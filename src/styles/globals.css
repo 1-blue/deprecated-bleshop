@@ -10,4 +10,8 @@
     /* font-family: 'Jua', sans-serif; */
     /* font-family: 'Yeon Sung', sans-serif; */
   }
+
+  body {
+    @apply bg-gray-50
+  }
 }

@@ -10,11 +10,12 @@ module.exports = {
       bold: ["Jua", "sans-serif"],
       special: ["Yeon Sung", "sans-serif"],
     },
-    colors: {
-      main: "#319590",
-      support: "#667EEA",
+    extend: {
+      colors: {
+        main: "#319590",
+        support: "#667EEA",
+      },
     },
-    extend: {},
   },
   plugins: [],
 };

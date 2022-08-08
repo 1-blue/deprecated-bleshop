@@ -1,1 +1,1 @@
-export type ICON = "cart";
+export type ICON = "cart" | "list" | "search" | "home" | "user";
