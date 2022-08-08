@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    /* 사용 가능한 폰트: "Nanum Gothic", "Jua", "Yeon Sung" */
+
+    font-family: 'Nanum Gothic', sans-serif;
+    /* font-family: 'Jua', sans-serif; */
+    /* font-family: 'Yeon Sung', sans-serif; */
+  }
+}

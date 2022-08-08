@@ -1,0 +1,136 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// 이미지
+model Photo {
+  path String @id
+
+  // 유저와 이미지 => 1:1
+  user    User? @relation(fields: [userIdx], references: [idx])
+  userIdx Int?  @unique
+
+  // 상품과 이미지 => 1:N
+  Product    Product? @relation(fields: [productIdx], references: [idx])
+  productIdx Int?
+
+  // 댓글과 이미지 => 1:N
+  Comment    Comment? @relation(fields: [commentIdx], references: [idx])
+  commentIdx Int?
+}
+
+// 유저
+model User {
+  idx      Int    @id @default(autoincrement())
+  id       String @unique
+  password String
+  name     String
+  email    String
+  phone    String
+  address  String
+
+  // 유저와 이미지 => 1:1
+  photo Photo?
+
+  // 유저와 주문 => 1:N
+  orders Order[]
+
+  // 유저와 상품 ( 장바구니 ) => N:M
+  baskets Basket[]
+
+  // 유저와 댓글 ( 좋아요 ) => N:M
+  evaluations Evaluation[]
+}
+
+// 상품
+model Product {
+  idx         Int    @id @default(autoincrement())
+  name        String
+  description String
+  price       Int
+
+  // 상품과 이미지 => 1:N
+  photos Photo[]
+
+  // 상품과 카테고리 => 1:N
+  categorys Category[]
+
+  // 상품과 주문 => 1:N
+  orders Order[]
+
+  // 유저와 상품 ( 장바구니 ) => N:M
+  baskets Basket[]
+
+  // 상품과 댓글 => 1:N
+  commments Comment[]
+}
+
+// 장바구니 ( 유저와 상품 )
+model Basket {
+  user       User    @relation(fields: [userIdx], references: [idx])
+  userIdx    Int
+  product    Product @relation(fields: [productIdx], references: [idx])
+  productIdx Int
+
+  @@id([userIdx, productIdx])
+}
+
+// 댓글
+model Comment {
+  idx      Int    @id @default(autoincrement())
+  score    Int
+  contents String
+
+  // 유저와 댓글 ( 좋아요 ) => N:M
+  evaluations Evaluation[]
+
+  // 상품과 댓글 => 1:N
+  Product    Product? @relation(fields: [productIdx], references: [idx])
+  productIdx Int?
+
+  // 댓글과 이미지 => 1:N
+  photos Photo[]
+}
+
+// 평가... 좋아요/싫어요 ( 유저와 댓글 )
+model Evaluation {
+  user       User    @relation(fields: [userIdx], references: [idx])
+  userIdx    Int
+  comment    Comment @relation(fields: [commentIdx], references: [idx])
+  commentIdx Int
+
+  // 좋다/싫다
+  isLike Boolean
+
+  @@id([userIdx, commentIdx])
+}
+
+// 카테고리
+model Category {
+  category String @id
+
+  // 상품과 카테고리 1:N
+  Product    Product? @relation(fields: [productIdx], references: [idx])
+  productIdx Int?
+}
+
+// 주문
+model Order {
+  idx Int @id @default(autoincrement())
+
+  // 유저와 주문 => 1:N
+  User    User? @relation(fields: [userIdx], references: [idx])
+  userIdx Int?
+
+  // 상품과 주문 => 1:N
+  Product    Product? @relation(fields: [productIdx], references: [idx])
+  productIdx Int?
+}
