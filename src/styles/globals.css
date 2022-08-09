@@ -12,6 +12,6 @@
   }
 
   body {
-    @apply bg-gray-50
+    @apply max-w-[1024px] mx-auto bg-gray-50 mb-[57px]
   }
 }

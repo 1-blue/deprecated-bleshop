@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 
 // utill
-import { combinePhotoUrl, getLogoUrl } from "@src/libs/utils";
+import { combinePhotoUrl, getLogoUrl } from "@src/libs";
 
 type Props = {
   title?: string;

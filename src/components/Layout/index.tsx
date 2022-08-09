@@ -10,9 +10,9 @@ type Props = {
 const Layout = ({ children }: Props) => {
   return (
     <>
-      <header className="max-w-[1024px] mx-auto"></header>
-      <main className="max-w-[1024px] mx-auto">{children}</main>
-      <footer className="max-w-[1024px] mx-auto bg-gray-200">
+      <header></header>
+      <main>{children}</main>
+      <footer className="bg-gray-200">
         <NavBar />
       </footer>
       <aside></aside>
