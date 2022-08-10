@@ -5,4 +5,10 @@ export {
   dateOrTimeFormat,
 } from "./timeFormat";
 
-export { combineClassNames } from "./utils";
+export {
+  combineClassNames,
+  getFrontUrl,
+  getLogoUrl,
+  combinePhotoUrl,
+  throttleHelper,
+} from "./utils";

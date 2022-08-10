@@ -10,4 +10,12 @@
     /* font-family: 'Jua', sans-serif; */
     /* font-family: 'Yeon Sung', sans-serif; */
   }
+
+  body {
+    @apply max-w-[1024px] mx-auto bg-gray-50 mb-[57px]
+  }
+
+  body::-webkit-scrollbar {
+    display: none
+  }
 }
