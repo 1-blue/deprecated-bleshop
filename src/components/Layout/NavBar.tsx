@@ -8,7 +8,7 @@ import useScrollDirection from "@src/hooks/useScrollDirection";
 import MenuAnchor from "@src/components/Layout/MenuAnchor";
 
 const NavBar = () => {
-  const [hide, isBottom] = useScrollDirection();
+  const [hide, isBottom] = useScrollDirection(50);
 
   return (
     <ul

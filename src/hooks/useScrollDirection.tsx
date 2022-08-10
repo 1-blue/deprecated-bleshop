@@ -5,9 +5,10 @@ import { throttleHelper } from "@src/libs";
 
 /**
  * 마지막 스크롤링의 방향을 알아내는 훅
+ * @param waitTime 쓰로틀링에 적용할 시간 입력
  * @returns [스크롤 방향, 스크롤 최하단 여부, 현재 스크롤 위치] 순서로 반환 ( boolean, boolean, number )
  */
-const useScrollDirection = () => {
+const useScrollDirection = (waitTime: number) => {
   // 2022/08/09 - 마지막 스크롤 방향 - by 1-blue
   const [isUp, setIsUp] = useState(false);
   // 2022/08/09 - 현재 스크롤 위치값 저장할 변수 - by 1-blue
@@ -41,7 +42,7 @@ const useScrollDirection = () => {
   }, [pageY, setIsUp, setPageY, setIsBottom]);
 
   // 2022/08/09 - 스크롤 이벤트에 스로틀링 적용 - by 1-blue
-  const throttleScroll = throttleHelper(handleScroll, 50);
+  const throttleScroll = throttleHelper(handleScroll, waitTime);
 
   // 2022/08/09 - 스크롤 이벤트 등록 - by 1-blue
   useEffect(() => {

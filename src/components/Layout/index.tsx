@@ -2,6 +2,8 @@ import React from "react";
 
 // component
 import NavBar from "@src/components/Layout/NavBar";
+import ScrollProgress from "@src/components/Layout/ScrollProgress";
+import ToTopButton from "@src/components/Layout/ToTopButton";
 
 type Props = {
   children: React.ReactNode;
@@ -10,12 +12,16 @@ type Props = {
 const Layout = ({ children }: Props) => {
   return (
     <>
-      <header></header>
+      <header>
+        <ScrollProgress />
+      </header>
       <main>{children}</main>
       <footer className="bg-gray-200">
         <NavBar />
       </footer>
-      <aside></aside>
+      <aside>
+        <ToTopButton />
+      </aside>
     </>
   );
 };

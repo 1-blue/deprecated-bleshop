@@ -1,1 +1,1 @@
-export type ICON = "cart" | "list" | "search" | "home" | "user";
+export type ICON = "cart" | "list" | "search" | "home" | "user" | "doubleUp";
