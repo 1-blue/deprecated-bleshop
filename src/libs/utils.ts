@@ -10,7 +10,7 @@ export const combineClassNames = (...classname: string[]) =>
  * 현재 웹페이지의 root url을 얻는 헬퍼 함수
  * @returns root url
  */
-export const getFrontUrl = () => `https://${process.env.NEXT_PUBLIC_FRONT_URL}`;
+export const getFrontUrl = () => `${process.env.NEXT_PUBLIC_FRONT_URL}`;
 
 /**
  * 현재 웹페이지의 logo url을 얻는 헬퍼 함수
@@ -19,12 +19,12 @@ export const getFrontUrl = () => `https://${process.env.NEXT_PUBLIC_FRONT_URL}`;
 export const getLogoUrl = () => getFrontUrl() + "/logo.jpg";
 
 /**
- * 현재 웹페이지의 이미지들의 경로를 얻는 헬퍼 함수
- * @param name 경로를 얻을 이미지 이름
- * @returns 이미지 경로
+ * 현재 웹페이지의 이미지의 경로를 얻는 헬퍼 함수 ( aws-s3 )
+ * @param path 후반부 이미지 경로
+ * @returns 전체 이미지 경로
  */
-export const combinePhotoUrl = (name: string) =>
-  `https://${process.env.NEXT_PUBLIC_PHOTO_URL}/${name}`;
+export const combinePhotoUrl = (path: string) =>
+  `${process.env.NEXT_PUBLIC_PHOTO_URL}/${path}`;
 
 /**
  * 스로틀링 적용 헬퍼 함수

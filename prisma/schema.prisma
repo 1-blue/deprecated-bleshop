@@ -29,13 +29,13 @@ model Photo {
 
 // 유저
 model User {
-  idx      Int    @id @default(autoincrement())
-  id       String @unique
+  idx      Int     @id @default(autoincrement())
+  id       String  @unique
   password String
   name     String
   email    String
   phone    String
-  address  String
+  address  String?
 
   // 유저와 이미지 => 1:1
   photo Photo?

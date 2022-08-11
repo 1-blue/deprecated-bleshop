@@ -15,3 +15,6 @@ export const axiosInstance = axios.create({
 //     return Promise.reject(error);
 //   },
 // );
+
+export { apiUploadPhoto } from "./photo";
+export { apiSignUp } from "./signup";

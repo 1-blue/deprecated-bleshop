@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-
+    
     // 절대 경로 설정
     "baseUrl": ".",
     "paths": {
