@@ -1,6 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+
+// util
+import { getRegExp } from "@src/libs";
 
 // api
 import { apiSignUp, apiUploadPhoto } from "@src/api";
@@ -15,7 +18,10 @@ import type { NextPage } from "next";
 import type { ApiSignUpBody } from "@src/types";
 import { AxiosError } from "axios";
 
-type SignUpForm = Omit<ApiSignUpBody, "photo"> & { photo?: FileList | null };
+type SignUpForm = Omit<ApiSignUpBody, "photo"> & {
+  passwordConfirm: string;
+  photo?: FileList | null;
+};
 
 const SignUp: NextPage = () => {
   const {
@@ -25,6 +31,7 @@ const SignUp: NextPage = () => {
     watch,
     setValue,
   } = useForm<SignUpForm>();
+
   // 2022/08/11 - 유저가 업로드한 이미지 경로 - by 1-blue
   const [photoURL, setPhotoURL] = useState("");
 
@@ -32,9 +39,18 @@ const SignUp: NextPage = () => {
   const onSubmit = useCallback(
     async (body: SignUpForm) => {
       try {
+        const { id, email, name, password, phone } = body;
+
         const {
           data: { message },
-        } = await apiSignUp({ ...body, photo: photoURL });
+        } = await apiSignUp({
+          id,
+          email,
+          name,
+          password,
+          phone,
+          photo: photoURL,
+        });
 
         toast.success(message);
       } catch (error) {
@@ -72,10 +88,13 @@ const SignUp: NextPage = () => {
             "알 수 없는 에러가 발생했습니다. 새로고침후에 다시 시도해주세요!"
           );
         }
-      });
-
-    setValue("photo", null);
+      })
+      .finally(() => setValue("photo", null));
   }, [photo, setValue]);
+
+  // 2022/08/12 - 비밀번호 확인과 비교를 위함 - by 1-blue
+  const password = useRef<string | null>(null);
+  password.current = watch("password", "");
 
   return (
     <>
@@ -92,18 +111,39 @@ const SignUp: NextPage = () => {
           name="id"
           placeholder="아이디를 입력해주세요."
           register={register("id", {
-            required: "아이디를 입력해주세요",
+            required: "아이디를 입력해주세요!",
+            pattern: {
+              value: getRegExp("id"),
+              message:
+                "숫자와 영어가 최소 한 글자 이상 포함되고, 최소 6자리여야 합니다.",
+            },
           })}
           errorMessage={errors.id?.message}
         />
         <Input
-          type="text"
+          type="password"
           name="password"
           placeholder="비밀번호를 입력해주세요."
           register={register("password", {
             required: "비밀번호를 입력해주세요",
+            pattern: {
+              value: getRegExp("password"),
+              message:
+                "숫자와 영어가 최소 한 글자 이상 포함되고, 최소 8자리여야 합니다.",
+            },
           })}
           errorMessage={errors.password?.message}
+        />
+        <Input
+          type="password"
+          name="password"
+          placeholder="비밀번호를 다시 입력해주세요."
+          register={register("passwordConfirm", {
+            required: "비밀번호를 다시 입력해주세요.",
+            validate: (value) =>
+              value === password.current || "비밀번호가 일치하지 않습니다.",
+          })}
+          errorMessage={errors.passwordConfirm?.message}
         />
         <Input
           type="text"
@@ -111,6 +151,10 @@ const SignUp: NextPage = () => {
           placeholder="이름를 입력해주세요."
           register={register("name", {
             required: "이름를 입력해주세요",
+            maxLength: {
+              value: 20,
+              message: "20자 이내로 입력해주세요.",
+            },
           })}
           errorMessage={errors.name?.message}
         />
@@ -120,6 +164,10 @@ const SignUp: NextPage = () => {
           placeholder="이메일을 입력해주세요.  ex)email@naver.com"
           register={register("email", {
             required: "이메일을 입력해주세요",
+            pattern: {
+              value: getRegExp("email"),
+              message: "이메일 형식에 맞게 입력해 주세요.",
+            },
           })}
           errorMessage={errors.email?.message}
         />
@@ -129,20 +177,32 @@ const SignUp: NextPage = () => {
           placeholder="휴대폰 번호를 숫자만 입력해주세요.  ex) 01021038259"
           register={register("phone", {
             required: "휴대폰 번호를 입력해주세요",
+            pattern: {
+              value: getRegExp("phone"),
+              message: "숫자만 11자리 입력해 주세요.",
+            },
+            maxLength: {
+              value: 11,
+              message: "숫자만 11자리 입력해 주세요.",
+            },
+            minLength: {
+              value: 11,
+              message: "숫자만 11자리 입력해 주세요.",
+            },
           })}
           errorMessage={errors.phone?.message}
         />
         {/* 프로필 이미지 */}
         <div className="min-w-[300px] max-w-[600px] w-full flex flex-col items-center space-x-3 mb-4">
           <label
-            htmlFor="picture"
+            htmlFor="photo"
             className="cursor-pointer py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium mb-4 transition-colors hover:bg-blue-400 hover:text-white focus:bg-blue-400 focus:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
             tabIndex={0}
           >
             프로필 사진 추가/변경
             <input
               {...register("photo")}
-              id="picture"
+              id="photo"
               type="file"
               className="hidden"
               accept="image/*"

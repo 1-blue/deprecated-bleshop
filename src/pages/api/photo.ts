@@ -1,15 +1,14 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 
 // util
-import { getSignedURL } from "@src/libs/s3";
+import { getSignedURL } from "@src/libs";
 
 // type
-import type { ApiPhotoResponse } from "@src/types";
+import type { ApiUploadPhotoResponse } from "@src/types";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ApiPhotoResponse>
+  res: NextApiResponse<ApiUploadPhotoResponse>
 ) {
   const {
     query: { name },
@@ -21,7 +20,7 @@ export default async function handler(
     return res.status(200).json({
       preSignedURL,
       photoURL,
-      message: "프로필 이미지를 업로드했습니다.",
+      message: "프로필 이미지를 업로드중입니다. 잠시만 기다려주세요!",
     });
   }
 

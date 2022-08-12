@@ -1,3 +1,5 @@
+import bcrypt from "bcrypt";
+
 import prisma from "@src/prisma";
 
 // type
@@ -13,10 +15,12 @@ export default async function handler(
 
   try {
     let data = null;
+    const hashPassword = await bcrypt.hash(body.password, 6);
 
     if (body.photo) {
       data = {
         ...body,
+        password: hashPassword,
         photo: {
           create: {
             path: body.photo,
@@ -26,6 +30,7 @@ export default async function handler(
     } else {
       data = {
         ...body,
+        password: hashPassword,
         photo: undefined,
       };
     }

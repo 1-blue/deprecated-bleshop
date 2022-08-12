@@ -14,6 +14,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+
+    // FileList 반복
+    "downlevelIteration": true,
     
     // 절대 경로 설정
     "baseUrl": ".",

@@ -1,3 +1,10 @@
 export type { ICON } from "./icon";
 
-export type { ApiPhotoResponse, ApiSignUpBody, ApiSignUpResponse } from "./api";
+export type {
+  ApiUploadPhotoBody,
+  ApiUploadPhotoResponse,
+  ApiUploadPhotosBody,
+  ApiUploadPhotosResponse,
+  ApiSignUpBody,
+  ApiSignUpResponse,
+} from "./api";

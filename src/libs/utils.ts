@@ -44,3 +44,42 @@ export const throttleHelper = (callback: () => void, waitTime: number) => {
     }, waitTime);
   };
 };
+
+/**
+ * Promise.allSettled()에서 "fulfilled"(성공)만 찾아내서 타입 적용해서 반환하는 함수
+ * @param input "PromiseSettledResult" 타입의 변수... 결과를 알 수 없는 변수 ( "status"로 결과를 알아냄 )
+ * @returns 성공한 결과(들)만 모아서 반환
+ */
+export const isFulFilled = <T>(
+  input: PromiseSettledResult<T>
+): input is PromiseFulfilledResult<T> => input.status === "fulfilled";
+
+type RegExpType = "id" | "password" | "email" | "phone" | "birthday";
+/**
+ * 2022/08/12 - 정규 표현식 모음 - by 1-blue
+ * @param type 정규표현식 종류 입력
+ * @returns 입력받은 종류에 따른 정규표현식 반환
+ */
+export const getRegExp = (type: RegExpType) => {
+  switch (type) {
+    case "id":
+      // 숫자와 영어가 최소 한 글자 이상 포함되고, 최소 6자리여야 합니다.
+      return /(?=.*\d)(?=.*[a-zA-ZS]).{6,}/;
+
+    case "password":
+      // 숫자와 영어가 최소 한 글자 이상 포함되고, 최소 8자리여야 합니다.
+      return /(?=.*\d)(?=.*[a-zA-ZS]).{8,}/;
+
+    case "email":
+      // 이메일 형식에 맞게 입력해 주세요.
+      return /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
+
+    case "phone":
+      // 숫자만 11자리 입력해 주세요.
+      return /[0-9]{11,11}/;
+
+    case "birthday":
+      // 숫자만 8자리 입력해 주세요.
+      return /[0-9]{8,8}/;
+  }
+};

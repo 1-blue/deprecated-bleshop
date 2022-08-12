@@ -8,8 +8,6 @@ AWS.config.update({
 
 const S3 = new AWS.S3({ apiVersion: "2012-10-17", signatureVersion: "v4" });
 
-export default S3;
-
 /**
  * "이미지.확장자"를 받아서 "경로/이미지_시간.확장자"으로 변경해주는 함수
  * @param name "이미지.확장자" 형태로 전송
