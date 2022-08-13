@@ -15,7 +15,7 @@ const Layout = ({ children }: Props) => {
       <header>
         <ScrollProgress />
       </header>
-      <main>{children}</main>
+      <main className="px-4">{children}</main>
       <footer className="bg-gray-200">
         <NavBar />
       </footer>

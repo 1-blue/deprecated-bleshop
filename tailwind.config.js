@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     fontFamily: {
       main: ["Nanum Gothic", "sans-serif"],
-      bold: ["Jua", "sans-serif"],
+      bolder: ["Jua", "sans-serif"],
       special: ["Yeon Sung", "sans-serif"],
     },
     extend: {
