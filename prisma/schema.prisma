@@ -32,9 +32,9 @@ model User {
   idx      Int     @id @default(autoincrement())
   id       String  @unique
   password String
-  name     String
-  email    String
-  phone    String
+  name     String  @unique
+  email    String  @unique
+  phone    String  @unique
   address  String?
 
   // 유저와 이미지 => 1:1

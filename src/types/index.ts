@@ -7,4 +7,8 @@ export type {
   ApiUploadPhotosResponse,
   ApiSignUpBody,
   ApiSignUpResponse,
+  ApiLogInBody,
+  ApiLogInResponse,
 } from "./api";
+
+export type { UserWithPhoto } from "./data";

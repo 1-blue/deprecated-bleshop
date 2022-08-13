@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 // util
 import { getRegExp } from "@src/libs";
@@ -24,6 +25,7 @@ type SignUpForm = Omit<ApiSignUpBody, "photo"> & {
 };
 
 const SignUp: NextPage = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -53,6 +55,7 @@ const SignUp: NextPage = () => {
         });
 
         toast.success(message);
+        router.push("/login");
       } catch (error) {
         console.error(error);
 
@@ -63,7 +66,7 @@ const SignUp: NextPage = () => {
         }
       }
     },
-    [photoURL]
+    [photoURL, router]
   );
 
   // 2022/08/11 - 프로필 이미지 S3에 업로드 - by 1-blue
@@ -221,6 +224,14 @@ const SignUp: NextPage = () => {
           type="submit"
           text="회원가입"
           className="min-w-[300px] max-w-[600px] w-full mb-4"
+          primary
+        />
+
+        <Button
+          type="button"
+          text="로그인하러 가기"
+          className="min-w-[300px] max-w-[600px] w-full mb-4 bg-gray-400 hover:bg-gray-500 focus:ring-gray-400"
+          onClick={() => router.push("/login")}
           primary
         />
       </form>

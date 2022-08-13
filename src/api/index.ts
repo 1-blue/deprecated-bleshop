@@ -18,3 +18,4 @@ export const axiosInstance = axios.create({
 
 export { apiUploadPhoto } from "./photo";
 export { apiSignUp } from "./signup";
+export { apiLogIn } from "./login";

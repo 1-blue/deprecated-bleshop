@@ -44,11 +44,38 @@ export default async function handler(
   } catch (error) {
     console.error("/api/signup >> ", error);
 
+    // 아이디, 이름, 이메일, 폰번호중에 하나가 겹친다면 실행
     if (error instanceof PrismaClientKnownRequestError) {
-      return res.status(409).json({
-        user: null,
-        message: "이미 사용중인 아이디입니다.",
-      });
+      const errorType = error.meta?.target;
+
+      switch (errorType) {
+        case "User_id_key":
+          return res.status(409).json({
+            user: null,
+            message: "이미 사용중인 아이디입니다.",
+          });
+        case "User_name_key":
+          return res.status(409).json({
+            user: null,
+            message: "이미 사용중인 이름입니다.",
+          });
+        case "User_email_key":
+          return res.status(409).json({
+            user: null,
+            message: "이미 사용중인 이메일입니다.",
+          });
+        case "User_phone_key":
+          return res.status(409).json({
+            user: null,
+            message: "이미 사용중인 전화번호입니다.",
+          });
+
+        default:
+          return res.status(409).json({
+            user: null,
+            message: "알 수 없는 에러입니다. 잠시후에 다시 시도해주세요!",
+          });
+      }
     }
 
     return res.status(400).json({

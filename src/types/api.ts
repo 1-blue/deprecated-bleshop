@@ -32,3 +32,10 @@ export type ApiSignUpBody = {
 export type ApiSignUpResponse = ApiResponse & {
   user: User | null;
 };
+
+// 2022/08/12 - 로그인 송신/수신 타입 - by 1-blue
+export type ApiLogInBody = {
+  id: string;
+  password: string;
+};
+export type ApiLogInResponse = ApiResponse & {};
