@@ -83,3 +83,26 @@ export const getRegExp = (type: RegExpType) => {
       return /[0-9]{8,8}/;
   }
 };
+
+/**
+ * 휴대폰 번호에 구분자 붙여서 반환해주는 함수
+ * @param phone 문자열형태 휴대폰 번호 ( "01021038259" )
+ * @returns "-"를 구분자로 적용한 휴대폰 번호 반환 ( "010-2103-8259" )
+ */
+export const addSeparatorToPhone = (phone: string) => {
+  const front = phone.slice(0, 3);
+  const mid = phone.slice(3, 7);
+  const last = phone.slice(7);
+
+  return `${front}-${mid}-${last}`;
+};
+/**
+ * 휴대폰 번호에 구분자를 제거하고 반환해주는 함수
+ * @param phone 문자열형태 구분자 포함 휴대폰 번호 ( "010-2103-8259" )
+ * @returns 구분자를 제외한 휴대폰 번호 반환 ( "01021038259" )
+ */
+export const removeSeparatorToPhone = (phone: string) =>
+  phone
+    .split("")
+    .filter((v) => !isNaN(+v))
+    .join("");

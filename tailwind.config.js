@@ -5,16 +5,33 @@ module.exports = {
     "./src/components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    fontFamily: {
-      main: ["Nanum Gothic", "sans-serif"],
-      bolder: ["Jua", "sans-serif"],
-      special: ["Yeon Sung", "sans-serif"],
-    },
     extend: {
       colors: {
         main: "#319590",
         support: "#667EEA",
       },
+    },
+    fontFamily: {
+      main: ["Nanum Gothic", "sans-serif"],
+      bolder: ["Jua", "sans-serif"],
+      special: ["Yeon Sung", "sans-serif"],
+    },
+    screens: {
+      xs: "400px",
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
+    },
+    keyframes: {
+      "fade-in": {
+        "0%": { opacity: 0.01 },
+        "100%": { opacity: 1 },
+      },
+    },
+    animation: {
+      "fade-in": "fade-in 0.2s linear",
     },
   },
   plugins: [],

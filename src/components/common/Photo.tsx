@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import Image from "next/image";
 
 // util
@@ -25,6 +25,8 @@ const Photo = ({
   avatar,
   onClick,
 }: Props) => {
+  const photoRef = useRef<HTMLElement>(null);
+
   const onClickPhoto = useCallback(() => {
     if (typeof onClick === "function") onClick();
   }, [onClick]);
@@ -34,11 +36,16 @@ const Photo = ({
       {path ? (
         <figure
           className={combineClassNames(
-            "relative bg-black",
+            "relative bg-black focus:ring-2 focus:ring-blue-400 focus:ring-offset-4",
             avatar ? "rounded-full" : "rounded-md",
             className ? className : ""
           )}
+          tabIndex={typeof onClick === "function" ? 0 : -1}
           onClick={onClickPhoto}
+          ref={photoRef}
+          onKeyDown={(e) =>
+            e.key === "Enter" ? photoRef.current?.click() : null
+          }
         >
           <Image
             src={combinePhotoUrl(path)}
@@ -61,6 +68,11 @@ const Photo = ({
               className ? className : ""
             )}
             onClick={onClickPhoto}
+            tabIndex={typeof onClick === "function" ? 0 : -1}
+            ref={photoRef}
+            onKeyDown={(e) =>
+              e.key === "Enter" ? photoRef.current?.click() : null
+            }
           >
             <Image
               src="/user.png"
