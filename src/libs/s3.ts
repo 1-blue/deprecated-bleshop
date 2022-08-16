@@ -36,34 +36,49 @@ export const getSignedURL = (name: string) => {
   return { preSignedURL, photoURL };
 };
 
-// // S3 이미지 제거
-// export const deletePhoto = (photo: string) =>
-//   S3.deleteObject(
-//     {
-//       Bucket: "bleshop",
-//       Key: photo,
-//     },
-//     (error, data) => {
-//       if (error) {
-//         console.error("error >> ", error);
-//       }
-//     }
-//   );
+/**
+ * 2022/08/14 - S3 이미지 제거 - by 1-blue
+ * @param photo 이미지 파일 이름
+ * @returns
+ */
+export const deletePhoto = (photo: string) =>
+  S3.deleteObject(
+    {
+      Bucket: "bleshop",
+      Key: photo,
+    },
+    (error, data) => {
+      if (error) console.error("S3 이미지 제거 error >> ", error);
+    }
+  );
 
-// // S3 이미지 이동
-// export const copyPhoto = (originalSource: string) =>
-//   S3.copyObject(
-//     {
-//       Bucket: "bleshop",
-//       CopySource: "bleshop/" + originalSource,
-//       Key:
-//         originalSource.slice(0, originalSource.lastIndexOf("/")) +
-//         "/remove" +
-//         originalSource.slice(originalSource.lastIndexOf("/")),
-//     },
-//     (error, data) => {
-//       if (error) {
-//         console.error("error >> ", error);
-//       }
-//     }
-//   );
+/**
+ * 2022/08/14 - S3 이미지 복사 - by 1-blue
+ * @param originalSource 이미지 파일 이름
+ * @returns
+ */
+export const copyPhoto = (originalSource: string) =>
+  S3.copyObject(
+    {
+      Bucket: "bleshop",
+      CopySource: "bleshop/" + originalSource,
+      Key:
+        originalSource.slice(0, originalSource.lastIndexOf("/")) +
+        "/remove" +
+        originalSource.slice(originalSource.lastIndexOf("/")),
+    },
+    (error, data) => {
+      if (error) console.error("S3 이미지 이동 error >> ", error);
+    }
+  );
+
+/**
+ * 2022/08/14 - S3 이미지 이동 ( 복사 후 제거 ) - by 1-blue
+ * >>> 복사, 제거 순차적으로 실행하는 방법 찾고 적용하기
+ * @param photo 이미지 파일 이름
+ * @returns
+ */
+export const movePhoto = async (photo: string) => {
+  copyPhoto(photo);
+  setTimeout(() => deletePhoto(photo), 500);
+};

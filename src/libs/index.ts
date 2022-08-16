@@ -13,6 +13,8 @@ export {
   throttleHelper,
   getRegExp,
   isFulFilled,
+  addSeparatorToPhone,
+  removeSeparatorToPhone,
 } from "./utils";
 
-export { getSignedURL } from "./s3";
+export { getSignedURL, movePhoto, deletePhoto, copyPhoto } from "./s3";

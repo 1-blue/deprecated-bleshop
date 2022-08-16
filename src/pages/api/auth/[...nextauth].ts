@@ -56,7 +56,6 @@ export default NextAuth({
           name: true,
           email: true,
           phone: true,
-          address: true,
           photo: {
             select: {
               path: true,
