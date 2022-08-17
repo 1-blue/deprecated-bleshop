@@ -12,7 +12,7 @@ type Props = {
 const Layout = ({ children }: Props) => {
   return (
     <>
-      <header>
+      <header className="sticky top-0">
         <ScrollProgress />
       </header>
       <main className="px-4">{children}</main>

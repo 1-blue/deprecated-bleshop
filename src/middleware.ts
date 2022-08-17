@@ -18,9 +18,9 @@ export async function middleware(req: NextRequest, event: NextFetchEvent) {
 
   // 2022/08/16 - 로그인 하지 않고 접근 제한 ( 정보 수정 ) - by 1-blue
   if (
-    pathname.startsWith("/information/edit") ||
+    pathname.startsWith("/information/update") ||
     pathname.startsWith("/information/address") ||
-    pathname.startsWith("/information/address/edit")
+    pathname.startsWith("/information/address/update")
   ) {
     if (!session) {
       return NextResponse.redirect(new URL("/information", req.url));
@@ -32,8 +32,8 @@ export const config = {
   matcher: [
     "/login",
     "/signup",
-    "/information/edit",
+    "/information/update",
     "/information/address",
-    "/information/address/edit",
+    "/information/address/update",
   ],
 };

@@ -26,7 +26,7 @@ const MenuAnchor = ({ shape, name, url }: Props) => {
       <Link href={`/${url}`}>
         <a
           className={combineClassNames(
-            "py-2 flex flex-col items-center transition-colors hover:text-blue-400 hover:bg-blue-200",
+            "py-2 flex flex-col items-center transition-colors hover:text-white hover:bg-blue-400 focus:outline-none focus:bg-blue-400 focus:text-white",
             isMatch ? " text-blue-500" : "text-gray-500"
           )}
         >

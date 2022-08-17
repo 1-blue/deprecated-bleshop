@@ -6,12 +6,12 @@ import prisma from "@src/prisma";
 import { isFulFilled } from "@src/libs";
 
 // type
-import type { ApiEditUserResponse } from "@src/types";
+import type { ApiUpdateUserResponse } from "@src/types";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ApiEditUserResponse>
+  res: NextApiResponse<ApiUpdateUserResponse>
 ) {
   const { body } = req;
   const session = await getSession({ req });
@@ -23,14 +23,14 @@ export default async function handler(
 
   // 2022/08/14 - 유저 일반 정보 수정 - by 1-blue
   if (req.method === "PUT") {
-    const { name, email, phone, photo } = body;
+    const { name, email, phone, path } = body;
 
     // 이미지 수정
-    if (photo) {
+    if (path) {
       await prisma.photo.upsert({
         where: { userIdx },
-        create: { path: photo, userIdx },
-        update: { path: photo },
+        create: { path, userIdx },
+        update: { path },
       });
 
       return res.json({ message: "이미지를 수정했습니다. 새로고침해주세요!" });

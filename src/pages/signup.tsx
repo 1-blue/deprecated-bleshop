@@ -7,9 +7,10 @@ import { useRouter } from "next/router";
 import { getRegExp } from "@src/libs";
 
 // api
-import { apiSignUp, apiUploadPhoto } from "@src/api";
+import apiService from "@src/api";
 
 // component
+import HeadInfo from "@src/components/common/HeadInfo";
 import Input from "@src/components/common/Input";
 import Button from "@src/components/common/Button";
 import Photo from "@src/components/common/Photo";
@@ -45,7 +46,7 @@ const SignUp: NextPage = () => {
 
         const {
           data: { message },
-        } = await apiSignUp({
+        } = await apiService.authService.apiSignUp({
           id,
           email,
           name,
@@ -74,7 +75,8 @@ const SignUp: NextPage = () => {
   useEffect(() => {
     if (!photo) return;
 
-    apiUploadPhoto({ photo: photo[0] })
+    apiService.photoService
+      .apiCreatePhoto({ file: photo[0] })
       .then(({ photoURL, message }) => {
         if (!photoURL) return;
 
@@ -101,6 +103,11 @@ const SignUp: NextPage = () => {
 
   return (
     <>
+      <HeadInfo
+        title="BleShop - 회원가입"
+        description="BleShop의 회원가입 페이지입니다."
+      />
+
       <h1 className="pt-8 pb-4 text-center text-5xl font-bold font-special">
         bleshop
       </h1>
@@ -199,7 +206,7 @@ const SignUp: NextPage = () => {
         <div className="min-w-[300px] max-w-[600px] w-full flex flex-col items-center space-x-3 mb-4">
           <label
             htmlFor="photo"
-            className="cursor-pointer py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium mb-4 transition-colors hover:bg-blue-400 hover:text-white focus:bg-blue-400 focus:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
+            className="cursor-pointer py-1 px-2 xs:py-2 xs:px-3 border border-gray-300 rounded-md shadow-sm text-[8px] xs:text-sm font-medium mb-4 transition-colors hover:bg-blue-400 hover:text-white focus:bg-blue-400 focus:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
             tabIndex={0}
           >
             프로필 사진 추가/변경
@@ -212,12 +219,14 @@ const SignUp: NextPage = () => {
             />
           </label>
 
-          <Photo
-            path={photoURL}
-            className="h-96 w-full"
-            alt="유저가 방금 업로드한 프로필 이미지"
-            contain
-          />
+          {photoURL && (
+            <Photo
+              path={photoURL}
+              className="h-96 w-full"
+              alt="유저가 방금 업로드한 프로필 이미지"
+              contain
+            />
+          )}
         </div>
 
         <Button

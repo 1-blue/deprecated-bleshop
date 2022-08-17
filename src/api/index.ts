@@ -16,18 +16,19 @@ export const axiosInstance = axios.create({
 //   },
 // );
 
-export {
-  apiUploadPhoto,
-  apiUpdateUserPhoto,
-  apiRemoveUserPhoto,
-  apiUploadPhotos,
-} from "./photo";
-export { apiSignUp } from "./signup";
-export { apiLogIn } from "./login";
-export { apiEditUser, apiEditUserPhoto } from "./user";
-export {
-  apiCreateAddress,
-  apiGetAddress,
-  apiRemoveAddress,
-  apiUpdateAddress,
-} from "./address";
+import photoService from "./photo";
+import authService from "./auth";
+import userService from "./user";
+import addressService from "./address";
+
+/**
+ * 2022/08/17 - api요청 관련 메서드들을 가진 객체 - by 1-blue
+ */
+const apiService = {
+  photoService,
+  authService,
+  userService,
+  addressService,
+};
+
+export default apiService;

@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
 // component
+import HeadInfo from "@src/components/common/HeadInfo";
 import Input from "@src/components/common/Input";
 import Button from "@src/components/common/Button";
 
@@ -46,6 +47,11 @@ const LogIn: NextPage = () => {
 
   return (
     <>
+      <HeadInfo
+        title="BleShop - 로그인"
+        description="BleShop의 로그인 페이지입니다."
+      />
+
       <h1 className="pt-8 pb-4 text-center text-5xl font-bold font-special">
         bleshop
       </h1>

@@ -3,14 +3,14 @@ import axios, { AxiosError } from "axios";
 import { axiosInstance } from ".";
 
 import type {
-  ApiUploadPhotoResponse,
-  ApiUploadPhotoBody,
-  ApiUploadPhotosResponse,
-  ApiUploadPhotosBody,
-  ApiUpdateUserPhotoBody,
-  ApiUpdateUserPhotoResponse,
-  // ApiRemoveUserPhotoBody,
-  ApiRemoveUserPhotoResponse,
+  ApiCreatePhotoResponse,
+  ApiCreatePhotoBody,
+  ApiCreatePhotosResponse,
+  ApiCreatePhotosBody,
+  ApiEditUserPhotoBody,
+  ApiEditUserPhotoResponse,
+  // ApiDeleteUserPhotoBody,
+  ApiDeleteUserPhotoResponse,
 } from "@src/types";
 
 import { isFulFilled } from "@src/libs";
@@ -20,13 +20,13 @@ import { isFulFilled } from "@src/libs";
  * @param file File 형태 입력
  * @returns 업로드된 이미지 URL(photoURL)반환 ( "photoURL"가 null이 아니면 성공 )
  */
-export const apiUploadPhoto = async ({
+const apiCreatePhoto = async ({
   file,
-}: ApiUploadPhotoBody): Promise<ApiUploadPhotoResponse> => {
+}: ApiCreatePhotoBody): Promise<ApiCreatePhotoResponse> => {
   try {
     const {
       data: { preSignedURL, photoURL, message },
-    } = await axiosInstance.get<ApiUploadPhotoResponse>(
+    } = await axiosInstance.get<ApiCreatePhotoResponse>(
       `/photo?name=${file.name}`
     );
 
@@ -44,7 +44,7 @@ export const apiUploadPhoto = async ({
 
     return { photoURL, preSignedURL, message };
   } catch (error) {
-    console.error("apiUploadPhoto() >> ", error);
+    console.error("apiCreatePhoto() >> ", error);
 
     // 예측 가능한 에러 ( 잘못된 형식의 데이터를 전달받음 )
     if (error instanceof AxiosError) {
@@ -67,13 +67,13 @@ export const apiUploadPhoto = async ({
  * @param files FileList 형태 입력
  * @returns 업로드된 이미지 URL(photoURL)들 반환
  */
-export const apiUploadPhotos = async ({
+const apiCreatePhotos = async ({
   files,
-}: ApiUploadPhotosBody): Promise<ApiUploadPhotosResponse> => {
+}: ApiCreatePhotosBody): Promise<ApiCreatePhotosResponse> => {
   try {
     // 각 이미지들의 "preSignedURL"의 promise 얻음
     const preSignedUrlPromiseList = [...files].map((file) =>
-      axiosInstance.get<ApiUploadPhotoResponse>(`/photo?name=${file.name}`)
+      axiosInstance.get<ApiCreatePhotoResponse>(`/photo?name=${file.name}`)
     );
 
     // promise 병렬 처리
@@ -100,7 +100,7 @@ export const apiUploadPhotos = async ({
 
     return preSignedUrlResultList;
   } catch (error) {
-    console.error("apiUploadPhotos() >> ", error);
+    console.error("apiCreatePhotos() >> ", error);
 
     // 예측 가능한 에러 ( 잘못된 형식의 데이터를 전달받음 )
     if (error instanceof AxiosError) {
@@ -121,41 +121,18 @@ export const apiUploadPhotos = async ({
 };
 
 /**
- * 2022/08/14 - 유저의 이미지 제거 - by 1-blue
- * @returns 결과 메시지
- */
-export const apiRemoveUserPhoto =
-  async (): Promise<ApiRemoveUserPhotoResponse> => {
-    try {
-      const {
-        data: { message },
-      } = await axiosInstance.delete<ApiRemoveUserPhotoResponse>(`/photo`);
-
-      return { message };
-    } catch (error) {
-      console.error("apiRemovePhoto() >> ", error);
-
-      if (error instanceof AxiosError) {
-        return { message: error.response?.data.message };
-      }
-
-      return { message: "에러가 발생했습니다. 잠시후에 다시 시도해주세요!" };
-    }
-  };
-
-/**
- * 2022/08/15 - 유저 이미지 업데이트 - by 1-blue
+ * 2022/08/15 - 유저 이미지 수정 - by 1-blue
  * @param file 수정할 이미지 파일
  * @returns
  */
-export const apiUpdateUserPhoto = async ({
+const apiEditUserPhoto = async ({
   file,
-}: ApiUpdateUserPhotoBody): Promise<ApiUpdateUserPhotoResponse> => {
+}: ApiEditUserPhotoBody): Promise<ApiEditUserPhotoResponse> => {
   try {
     const {
       data: { preSignedURL, photoURL, message },
-    } = await axiosInstance.put<ApiUpdateUserPhotoResponse>(
-      `/photo?name=${file.name}`
+    } = await axiosInstance.put<ApiEditUserPhotoResponse>(
+      `/user/photo?name=${file.name}`
     );
 
     // 예측 불가능한 에러
@@ -172,7 +149,7 @@ export const apiUpdateUserPhoto = async ({
 
     return { preSignedURL, photoURL, message };
   } catch (error) {
-    console.error("apiUpdateUserPhoto() >> ", error);
+    console.error("apiEditUserPhoto() >> ", error);
 
     // 예측 가능한 에러 ( 잘못된 형식의 데이터를 전달받음 )
     if (error instanceof AxiosError) {
@@ -189,3 +166,37 @@ export const apiUpdateUserPhoto = async ({
     };
   }
 };
+
+/**
+ * 2022/08/14 - 유저의 이미지 제거 - by 1-blue
+ * @returns 결과 메시지
+ */
+const apiDeleteUserPhoto = async (): Promise<ApiDeleteUserPhotoResponse> => {
+  try {
+    const {
+      data: { message },
+    } = await axiosInstance.delete<ApiDeleteUserPhotoResponse>(`/user/photo`);
+
+    return { message };
+  } catch (error) {
+    console.error("apiDeleteUserPhoto() >> ", error);
+
+    if (error instanceof AxiosError) {
+      return { message: error.response?.data.message };
+    }
+
+    return { message: "에러가 발생했습니다. 잠시후에 다시 시도해주세요!" };
+  }
+};
+
+/**
+ * 2022/08/17 - 이미지 관련 api 요청 객체 - by 1-blue
+ */
+const photoService = {
+  apiCreatePhoto,
+  apiCreatePhotos,
+  apiDeleteUserPhoto,
+  apiEditUserPhoto,
+};
+
+export default photoService;

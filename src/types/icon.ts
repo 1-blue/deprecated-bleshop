@@ -5,6 +5,7 @@ export type ICON =
   | "home"
   | "user"
   | "doubleUp"
+  | "doubleDown"
   | "star"
   | "catalog"
   | "arrowRight"

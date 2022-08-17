@@ -10,6 +10,15 @@ module.exports = {
         main: "#319590",
         support: "#667EEA",
       },
+      keyframes: {
+        "fade-in": {
+          "0%": { opacity: 0.01 },
+          "100%": { opacity: 1 },
+        },
+      },
+      animation: {
+        "fade-in": "fade-in 0.2s linear",
+      },
     },
     fontFamily: {
       main: ["Nanum Gothic", "sans-serif"],
@@ -23,15 +32,6 @@ module.exports = {
       lg: "1024px",
       xl: "1280px",
       "2xl": "1536px",
-    },
-    keyframes: {
-      "fade-in": {
-        "0%": { opacity: 0.01 },
-        "100%": { opacity: 1 },
-      },
-    },
-    animation: {
-      "fade-in": "fade-in 0.2s linear",
     },
   },
   plugins: [],

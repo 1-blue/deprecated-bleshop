@@ -7,7 +7,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import type {
   ApiCreateAddressResponse,
   ApiGetAddressResponse,
-  ApiRemoveAddressResponse,
+  ApiDeleteAddressResponse,
   ApiUpdateAddressResponse,
 } from "@src/types";
 
@@ -16,7 +16,7 @@ export default async function handler(
   res: NextApiResponse<
     | ApiCreateAddressResponse
     | ApiGetAddressResponse
-    | ApiRemoveAddressResponse
+    | ApiDeleteAddressResponse
     | ApiUpdateAddressResponse
   >
 ) {
@@ -27,15 +27,27 @@ export default async function handler(
     return res.status(403).json({ message: "접근 권한이 없습니다." });
 
   try {
-    // 주소 가져오기
+    // 기본 주소 가져오기
     if (method === "GET") {
-      const addresses = await prisma.address.findMany({
-        where: { userIdx: session.user.idx },
+      const defaultAddress = await prisma.address.findFirst({
+        where: { userIdx: session.user.idx, isDefault: true },
       });
 
+      // 기본 주소가 존재한다면
+      if (defaultAddress) {
+        return res.status(200).json({
+          message: `${session.user.name}님의 기본 주소를 가져왔습니다.`,
+          address: defaultAddress,
+        });
+      }
+
+      // 기본 주소가 존재하지 않는다면 제일 처음 등록한 주소
+      const latestAddress = await prisma.address.findFirst({
+        where: { userIdx: session.user.idx },
+      });
       return res.status(200).json({
-        message: `${session.user.name}님의 모든 주소를 가져왔습니다.`,
-        addresses,
+        message: `${session.user.name}님의 최근 주소를 가져왔습니다.`,
+        address: latestAddress,
       });
     }
     // 주소 생성
