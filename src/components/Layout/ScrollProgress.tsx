@@ -5,12 +5,6 @@ const ScrollProgress = () => {
 
   // 2022/08/10 - 현재 스크롤 Y값 %로 구하기 - by 1-blue
   const scrollEvent = useCallback(() => {
-    console.log(
-      window.scrollY /
-        (document.documentElement.scrollHeight -
-          document.documentElement.clientHeight)
-    );
-
     setCurrentPositionY(
       window.scrollY /
         (document.documentElement.scrollHeight -

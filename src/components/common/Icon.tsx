@@ -97,6 +97,14 @@ const Icon = ({ shape, className, fill }: Props) => {
             d="M15 19l-7-7 7-7"
           />
         );
+      case "plus":
+        return (
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 4v16m8-8H4"
+          />
+        );
     }
   }, []);
 
@@ -179,6 +187,14 @@ const Icon = ({ shape, className, fill }: Props) => {
           <path
             fillRule="evenodd"
             d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+            clipRule="evenodd"
+          />
+        );
+      case "plus":
+        return (
+          <path
+            fillRule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
             clipRule="evenodd"
           />
         );

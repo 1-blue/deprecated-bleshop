@@ -9,4 +9,5 @@ export type ICON =
   | "star"
   | "catalog"
   | "arrowRight"
-  | "arrowLeft";
+  | "arrowLeft"
+  | "plus";

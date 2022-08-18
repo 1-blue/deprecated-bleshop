@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Button from "@src/components/common/Button";
+import Tool from "@src/components/common/Tool";
 import Icon from "@src/components/common/Icon";
 import Photo from "@src/components/common/Photo";
 
@@ -55,7 +55,7 @@ const Information: NextPage = () => {
                     </a>
                   </Link>
 
-                  <Button
+                  <Tool.Button
                     type="button"
                     text="로그아웃"
                     onClick={onClickLogOut}

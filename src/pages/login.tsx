@@ -6,8 +6,7 @@ import { useRouter } from "next/router";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Input from "@src/components/common/Input";
-import Button from "@src/components/common/Button";
+import Tool from "@src/components/common/Tool";
 
 // type
 import type { NextPage } from "next";
@@ -56,40 +55,37 @@ const LogIn: NextPage = () => {
         bleshop
       </h1>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col items-center"
-      >
-        <Input
-          name="id"
+      <Tool.Form onSubmit={handleSubmit(onSubmit)}>
+        <Tool.Input
+          name="아이디"
           type="text"
           register={register("id")}
           placeholder="아이디를 입력하세요."
           errorMessage={errors.id?.message}
         />
-        <Input
-          name="password"
+        <Tool.Input
+          name="비밀번호"
           type="password"
           register={register("password")}
           placeholder="비밀번호를 입력하세요."
           errorMessage={errors.password?.message}
         />
 
-        <Button
+        <Tool.Button
           type="submit"
           text="로그인"
           className="min-w-[300px] max-w-[600px] w-full mb-4"
           primary
         />
 
-        <Button
+        <Tool.Button
           type="button"
           text="회원가입하러 가기"
           className="min-w-[300px] max-w-[600px] w-full mb-4 bg-gray-400 hover:bg-gray-500 focus:ring-gray-400"
           onClick={() => router.push("/signup")}
           primary
         />
-      </form>
+      </Tool.Form>
     </>
   );
 };

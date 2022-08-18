@@ -11,7 +11,7 @@ import { addSeparatorToPhone } from "@src/libs";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Button from "@src/components/common/Button";
+import Tool from "@src/components/common/Tool";
 import Nav from "@src/components/common/Nav";
 
 // type
@@ -38,6 +38,7 @@ const Address = () => {
           render: "저장된 주소지가 존재하지 않습니다.",
           type: "warning",
           isLoading: false,
+          autoClose: 1500,
         });
 
       if (addresses[0].isDefault) setAddresses(addresses);
@@ -115,14 +116,14 @@ const Address = () => {
                       </span>
                     )}
                     <div className="flex-1" />
-                    <Button
+                    <Tool.Button
                       type="button"
                       text="수정"
                       className="self-start px-1 pt-1 pb-1 xs:px-2 xs:pt-2 xs:pb-2 text-[8px] xs:text-xs md:text-xs rounded-sm xs:rounded-md"
                       primary
                       onClick={onUpdateAddress(address.idx)}
                     />
-                    <Button
+                    <Tool.Button
                       type="button"
                       text="삭제"
                       className="self-start px-1 pt-1 pb-1 xs:px-2 xs:pt-2 xs:pb-2 text-[8px] xs:text-xs md:text-xs rounded-sm xs:rounded-md"

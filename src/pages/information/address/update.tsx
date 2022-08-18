@@ -7,11 +7,10 @@ import { useRouter } from "next/router";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Button from "@src/components/common/Button";
+import Tool from "@src/components/common/Tool";
 import Nav from "@src/components/common/Nav";
 import Modal from "@src/components/common/Modal";
 import Icon from "@src/components/common/Icon";
-import Input from "@src/components/common/Input";
 
 // util
 import { getRegExp } from "@src/libs";
@@ -128,11 +127,11 @@ const AddressUpdate = () => {
       <section className="flex flex-col items-center pt-4 space-y-4">
         <Nav.TitleNav title="주소록 관리" />
 
-        <form
+        <Tool.Form
           onSubmit={handleSubmit(submitAddress)}
-          className="flex flex-col items-center bg-white rounded-md shadow-2xl overflow-hidden min-w-[300px] max-w-[600px] p-8 w-full"
+          className="bg-white rounded-md shadow-2xl overflow-hidden min-w-[300px] max-w-[600px] p-8 w-full"
         >
-          <Input
+          <Tool.Input
             type="text"
             name="받는 사람"
             placeholder="받는 사람 이름을 입력해주세요."
@@ -146,7 +145,7 @@ const AddressUpdate = () => {
             errorMessage={errors.name?.message}
           />
           <div className="relative flex flex-col items-center min-w-[200px] max-w-[600px] w-full">
-            <Input
+            <Tool.Input
               type="text"
               name="주소"
               placeholder="주소를 검색해주세요."
@@ -168,7 +167,7 @@ const AddressUpdate = () => {
               />
             </button>
           </div>
-          <Input
+          <Tool.Input
             type="text"
             name="상세 주소"
             placeholder="상세 주소를 입력해주세요."
@@ -177,7 +176,7 @@ const AddressUpdate = () => {
             })}
             errorMessage={errors.residence?.message}
           />
-          <Input
+          <Tool.Input
             type="text"
             name="phone"
             placeholder="휴대폰 번호를 숫자만 입력해주세요.  ex) 01021038259"
@@ -198,36 +197,24 @@ const AddressUpdate = () => {
             })}
             errorMessage={errors.phone?.message}
           />
-          <Input
+          <Tool.Input
             type="text"
             name="요청 사항"
             placeholder="요청 사항을 입력해주세요!"
             register={register("message")}
             errorMessage={errors.message?.message}
           />
-
-          <div className="mb-4 min-w-[200px] max-w-[600px] w-full flex items-center space-x-1">
-            <input
-              {...register("isDefault")}
-              id="default"
-              type="checkBox"
-              className="w-4 h-4 xs:w-5 xs:h-5 cursor-pointer focus:outline-blue-400"
-            />
-            <label
-              htmlFor="default"
-              className="text-xs xs:text-sm cursor-pointer"
-            >
-              기본 배송지로 선택
-            </label>
-          </div>
-
-          <Button
+          <Tool.Checkbox
+            name="기본 배송지로 선택"
+            register={register("isDefault")}
+          />
+          <Tool.Button
             type="submit"
             text="등록/수정"
             className="min-w-[200px] max-w-[600px] w-full"
             primary
           />
-        </form>
+        </Tool.Form>
 
         {showAddressInput && (
           <Modal
