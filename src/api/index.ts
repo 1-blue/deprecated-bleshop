@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: "/api",
+  baseURL: process.env.NEXT_PUBLIC_FRONT_URL + "/api",
   withCredentials: true,
   timeout: 10000,
 });
@@ -20,6 +20,7 @@ import photoService from "./photo";
 import authService from "./auth";
 import userService from "./user";
 import addressService from "./address";
+import categoryService from "./category";
 
 /**
  * 2022/08/17 - api요청 관련 메서드들을 가진 객체 - by 1-blue
@@ -29,6 +30,7 @@ const apiService = {
   authService,
   userService,
   addressService,
+  categoryService,
 };
 
 export default apiService;

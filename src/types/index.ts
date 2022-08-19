@@ -27,6 +27,14 @@ export type {
   ApiUpdateAddressResponse,
   ApiGetAddressBody,
   ApiGetAddressResponse,
+  ApiCreateProductBody,
+  ApiCreateProductResponse,
+  ApiGetCategoryBody,
+  ApiGetCategoryResponse,
+  ApiDeletePhotoBody,
+  ApiDeletePhotoResponse,
+  ApiDeletePhotosBody,
+  ApiDeletePhotosResponse,
 } from "./api";
 
 export type { UserWithPhoto } from "./data";

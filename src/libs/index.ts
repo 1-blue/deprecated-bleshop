@@ -15,6 +15,7 @@ export {
   isFulFilled,
   addSeparatorToPhone,
   removeSeparatorToPhone,
+  deleteSeparator,
 } from "./utils";
 
 export { getSignedURL, movePhoto, deletePhoto, copyPhoto } from "./s3";

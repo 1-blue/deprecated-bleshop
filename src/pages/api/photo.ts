@@ -1,7 +1,3 @@
-import { getSession } from "next-auth/react";
-
-import prisma from "@src/prisma";
-
 // util
 import { getSignedURL, movePhoto } from "@src/libs";
 
@@ -30,6 +26,29 @@ export default async function handler(
         photoURL,
         message: "프로필 이미지를 업로드중입니다. 잠시만 기다려주세요!",
       });
+    }
+  }
+
+  if (method === "DELETE") {
+    // 이미지들 제거
+    if (typeof query.names === "object") {
+      const { names } = query;
+
+      names.forEach((name) => movePhoto(name));
+
+      return res
+        .status(200)
+        .json({ message: "임시 저장된 이미지들을 제거합니다." });
+    }
+    // 이미지 제거
+    else if (typeof query.name === "string") {
+      const { name } = query;
+
+      movePhoto(name);
+
+      return res
+        .status(200)
+        .json({ message: "임시 저장된 이미지를 제거합니다." });
     }
   }
 

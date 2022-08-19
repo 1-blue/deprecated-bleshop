@@ -106,3 +106,12 @@ export const removeSeparatorToPhone = (phone: string) =>
     .split("")
     .filter((v) => !isNaN(+v))
     .join("");
+
+/**
+ * 문자열에서 구분자 기준으로 나누는 함수
+ * @param word 문자열
+ * @param separator 구분자
+ * @returns 구분자와 공백을 제거한 문자 배열
+ */
+export const deleteSeparator = (word: string, separator: string) =>
+  word.split(separator).map((v) => v.trim());

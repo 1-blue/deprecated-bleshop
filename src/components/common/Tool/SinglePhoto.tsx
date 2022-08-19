@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 // component
 import Icon from "@src/components/common/Icon";
 import Photo from "@src/components/common/Photo";
+import Label from "./Label";
+import ErrorMessage from "./ErrorMessage";
 
 // api
 import apiService from "@src/api";
@@ -83,12 +85,8 @@ const SinglePhoto = ({
 
   return (
     <>
-      <label
-        htmlFor={name}
-        className="min-w-[200px] max-w-[600px] w-full font-bolder text-xs xs:text-sm md:text-base cursor-pointer"
-      >
-        {name}
-      </label>
+      <Label name={name} />
+
       <input
         id={name}
         type="file"
@@ -103,8 +101,9 @@ const SinglePhoto = ({
         onChange={onInputPhoto}
       />
       <div
-        className="min-w-[200px] max-w-[600px] w-full h-60 xs:h-96 p-2 flex justify-center items-center bg-transparent border-2 border-blue-400 hover:border-blue-600 text-blue-400 hover:text-blue-600 rounded-md cursor-pointer transition-colors"
+        className="min-w-[200px] max-w-[600px] w-full h-60 xs:h-96 p-2 flex justify-center items-center bg-transparent border-dashed border-2 border-gray-400 hover:border-blue-600 text-blue-400 hover:text-blue-600 rounded-md cursor-pointer transition-colors focus:outline-none focus:text-blue-600 focus:border-blue-600"
         onClick={() => photoRef.current?.click()}
+        tabIndex={0}
       >
         {photoURL === "" ? (
           <Icon shape="plus" className="w-8 h-8 xs:w-12 xs:h-12" />
@@ -112,14 +111,13 @@ const SinglePhoto = ({
           <Photo
             path={photoURL}
             className="h-full w-full"
-            alt="상품 대표 이미지"
+            alt="대표 이미지"
             contain
           />
         )}
       </div>
-      <span className="self-start text-red-600 mb-4 mt-1 font-semibold text-[8px] xs:text-xs">
-        {errorMessage && "※" + " " + errorMessage}
-      </span>
+
+      <ErrorMessage errorMessage={errorMessage} />
     </>
   );
 };

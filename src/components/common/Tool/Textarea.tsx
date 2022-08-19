@@ -1,5 +1,9 @@
 import { useCallback, useRef } from "react";
 
+// component
+import ErrorMessage from "./ErrorMessage";
+import Label from "./Label";
+
 // type
 import type { UseFormRegisterReturn } from "react-hook-form";
 
@@ -32,12 +36,8 @@ const Textarea = ({
 
   return (
     <>
-      <label
-        htmlFor={name}
-        className="min-w-[200px] max-w-[600px] w-full font-bolder text-xs xs:text-sm md:text-base cursor-pointer"
-      >
-        {name}
-      </label>
+      <Label name={name} />
+
       <textarea
         id={name}
         rows={10}
@@ -51,9 +51,8 @@ const Textarea = ({
         }}
         onInput={handleResizeHeight}
       />
-      <span className="self-start text-red-600 mb-4 mt-1 font-semibold text-[8px] xs:text-xs">
-        {errorMessage && "※" + " " + errorMessage}
-      </span>
+
+      <ErrorMessage errorMessage={errorMessage} />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import type { Address, User } from "@prisma/client";
+import type { Address, Category, User } from "@prisma/client";
 
 /**
  * 2022/08/11 - 모든 api요청이 공통으로 갖는 타입 - by 1-blue
@@ -149,3 +149,63 @@ export type ApiGetAddressBody = {};
  * 기본 주소가 없다면 제일 처음 등록한 주소 반환
  */
 export type ApiGetAddressResponse = ApiResponse & { address: Address | null };
+
+/**
+ * 2022/08/18 - 모든 카테고리 요청 송신 타입 - by 1-blue
+ */
+export type ApiGetCategoryBody = {};
+/**
+ * 2022/08/18 - 모든 카테고리 요청 수신 타입 - by 1-blue
+ */
+export type ApiGetCategoryResponse = ApiResponse & { categories: Category[] };
+
+/**
+ * 2022/08/19 - 임시 저장된 이미지 제거 송신 타입 - by 1-blue
+ */
+export type ApiDeletePhotoBody = { name: string };
+/**
+ * 2022/08/19 - 임시 저장된 이미지 제거 수신 타입 - by 1-blue
+ */
+export type ApiDeletePhotoResponse = ApiResponse & {};
+/**
+ * 2022/08/19 - 임시 저장된 이미지들 제거 송신 타입 - by 1-blue
+ */
+export type ApiDeletePhotosBody = { names: string[] };
+/**
+ * 2022/08/19 - 임시 저장된 이미지들 제거 수신 타입 - by 1-blue
+ */
+export type ApiDeletePhotosResponse = ApiResponse & {};
+
+/**
+ * 2022/08/18 - 상품 등록 송신 타입 - by 1-blue
+ */
+export type ApiCreateProductBody = {
+  name: string;
+  category: string;
+  option: {
+    color: string[];
+    size: string[];
+  };
+  photo: string;
+  photos: string[];
+  description: string;
+  information: {
+    brand: string;
+    company: string;
+    period: Date;
+    price: number;
+  };
+  keywords: string[];
+  filters: string[];
+  // delivery: {
+  //   location: string;
+  //   way: string;
+  //   company: string;
+  //   kinds: string;
+  //   period: string;
+  // };
+};
+/**
+ * 2022/08/18 - 상품 등록 수신 타입 - by 1-blue
+ */
+export type ApiCreateProductResponse = ApiResponse & {};

@@ -26,6 +26,13 @@ export async function middleware(req: NextRequest, event: NextFetchEvent) {
       return NextResponse.redirect(new URL("/information", req.url));
     }
   }
+
+  // 2022/08/16 - 로그인 하지 않고 접근 제한 ( 상품 생성 ) - by 1-blue
+  if (pathname.startsWith("/product/upload")) {
+    if (!session) {
+      return NextResponse.redirect(new URL("/product", req.url));
+    }
+  }
 }
 
 export const config = {
@@ -35,5 +42,6 @@ export const config = {
     "/information/update",
     "/information/address",
     "/information/address/update",
+    "/product/upload",
   ],
 };
