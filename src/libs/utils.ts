@@ -54,7 +54,13 @@ export const isFulFilled = <T>(
   input: PromiseSettledResult<T>
 ): input is PromiseFulfilledResult<T> => input.status === "fulfilled";
 
-type RegExpType = "id" | "password" | "email" | "phone" | "birthday";
+type RegExpType =
+  | "id"
+  | "password"
+  | "email"
+  | "phone"
+  | "birthday"
+  | "numberWithComma";
 /**
  * 2022/08/12 - 정규 표현식 모음 - by 1-blue
  * @param type 정규표현식 종류 입력
@@ -81,6 +87,10 @@ export const getRegExp = (type: RegExpType) => {
     case "birthday":
       // 숫자만 8자리 입력해 주세요.
       return /[0-9]{8,8}/;
+
+    case "numberWithComma":
+      // 숫자에 3자리마다 콤마 추가
+      return /\B(?=(\d{3})+(?!\d))/g;
   }
 };
 
@@ -115,3 +125,19 @@ export const removeSeparatorToPhone = (phone: string) =>
  */
 export const deleteSeparator = (word: string, separator: string) =>
   word.split(separator).map((v) => v.trim());
+
+/**
+ * 숫자 3자리마다 콤마 추가
+ * @param number 콤마를 추가할 숫자
+ * @returns 콤마가 추가된 문자열로 반환
+ */
+export const numberWithComma = (number: number | string) =>
+  number.toString().replace(getRegExp("numberWithComma"), ",");
+
+/**
+ * 콤마가 추가된 문자열을 콤마를 제거한 숫자로 반환
+ * @param price 콤마가 추가된 문자열
+ * @returns 콤마를 제거한 숫자 반환
+ */
+export const numberWithoutComma = (price: string) =>
+  price.toString().split(",").join("");

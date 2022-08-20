@@ -42,6 +42,7 @@ export type ApiSignUpBody = {
   email: string;
   phone: string;
   photo?: string;
+  isAdmin: boolean;
 };
 /**
  * 2022/08/11 - 회원가입 수신 타입 - by 1-blue
@@ -183,8 +184,8 @@ export type ApiCreateProductBody = {
   name: string;
   category: string;
   option: {
-    color: string[];
-    size: string[];
+    color: string;
+    size: string;
   };
   photo: string;
   photos: string[];
@@ -193,7 +194,7 @@ export type ApiCreateProductBody = {
     brand: string;
     company: string;
     period: Date;
-    price: number;
+    price: string;
   };
   keywords: string[];
   filters: string[];
@@ -208,4 +209,6 @@ export type ApiCreateProductBody = {
 /**
  * 2022/08/18 - 상품 등록 수신 타입 - by 1-blue
  */
-export type ApiCreateProductResponse = ApiResponse & {};
+export type ApiCreateProductResponse = ApiResponse & {
+  productIdx?: number;
+};

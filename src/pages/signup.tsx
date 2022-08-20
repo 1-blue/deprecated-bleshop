@@ -12,7 +12,6 @@ import apiService from "@src/api";
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
 import Tool from "@src/components/common/Tool";
-import Photo from "@src/components/common/Photo";
 
 // type
 import type { NextPage } from "next";
@@ -40,7 +39,7 @@ const SignUp: NextPage = () => {
   const onSubmit = useCallback(
     async (body: SignUpForm) => {
       try {
-        const { id, email, name, password, phone } = body;
+        const { id, email, name, password, phone, isAdmin } = body;
 
         const {
           data: { message },
@@ -51,6 +50,7 @@ const SignUp: NextPage = () => {
           password,
           phone,
           photo: photoURL,
+          isAdmin,
         });
 
         toast.success(message);
@@ -68,36 +68,12 @@ const SignUp: NextPage = () => {
     [photoURL, router]
   );
 
-  // // 2022/08/11 - 프로필 이미지 S3에 업로드 - by 1-blue
-  // const photo = watch("photo");
-  // useEffect(() => {
-  //   if (!photo) return;
-
-  //   apiService.photoService
-  //     .apiCreatePhoto({ file: photo[0] })
-  //     .then(({ photoURL, message }) => {
-  //       if (!photoURL) return;
-
-  //       setPhotoURL(photoURL);
-  //       toast.success(message);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-
-  //       if (error instanceof AxiosError) {
-  //         toast.error(error.response?.data.message);
-  //       } else {
-  //         toast.error(
-  //           "알 수 없는 에러가 발생했습니다. 새로고침후에 다시 시도해주세요!"
-  //         );
-  //       }
-  //     })
-  //     .finally(() => setValue("photo", null));
-  // }, [photo, setValue]);
-
   // 2022/08/12 - 비밀번호 확인과 비교를 위함 - by 1-blue
   const password = useRef<string | null>(null);
   password.current = watch("password", "");
+
+  // 2022/08/20 - 관리자 여부 ( 임의로 숨김 ) - by 1-blue
+  const [isShow, setIsShow] = useState(false);
 
   return (
     <>
@@ -111,6 +87,18 @@ const SignUp: NextPage = () => {
       </h1>
 
       <Tool.Form onSubmit={handleSubmit(onSubmit)}>
+        {isShow && (
+          <div className="fixed top-2 left-2">
+            <Tool.Checkbox name="관리자" register={register("isAdmin")} />
+          </div>
+        )}
+
+        <button
+          type="button"
+          className="fixed top-2 right-2 bg-transparent p-1"
+          onClick={() => setIsShow((prev) => !prev)}
+        />
+
         <Tool.Input
           type="text"
           name="아이디"

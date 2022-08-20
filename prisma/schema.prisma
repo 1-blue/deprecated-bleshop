@@ -18,9 +18,9 @@ model Photo {
   user    User? @relation(fields: [userIdx], references: [idx])
   userIdx Int?  @unique
 
-  // 상품과 이미지 => 1:N
-  Product    Product? @relation(fields: [productIdx], references: [idx])
-  productIdx Int?
+  // 상품과 이미지 => 1:N ( 대표 이미지, 추가 이미지 )
+  Product     Product? @relation(fields: [productsIdx], references: [idx])
+  productsIdx Int?
 
   // 댓글과 이미지 => 1:N
   Comment    Comment? @relation(fields: [commentIdx], references: [idx])
@@ -29,12 +29,16 @@ model Photo {
 
 // 유저
 model User {
-  idx      Int    @id @default(autoincrement())
-  id       String @unique
+  idx      Int     @id @default(autoincrement())
+  id       String  @unique
   password String
-  name     String @unique
-  email    String @unique
-  phone    String @unique
+  name     String  @unique
+  email    String  @unique
+  phone    String  @unique
+  isAdmin  Boolean @default(false)
+
+  // 유저와 상품 => 1:N
+  products Product[]
 
   // 유저와 이미지 => 1:1
   photo Photo?
@@ -52,18 +56,40 @@ model User {
   addresses Address[]
 }
 
+// 주소
+model Address {
+  idx       Int     @id @default(autoincrement())
+  address   String
+  residence String
+  name      String
+  phone     String
+  message   String
+  isDefault Boolean
+
+  // 유저와 주소 => 1 : N
+  User    User? @relation(fields: [userIdx], references: [idx])
+  userIdx Int?
+}
+
 // 상품
 model Product {
-  idx         Int    @id @default(autoincrement())
+  idx         Int     @id @default(autoincrement())
   name        String
+  color       String?
+  size        String?
   description String
+  brand       String
+  company     String
+  period      String
   price       Int
+  photo       String
 
-  // 상품과 이미지 => 1:N
+  // 유저와 상품 => 1:N
+  User    User? @relation(fields: [userIdx], references: [idx])
+  userIdx Int?
+
+  // 상품과 이미지 => 1:N ( 추가 이미지 )
   photos Photo[]
-
-  // 상품과 카테고리 => 1:N
-  categorys Category[]
 
   // 상품과 주문 => 1:N
   orders Order[]
@@ -73,6 +99,82 @@ model Product {
 
   // 상품과 댓글 => 1:N
   commments Comment[]
+
+  // 상품과 카테고리 => N:M
+  categories ProductsOnCategories[]
+
+  // 상품과 키워드 => N:M
+  keywords ProductsOnKeywords[]
+
+  // 상품과 필터 => N:M
+  filters ProductsOnFilters[]
+}
+
+// 카테고리
+model Category {
+  category String @id
+
+  // 상품과 카테고리 => N:M
+  products ProductsOnCategories[]
+}
+
+// 상품과 카테고리 중간 테이블 ( N:M )
+model ProductsOnCategories {
+  product     Product  @relation(fields: [productIdx], references: [idx])
+  productIdx  Int
+  category    Category @relation(fields: [categoryIdx], references: [category])
+  categoryIdx String
+
+  @@id([productIdx, categoryIdx])
+}
+
+// 키워드
+model Keyword {
+  keyword String @id @unique
+
+  // 상품과 키워드 => N:M
+  products ProductsOnKeywords[]
+}
+
+// 상품과 키워드 중간 테이블 ( N:M )
+model ProductsOnKeywords {
+  product    Product @relation(fields: [productIdx], references: [idx])
+  productIdx Int
+  keyword    Keyword @relation(fields: [keywordIdx], references: [keyword])
+  keywordIdx String
+
+  @@id([productIdx, keywordIdx])
+}
+
+// 필터
+model Filter {
+  filter String @id @unique
+
+  // 상품과 필터 => N:M
+  products ProductsOnFilters[]
+}
+
+// 상품과 필터 중간 테이블 ( N:M )
+model ProductsOnFilters {
+  product    Product @relation(fields: [productIdx], references: [idx])
+  productIdx Int
+  filter     Filter  @relation(fields: [filterIdx], references: [filter])
+  filterIdx  String
+
+  @@id([productIdx, filterIdx])
+}
+
+// 주문
+model Order {
+  idx Int @id @default(autoincrement())
+
+  // 유저와 주문 => 1:N
+  User    User? @relation(fields: [userIdx], references: [idx])
+  userIdx Int?
+
+  // 상품과 주문 => 1:N
+  Product    Product? @relation(fields: [productIdx], references: [idx])
+  productIdx Int?
 }
 
 // 장바구니 ( 유저와 상품 )
@@ -113,41 +215,4 @@ model Evaluation {
   isLike Boolean
 
   @@id([userIdx, commentIdx])
-}
-
-// 카테고리
-model Category {
-  category String @id
-
-  // 상품과 카테고리 1:N
-  Product    Product? @relation(fields: [productIdx], references: [idx])
-  productIdx Int?
-}
-
-// 주문
-model Order {
-  idx Int @id @default(autoincrement())
-
-  // 유저와 주문 => 1:N
-  User    User? @relation(fields: [userIdx], references: [idx])
-  userIdx Int?
-
-  // 상품과 주문 => 1:N
-  Product    Product? @relation(fields: [productIdx], references: [idx])
-  productIdx Int?
-}
-
-// 주소
-model Address {
-  idx       Int     @id @default(autoincrement())
-  address   String
-  residence String
-  name      String
-  phone     String
-  message   String
-  isDefault Boolean
-
-  // 유저와 주소 => 1 : N
-  User    User? @relation(fields: [userIdx], references: [idx])
-  userIdx Int?
 }

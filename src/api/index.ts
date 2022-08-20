@@ -21,6 +21,7 @@ import authService from "./auth";
 import userService from "./user";
 import addressService from "./address";
 import categoryService from "./category";
+import productService from "./product";
 
 /**
  * 2022/08/17 - api요청 관련 메서드들을 가진 객체 - by 1-blue
@@ -31,6 +32,7 @@ const apiService = {
   userService,
   addressService,
   categoryService,
+  productService,
 };
 
 export default apiService;

@@ -16,6 +16,8 @@ export {
   addSeparatorToPhone,
   removeSeparatorToPhone,
   deleteSeparator,
+  numberWithComma,
+  numberWithoutComma,
 } from "./utils";
 
 export { getSignedURL, movePhoto, deletePhoto, copyPhoto } from "./s3";
