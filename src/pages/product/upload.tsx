@@ -173,6 +173,7 @@ const Upload: NextPage = () => {
             maxLength: { message: "상품명은 최대 40자 입니다!", value: 40 },
           })}
           errorMessage={errors.name?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
 
         {/* 가격 입력 */}
@@ -186,6 +187,7 @@ const Upload: NextPage = () => {
           errorMessage={errors.information?.price?.message}
           onFocus={onFocus}
           onBlur={onBlur}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
 
         {/* 카테고리 설정 */}
@@ -209,6 +211,7 @@ const Upload: NextPage = () => {
           placeholder="사이즈 입력해주세요. ( 쉼표(,)로 구분해서 입력해주세요. )"
           register={register("option.size")}
           errorMessage={errors.option?.size?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
         <Tool.Input
           name="색상"
@@ -216,6 +219,7 @@ const Upload: NextPage = () => {
           placeholder="색상 입력해주세요. ( 쉼표(,)로 구분해서 입력해주세요. )"
           register={register("option.color")}
           errorMessage={errors.option?.color?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
 
         {/* 상품 대표 이미지 등록 */}
@@ -257,6 +261,7 @@ const Upload: NextPage = () => {
           placeholder="브랜드를 입력해주세요."
           register={register("information.brand")}
           errorMessage={errors.option?.color?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
         <Tool.Input
           name="제조사"
@@ -264,6 +269,7 @@ const Upload: NextPage = () => {
           placeholder="제조사를 입력해주세요."
           register={register("information.company")}
           errorMessage={errors.option?.color?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
         <Tool.DatePicker<ProductForm>
           name="판매 종료일"
@@ -280,6 +286,7 @@ const Upload: NextPage = () => {
           placeholder="검색어 입력해주세요. ( 쉼표(,)로 구분해서 입력해주세요. ) ex) 남자,상의"
           register={register("keywords")}
           errorMessage={errors.option?.color?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
 
         {/* 검색어 필터 ( 색상, 사이즈, 제조연도 등 ) */}
@@ -289,6 +296,7 @@ const Upload: NextPage = () => {
           placeholder="검색어 필터 입력해주세요. ( 쉼표(,)로 구분해서 입력해주세요. ) ex) 파랑,M"
           register={register("filters")}
           errorMessage={errors.option?.color?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
 
         {/* 판매 요청 버튼 */}

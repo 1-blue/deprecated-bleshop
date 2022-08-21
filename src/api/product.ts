@@ -4,6 +4,8 @@ import { axiosInstance } from ".";
 import type {
   ApiCreateProductBody,
   ApiCreateProductResponse,
+  ApiGetProductsBody,
+  ApiGetProductsResponse,
 } from "@src/types";
 
 /**
@@ -15,10 +17,21 @@ const apiCreateProduct = (body: ApiCreateProductBody) =>
   axiosInstance.post<ApiCreateProductResponse>(`/product`, body);
 
 /**
+ * 2022/08/21 - 상품들 요청 - by 1-blue
+ * @param 요청 개수(limit)와 마지막 상품 식별자(lastIdx)
+ * @returns
+ */
+const apiGetProducts = ({ limit, lastIdx }: ApiGetProductsBody) =>
+  axiosInstance.get<ApiGetProductsResponse>(
+    `/products?limit=${limit}&lastIdx=${lastIdx}`
+  );
+
+/**
  * 2022/08/19 - 상품 관련 api 요청 객체 - by 1-blue
  */
 const productService = {
   apiCreateProduct,
+  apiGetProducts,
 };
 
 export default productService;

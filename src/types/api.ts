@@ -1,4 +1,4 @@
-import type { Address, Category, User } from "@prisma/client";
+import type { Address, Category, Product, User } from "@prisma/client";
 
 /**
  * 2022/08/11 - 모든 api요청이 공통으로 갖는 타입 - by 1-blue
@@ -212,3 +212,12 @@ export type ApiCreateProductBody = {
 export type ApiCreateProductResponse = ApiResponse & {
   productIdx?: number;
 };
+
+/**
+ * 2022/08/21 - 상품들 불러오기 송신 타입 - by 1-blue
+ */
+export type ApiGetProductsBody = { limit: number; lastIdx: number };
+/**
+ * 2022/08/21 - 상품들 불러오기 수신 타입 - by 1-blue
+ */
+export type ApiGetProductsResponse = ApiResponse & { products: Product[] };
