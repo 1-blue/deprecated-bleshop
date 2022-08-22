@@ -1,3 +1,4 @@
+import type { LIMIT } from ".";
 import type { Address, Category, Product, User } from "@prisma/client";
 
 /**
@@ -216,7 +217,7 @@ export type ApiCreateProductResponse = ApiResponse & {
 /**
  * 2022/08/21 - 상품들 불러오기 송신 타입 - by 1-blue
  */
-export type ApiGetProductsBody = { limit: number; lastIdx: number };
+export type ApiGetProductsBody = { limit: LIMIT; lastIdx: number };
 /**
  * 2022/08/21 - 상품들 불러오기 수신 타입 - by 1-blue
  */

@@ -5,7 +5,7 @@ import { v1 } from "uuid";
 import apiService from "@src/api";
 
 // type
-import type { Category } from "@prisma/client";
+import type { Category, Product } from "@prisma/client";
 
 /**
  * 구글링으로 알아본 결과 "next.js"와 "recoil"을 같이 사용하면 어떤 문제로 인해서 "key" 중복 경고가 발생함
@@ -21,15 +21,39 @@ import type { Category } from "@prisma/client";
  */
 
 /**
- * 저장된 모든 카테고리들 요청
+ * 2022/08/20 - 저장된 모든 카테고리들 요청 - by 1-blue
  */
 export const categoryState = selector<Category[]>({
-  key: "categoryState" + v1(),
+  key: "categoryState - " + v1(),
   get: async () => {
     const {
       data: { categories },
     } = await apiService.categoryService.apiGetCategory();
 
     return categories;
+  },
+});
+
+/**
+ * 2022/08/22 - 최근 상품들 - by 1-blue
+ */
+export const productsState = atom<Product[]>({
+  key: "productsState - " + v1(),
+  default: [],
+});
+/**
+ * 2022/08/22 - 최근 상품들의 마지막 상품의 식별자 - by 1-blue
+ */
+export const productLastIdxState = selector<number>({
+  key: "productLastIdxState",
+  get: ({ get }) => {
+    const products = get(productsState);
+
+    if (products.length === 0) return -1;
+
+    return products[products.length - 1].idx;
+  },
+  set: ({ set }) => {
+    set(productsState, []);
   },
 });

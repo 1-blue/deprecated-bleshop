@@ -20,6 +20,7 @@ export default async function handler(
         take: limit,
         skip: lastIdx === -1 ? 0 : 1,
         ...(lastIdx !== -1 && { cursor: { idx: lastIdx } }),
+        orderBy: { updatedAt: "desc" },
       });
 
       res.status(200).json({ products, message: "상품들을 가져왔습니다." });

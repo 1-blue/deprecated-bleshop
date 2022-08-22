@@ -73,7 +73,7 @@ model Address {
 
 // 상품
 model Product {
-  idx         Int     @id @default(autoincrement())
+  idx         Int      @id @default(autoincrement())
   name        String
   color       String?
   size        String?
@@ -83,6 +83,7 @@ model Product {
   period      String
   price       Int
   photo       String
+  updatedAt   DateTime @updatedAt
 
   // 유저와 상품 => 1:N
   User    User? @relation(fields: [userIdx], references: [idx])

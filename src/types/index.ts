@@ -35,6 +35,11 @@ export type {
   ApiDeletePhotoResponse,
   ApiDeletePhotosBody,
   ApiDeletePhotosResponse,
+  ApiGetProductsBody,
+  ApiGetProductsResponse,
 } from "./api";
 
 export type { UserWithPhoto } from "./data";
+
+// 2022/08/21 - 최대 요청 개수 - by 1-blue
+export type LIMIT = 15;
