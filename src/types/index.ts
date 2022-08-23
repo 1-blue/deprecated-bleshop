@@ -37,6 +37,10 @@ export type {
   ApiDeletePhotosResponse,
   ApiGetProductsBody,
   ApiGetProductsResponse,
+  ApiGetKeywordsBody,
+  ApiGetKeywordsResponse,
+  ApiGetProductsByKeywordBody,
+  ApiGetProductsByKeywordResponse,
 } from "./api";
 
 export type { UserWithPhoto } from "./data";

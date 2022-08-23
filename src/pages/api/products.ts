@@ -13,10 +13,25 @@ export default async function handler(
   try {
     // lastIdx 기준으로 상품들 요청
     if (method === "GET") {
+      let where = {};
+
       const limit = Number(req.query.limit);
       const lastIdx = Number(req.query.lastIdx);
+      const keyword = req.query.keyword;
+
+      // 특정 키워드를 가진 상품들을 검색하는 경우
+      if (typeof keyword === "string") {
+        where = {
+          keywords: {
+            some: {
+              keywordIdx: keyword,
+            },
+          },
+        };
+      }
 
       const products = await prisma.product.findMany({
+        where,
         take: limit,
         skip: lastIdx === -1 ? 0 : 1,
         ...(lastIdx !== -1 && { cursor: { idx: lastIdx } }),

@@ -57,3 +57,25 @@ export const productLastIdxState = selector<number>({
     set(productsState, []);
   },
 });
+
+/**
+ * 2022/08/23 - 검색중인 단어 - by 1-blue
+ */
+export const searchWordState = atom({
+  key: "searchWordState",
+  default: "",
+});
+/**
+ * 2022/08/23 - 검색중인 단어를 포함하는 키워드들 ( 추천 검색어 ) - by 1-blue
+ */
+export const keywordsState = selector({
+  key: "keywordsState",
+  get: async ({ get }) => {
+    const word = get(searchWordState);
+    const {
+      data: { keywords },
+    } = await apiService.keywordService.apiGetKeywords({ word });
+
+    return keywords;
+  },
+});

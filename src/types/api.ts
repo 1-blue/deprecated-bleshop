@@ -1,5 +1,5 @@
 import type { LIMIT } from ".";
-import type { Address, Category, Product, User } from "@prisma/client";
+import type { Address, Category, Keyword, Product, User } from "@prisma/client";
 
 /**
  * 2022/08/11 - 모든 api요청이 공통으로 갖는 타입 - by 1-blue
@@ -222,3 +222,23 @@ export type ApiGetProductsBody = { limit: LIMIT; lastIdx: number };
  * 2022/08/21 - 상품들 불러오기 수신 타입 - by 1-blue
  */
 export type ApiGetProductsResponse = ApiResponse & { products: Product[] };
+
+/**
+ * 2022/08/23 - 추천 검색 키워드 불러오기 송신 타입 - by 1-blue
+ */
+export type ApiGetKeywordsBody = { word?: string };
+/**
+ * 2022/08/23 - 추천 검색 키워드 불러오기 수신 타입 - by 1-blue
+ */
+export type ApiGetKeywordsResponse = ApiResponse & { keywords: Keyword[] };
+
+/**
+ * 2022/08/23 - 특정 키워드를 가진 상품들 불러오기 송신 타입 - by 1-blue
+ */
+export type ApiGetProductsByKeywordBody = ApiGetProductsBody & {
+  keyword: string;
+};
+/**
+ * 2022/08/23 - 특정 키워드를 가진 상품들 불러오기 수신 타입 - by 1-blue
+ */
+export type ApiGetProductsByKeywordResponse = ApiGetProductsResponse;
