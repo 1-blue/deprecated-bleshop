@@ -18,6 +18,8 @@ export default async function handler(
       const limit = Number(req.query.limit);
       const lastIdx = Number(req.query.lastIdx);
       const keyword = req.query.keyword;
+      const selectedCategory = req.query.selectedCategory;
+      const selectedFilters = req.query.selectedFilters;
 
       // 특정 키워드를 가진 상품들을 검색하는 경우
       if (typeof keyword === "string") {
@@ -25,6 +27,32 @@ export default async function handler(
           keywords: {
             some: {
               keywordIdx: keyword,
+            },
+          },
+        };
+      }
+
+      // 특정 카테고리를 가진 상품들을 찾는 경우
+      if (typeof selectedCategory === "string" && selectedCategory.length > 0) {
+        where = {
+          ...where,
+          categories: {
+            some: {
+              categoryIdx: selectedCategory,
+            },
+          },
+        };
+      }
+
+      // 특정 필터링을 적용한 경우
+      if (typeof selectedFilters === "string" && selectedFilters.length > 0) {
+        where = {
+          ...where,
+          filters: {
+            some: {
+              OR: selectedFilters.split(",").map((filter) => ({
+                filterIdx: { equals: filter },
+              })),
             },
           },
         };

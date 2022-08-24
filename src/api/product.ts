@@ -20,27 +20,40 @@ const apiCreateProduct = (body: ApiCreateProductBody) =>
 
 /**
  * 2022/08/21 - 상품들 요청 - by 1-blue
- * @param 요청 개수(limit)와 마지막 상품 식별자(lastIdx)
+ * @param 요청 개수(limit)와 마지막 상품 식별자(lastIdx), 선택한 카테고리와 선택한 필터링
  * @returns
  */
-const apiGetProducts = ({ limit, lastIdx }: ApiGetProductsBody) =>
-  axiosInstance.get<ApiGetProductsResponse>(
-    `/products?limit=${limit}&lastIdx=${lastIdx}`
-  );
+const apiGetProducts = ({
+  limit,
+  lastIdx,
+  selectedCategory,
+  selectedFilters,
+}: ApiGetProductsBody) => {
+  let requestUrl = `/products?limit=${limit}&lastIdx=${lastIdx}`;
+  requestUrl += selectedCategory ? `&selectedCategory=${selectedCategory}` : "";
+  requestUrl += selectedFilters ? `&selectedFilters=${selectedFilters}` : "";
+
+  return axiosInstance.get<ApiGetProductsResponse>(requestUrl);
+};
 
 /**
  * 2022/08/23 - 특정 키워드를 가진 상품들 요청 - by 1-blue
- * @param 요청 개수(limit)와 마지막 상품 식별자(lastIdx)
+ * @param 요청 개수(limit)와 마지막 상품 식별자(lastIdx), 검색 키워드, 선택한 카테고리와 선택한 필터링
  * @returns
  */
 const apiGetProductsByKeyword = ({
   limit,
   lastIdx,
   keyword,
-}: ApiGetProductsByKeywordBody) =>
-  axiosInstance.get<ApiGetProductsByKeywordResponse>(
-    `/products?limit=${limit}&lastIdx=${lastIdx}&keyword=${keyword}`
-  );
+  selectedCategory,
+  selectedFilters,
+}: ApiGetProductsByKeywordBody) => {
+  let requestUrl = `/products?limit=${limit}&lastIdx=${lastIdx}&keyword=${keyword}`;
+  requestUrl += selectedCategory ? `&selectedCategory=${selectedCategory}` : "";
+  requestUrl += selectedFilters ? `&selectedFilters=${selectedFilters}` : "";
+
+  return axiosInstance.get<ApiGetProductsByKeywordResponse>(requestUrl);
+};
 
 /**
  * 2022/08/19 - 상품 관련 api 요청 객체 - by 1-blue

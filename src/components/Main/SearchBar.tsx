@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
 
 // state
-import { categoryState, keywordsState, searchWordState } from "@src/states";
+import { keywordsState, searchWordState } from "@src/states";
 
 // hook
 import useDebounce from "@src/hooks/useDebounce";
@@ -21,10 +21,6 @@ type SearchForm = {
 const SearchBar = () => {
   const router = useRouter();
   const { register, handleSubmit, watch } = useForm<SearchForm>();
-
-  // 2022/08/22 - 등록된 모든 카테고리들 - by 1-blue
-  const { state: categoryResult, contents: categories } =
-    useRecoilValueLoadable(categoryState);
 
   // 2022/08/23 - 검색할 키워드 수정 - by 1-blue
   const setSearchWord = useSetRecoilState(searchWordState);
@@ -74,79 +70,58 @@ const SearchBar = () => {
     [router]
   );
 
-  // "useRecoilValueLoadable()"에 의해 사용 ( 미사용시 에러 발생 )
-  if (categoryResult === "loading") return <h3>로딩중입니다...</h3>;
-  if (categoryResult === "hasError" || keywordResult === "hasError")
+  if (keywordResult === "hasError")
     return <h3>에러가 발생했습니다. 새고로침을 시도해주세요.</h3>;
 
   return (
-    <section className="p-2 xsm:p-3 md:p-4 space-y-1 bg-white rounded-md shadow-2xl">
-      <h2 className="pl-1 text-gray-800 font-bolder text-lg xs:text-xl md:text-2xl">
-        상품 검색
-      </h2>
-
-      <form
-        className="flex flex-col justify-center"
-        onSubmit={handleSubmit(onSubmit)}
+    <form
+      className="flex flex-col justify-center"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <div
+        className="relative flex flex-col items-center w-full"
+        ref={wrapperRef}
       >
-        <div
-          className="relative flex flex-col items-center w-full"
-          ref={wrapperRef}
+        <Tool.Input
+          type="search"
+          name="검색어"
+          placeholder="검색어를 입력해주세요."
+          register={register("searchWord", {
+            required: "검색어를 입력해주세요!",
+          })}
+          hiddenLabel={true}
+          hiddenMessage={true}
+          className="min-w-full max-w-full"
+          onFocus={() => setIsFocus(true)}
+        />
+
+        <button
+          type="submit"
+          className="absolute top-0 right-0 p-[10px] xs:p-[12px] md:p-[10px] bg-blue-400 text-white rounded-r-sm hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
         >
-          <Tool.Input
-            type="search"
-            name="검색어"
-            placeholder="검색어를 입력해주세요."
-            register={register("searchWord", {
-              required: "검색어를 입력해주세요!",
-            })}
-            hiddenLabel={true}
-            hiddenMessage={true}
-            className="min-w-full max-w-full"
-            onFocus={() => setIsFocus(true)}
+          <Icon
+            shape="search"
+            className="w-4 h-4 xs:w-5 xs:h-5 md:w-6 md:h-6"
           />
+        </button>
+      </div>
 
-          <button
-            type="submit"
-            className="absolute top-0 right-0 p-[10px] xs:p-[12px] md:p-[10px] bg-blue-400 text-white rounded-r-sm hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
-          >
-            <Icon
-              shape="search"
-              className="w-4 h-4 xs:w-5 xs:h-5 md:w-6 md:h-6"
-            />
-          </button>
-        </div>
-
-        <div className="relative w-full">
-          <ul className="absolute top-0 left-0 w-full bg-gray-200 rounded-b-md z-[1]">
-            {isFocus &&
-              keywordResult === "hasValue" &&
-              keywords.map(({ keyword }) => (
-                <li key={keyword}>
-                  <Link href={`/search?searchWord=${keyword}`}>
-                    <a className="inline-block w-full px-4 py-2 text-[8px] xs:text-sm sm:text-base hover:bg-gray-300 focus:outline-none focus:bg-gray-300 transition-colors">
-                      {keyword}
-                    </a>
-                  </Link>
-                </li>
-              ))}
-          </ul>
-        </div>
-      </form>
-
-      <ul className="flex flex-wrap space-x-2 space-y-2">
-        {categories.map(({ category }) => (
-          <li key={category} className="first:self-end">
-            <button
-              type="button"
-              className="py-1 px-2 shrink-1 bg-gray-400 text-white font-bolder text-xs hover:bg-blue-600 focus:outline-none focus:bg-blue-600 transition-colors"
-            >
-              {category}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </section>
+      <div className="relative w-full">
+        <ul className="absolute top-0 left-0 w-full bg-gray-200 rounded-b-md z-[1]">
+          {isFocus &&
+            keywordResult === "hasValue" &&
+            keywords.map(({ keyword }) => (
+              <li key={keyword}>
+                <Link href={`/search?searchWord=${keyword}`}>
+                  <a className="inline-block w-full px-4 py-2 text-[8px] xs:text-sm sm:text-base hover:bg-gray-300 focus:outline-none focus:bg-gray-300 transition-colors">
+                    {keyword}
+                  </a>
+                </Link>
+              </li>
+            ))}
+        </ul>
+      </div>
+    </form>
   );
 };
 

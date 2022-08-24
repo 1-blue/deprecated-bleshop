@@ -5,7 +5,7 @@ import { v1 } from "uuid";
 import apiService from "@src/api";
 
 // type
-import type { Category, Product } from "@prisma/client";
+import type { Category, Filter, Product } from "@prisma/client";
 
 /**
  * 구글링으로 알아본 결과 "next.js"와 "recoil"을 같이 사용하면 어떤 문제로 인해서 "key" 중복 경고가 발생함
@@ -23,8 +23,8 @@ import type { Category, Product } from "@prisma/client";
 /**
  * 2022/08/20 - 저장된 모든 카테고리들 요청 - by 1-blue
  */
-export const categoryState = selector<Category[]>({
-  key: "categoryState - " + v1(),
+export const categoriesState = selector<Category[]>({
+  key: "categoriesState - " + v1(),
   get: async () => {
     const {
       data: { categories },
@@ -32,6 +32,13 @@ export const categoryState = selector<Category[]>({
 
     return categories;
   },
+});
+/**
+ * 2022/08/24 - 현재 선택한 카테고리 - by 1-blue
+ */
+export const selectedCategoryState = atom<string | null>({
+  key: "selectedCategoryState",
+  default: null,
 });
 
 /**
@@ -78,4 +85,25 @@ export const keywordsState = selector({
 
     return keywords;
   },
+});
+
+/**
+ * 2022/08/24 - 저장된 모든 필터들 요청 - by 1-blue
+ */
+export const filtersState = selector<Filter[]>({
+  key: "filtersState - " + v1(),
+  get: async () => {
+    const {
+      data: { filters },
+    } = await apiService.filterService.apiGetFilters();
+
+    return filters;
+  },
+});
+/**
+ * 2022/08/24 - 현재 선택한 필터들 - by 1-blue
+ */
+export const selectedFiltersState = atom<string[]>({
+  key: "selectedFiltersState",
+  default: [],
 });

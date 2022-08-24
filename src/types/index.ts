@@ -41,6 +41,8 @@ export type {
   ApiGetKeywordsResponse,
   ApiGetProductsByKeywordBody,
   ApiGetProductsByKeywordResponse,
+  ApiGetFiltersBody,
+  ApiGetFiltersResponse,
 } from "./api";
 
 export type { UserWithPhoto } from "./data";

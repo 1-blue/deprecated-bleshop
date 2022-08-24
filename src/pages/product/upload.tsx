@@ -3,6 +3,7 @@ import { useRecoilValueLoadable } from "recoil";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 // util
 import {
@@ -15,7 +16,7 @@ import {
 import apiService from "@src/api";
 
 // atom
-import { categoryState } from "@src/states";
+import { categoriesState } from "@src/states";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
@@ -25,7 +26,6 @@ import Tool from "@src/components/common/Tool";
 import type { NextPage } from "next";
 import type { ApiCreateProductBody } from "@src/types";
 import { AxiosError } from "axios";
-import { useSession } from "next-auth/react";
 
 type ProductForm = Pick<
   ApiCreateProductBody,
@@ -41,7 +41,8 @@ const Upload: NextPage = () => {
   const router = useRouter();
   const { data } = useSession();
   // 2022/08/19 - 저장된 모든 카테고리들 - by 1-blue
-  const { state, contents: categories } = useRecoilValueLoadable(categoryState);
+  const { state, contents: categories } =
+    useRecoilValueLoadable(categoriesState);
   const {
     control,
     register,

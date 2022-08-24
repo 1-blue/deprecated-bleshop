@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
@@ -11,7 +11,12 @@ import apiService from "@src/api";
 import { dateOrTimeFormat, numberWithComma } from "@src/libs";
 
 // state
-import { productLastIdxState, productsState } from "@src/states";
+import {
+  productLastIdxState,
+  productsState,
+  selectedCategoryState,
+  selectedFiltersState,
+} from "@src/states";
 
 // component
 import Photo from "@src/components/common/Photo";
@@ -33,6 +38,10 @@ const Products = () => {
   const [lastProductRef, setLastProductRef] = useState<HTMLLIElement | null>(
     null
   );
+  // 2022/08/23 - 현재 선택한 카테고리 - by 1-blue
+  const selectedCategory = useRecoilValue(selectedCategoryState);
+  // 2022/08/23 - 현재 선택한 카테고리 - by 1-blue
+  const selectedFilters = useRecoilValue(selectedFiltersState);
 
   // 2022/08/22 - 처음 한번 상품들의 데이터 요청 - by 1-blue
   useEffect(() => {
@@ -49,6 +58,8 @@ const Products = () => {
             limit,
             lastIdx: -1,
             keyword: router.query.searchWord,
+            selectedCategory,
+            selectedFilters,
           });
 
           setProducts(products);
@@ -60,6 +71,8 @@ const Products = () => {
           } = await apiService.productService.apiGetProducts({
             limit,
             lastIdx: -1,
+            selectedCategory,
+            selectedFilters,
           });
 
           setProducts(products);
@@ -74,7 +87,13 @@ const Products = () => {
         }
       }
     })();
-  }, [setProducts, setProductLastIdx, router.query]);
+  }, [
+    setProducts,
+    setProductLastIdx,
+    router.query,
+    selectedCategory,
+    selectedFilters,
+  ]);
 
   // 2022/08/22 - observer로 인해 실행할 이벤트 함수 ( 제일 마지막 상품이 뷰포트에 들어오면 실행할 이벤트 함수 ) - by 1-blue
   const onScroll = useCallback(
@@ -88,12 +107,20 @@ const Products = () => {
         } = await apiService.productService.apiGetProducts({
           limit,
           lastIdx: productLastIdx,
+          selectedCategory,
+          selectedFilters,
         });
 
         setProducts((prev) => [...prev, ...products]);
       }
     },
-    [lastProductRef, productLastIdx, setProducts]
+    [
+      lastProductRef,
+      productLastIdx,
+      setProducts,
+      selectedCategory,
+      selectedFilters,
+    ]
   );
 
   // 2022/08/22 - observer 등록 ( 제일 마지막 상품이 뷰포트에 들어오면 실행할 이벤트 함수를 등록 ) - by 1-blue
@@ -111,13 +138,7 @@ const Products = () => {
   }, [lastProductRef, onScroll, products]);
 
   return (
-    <section className="space-y-4 p-2 xsm:p-3 md:p-4 bg-white rounded-md shadow-2xl">
-      <h2 className="pl-1 text-gray-800 font-bolder text-lg xs:text-xl md:text-2xl">
-        {router.query.searchWord
-          ? `"${router.query.searchWord}"의 검색 결과`
-          : "상품들"}
-      </h2>
-
+    <>
       {products.length === 0 ? (
         <h3>조건에 맞는 상품이 없습니다.</h3>
       ) : (
@@ -157,7 +178,7 @@ const Products = () => {
           ))}
         </ul>
       )}
-    </section>
+    </>
   );
 };
 
