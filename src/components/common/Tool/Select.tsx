@@ -1,3 +1,7 @@
+// component
+import Label from "./Label";
+import ErrorMessage from "./ErrorMessage";
+
 // type
 import type { UseFormRegisterReturn } from "react-hook-form";
 
@@ -18,23 +22,18 @@ const Select = ({
 }: Props) => {
   return (
     <>
-      <label
-        htmlFor={name}
-        className="min-w-[200px] max-w-[600px] w-full font-bolder text-xs xs:text-sm md:text-base cursor-pointer"
-      >
-        카테고리
-      </label>
+      <Label name={name} />
+
       <select
         id={name}
         {...register}
-        className="min-w-[200px] max-w-[600px] w-full p-2"
+        className="min-w-[200px] max-w-[600px] w-full p-2 border-2 cursor-pointer focus:outline-blue-400"
       >
         {placeholder && <option value="">{placeholder}</option>}
         {children}
       </select>
-      <span className="self-start text-red-600 mb-4 mt-1 font-semibold text-[8px] xs:text-xs">
-        {errorMessage && "※" + " " + errorMessage}
-      </span>
+
+      <ErrorMessage errorMessage={errorMessage} />
     </>
   );
 };

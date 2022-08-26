@@ -11,6 +11,10 @@ import type {
   ApiEditUserPhotoResponse,
   // ApiDeleteUserPhotoBody,
   ApiDeleteUserPhotoResponse,
+  ApiDeletePhotoBody,
+  ApiDeletePhotoResponse,
+  ApiDeletePhotosBody,
+  ApiDeletePhotosResponse,
 } from "@src/types";
 
 import { isFulFilled } from "@src/libs";
@@ -190,6 +194,66 @@ const apiDeleteUserPhoto = async (): Promise<ApiDeleteUserPhotoResponse> => {
 };
 
 /**
+ * 2022/08/19 - 이미지 제거 - by 1-blue
+ * @param name 이미지 이름
+ * @returns 결과 메시지 ( message )
+ */
+const apiDeletePhoto = async ({
+  name,
+}: ApiDeletePhotoBody): Promise<ApiDeletePhotoResponse> => {
+  try {
+    const {
+      data: { message },
+    } = await axiosInstance.delete<ApiDeletePhotoResponse>(
+      `/photo?name=${name}`
+    );
+
+    return { message };
+  } catch (error) {
+    console.error("apiDeletePhoto() >> ", error);
+
+    // 예측 가능한 에러 ( 잘못된 형식의 데이터를 전달받음 )
+    if (error instanceof AxiosError) {
+      const { message } = error.response?.data;
+
+      return { message };
+    }
+
+    return { message: "알 수 없는 문제입니다. 잠시후에 다시 시도해주세요!" };
+  }
+};
+
+/**
+ * 2022/08/19 - 이미지들 제거 - by 1-blue
+ * @param name 이미지 이름 배열
+ * @returns 결과 메시지 ( message )
+ */
+const apiDeletePhotos = async ({
+  names,
+}: ApiDeletePhotosBody): Promise<ApiDeletePhotosResponse> => {
+  try {
+    const {
+      data: { message },
+    } = await axiosInstance.delete<ApiDeletePhotosResponse>(
+      `/photo?names=${names}`
+    );
+
+    return { message };
+  } catch (error) {
+    console.error("apiDeletePhotos() >> ", error);
+
+    // 예측 가능한 에러 ( 잘못된 형식의 데이터를 전달받음 )
+    if (error instanceof AxiosError) {
+      const { message } = error.response?.data;
+
+      return { message };
+    }
+
+    return { message: "알 수 없는 문제입니다. 잠시후에 다시 시도해주세요!" };
+  }
+};
+
+/**
  * 2022/08/17 - 이미지 관련 api 요청 객체 - by 1-blue
  */
 const photoService = {
@@ -197,6 +261,8 @@ const photoService = {
   apiCreatePhotos,
   apiDeleteUserPhoto,
   apiEditUserPhoto,
+  apiDeletePhoto,
+  apiDeletePhotos,
 };
 
 export default photoService;

@@ -1,5 +1,20 @@
-import { atom, selector } from "recoil";
+import { atom, selector, selectorFamily } from "recoil";
 import { v1 } from "uuid";
+
+// api
+import apiService from "@src/api";
+
+// type
+import type { Category, Filter, Product } from "@prisma/client";
+import type { ProductToBuy } from "@src/types";
+
+import productService from "./product";
+
+const stateService = {
+  productService,
+};
+
+export default stateService;
 
 /**
  * 구글링으로 알아본 결과 "next.js"와 "recoil"을 같이 사용하면 어떤 문제로 인해서 "key" 중복 경고가 발생함
@@ -13,3 +28,99 @@ import { v1 } from "uuid";
  *
  * 아직 마땅한 해결법을 찾지 못해서 "selector"의 비동기처리를 하는 경우에는 인증된 유저가 아니어도 접근할 수 있는 정보를 요청할 때만 사용함
  */
+
+/**
+ * 2022/08/20 - 저장된 모든 카테고리들 요청 - by 1-blue
+ */
+export const categoriesState = selector<Category[]>({
+  key: "categoriesState - " + v1(),
+  get: async () => {
+    const {
+      data: { categories },
+    } = await apiService.categoryService.apiGetCategory();
+
+    return categories;
+  },
+});
+/**
+ * 2022/08/24 - 현재 선택한 카테고리 - by 1-blue
+ */
+export const selectedCategoryState = atom<string | null>({
+  key: "selectedCategoryState",
+  default: null,
+});
+
+/**
+ * 2022/08/22 - 최근 상품들 - by 1-blue
+ */
+export const productsState = atom<Product[]>({
+  key: "productsState - " + v1(),
+  default: [],
+});
+/**
+ * 2022/08/22 - 최근 상품들의 마지막 상품의 식별자 - by 1-blue
+ */
+export const productLastIdxState = selector<number>({
+  key: "productLastIdxState",
+  get: ({ get }) => {
+    const products = get(productsState);
+
+    if (products.length === 0) return -1;
+
+    return products[products.length - 1].idx;
+  },
+  set: ({ set }) => {
+    set(productsState, []);
+  },
+});
+
+/**
+ * 2022/08/23 - 검색중인 단어 - by 1-blue
+ */
+export const searchWordState = atom({
+  key: "searchWordState",
+  default: "",
+});
+/**
+ * 2022/08/23 - 검색중인 단어를 포함하는 키워드들 ( 추천 검색어 ) - by 1-blue
+ */
+export const keywordsState = selector({
+  key: "keywordsState",
+  get: async ({ get }) => {
+    const word = get(searchWordState);
+    const {
+      data: { keywords },
+    } = await apiService.keywordService.apiGetKeywords({ word });
+
+    return keywords;
+  },
+});
+
+/**
+ * 2022/08/24 - 저장된 모든 필터들 요청 - by 1-blue
+ */
+export const filtersState = selector<Filter[]>({
+  key: "filtersState - " + v1(),
+  get: async () => {
+    const {
+      data: { filters },
+    } = await apiService.filterService.apiGetFilters();
+
+    return filters;
+  },
+});
+/**
+ * 2022/08/24 - 현재 선택한 필터들 - by 1-blue
+ */
+export const selectedFiltersState = atom<string[]>({
+  key: "selectedFiltersState",
+  default: [],
+});
+
+/**
+ * 2022/08/26 - 구매할 상품 정보 + 선택한 옵션 ( 수량, 색상, 사이즈 등 ) - by 1-blue
+ */
+export const productToBuy = atom<null | ProductToBuy>({
+  key: "productToBuy",
+  default: null,
+});
