@@ -24,6 +24,7 @@ import categoryService from "./category";
 import productService from "./product";
 import keywordService from "./keyword";
 import filterService from "./filter";
+import wishService from "./wish";
 
 /**
  * 2022/08/17 - api요청 관련 메서드들을 가진 객체 - by 1-blue
@@ -37,6 +38,7 @@ const apiService = {
   productService,
   keywordService,
   filterService,
+  wishService,
 };
 
 export default apiService;

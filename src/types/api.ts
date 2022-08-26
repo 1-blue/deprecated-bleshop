@@ -1,4 +1,4 @@
-import type { LIMIT } from ".";
+import type { LIMIT, DetailProduct } from ".";
 import type {
   Address,
   Category,
@@ -263,3 +263,35 @@ export type ApiGetFiltersBody = {};
  * 2022/08/24 - 모든 필터들 요청 수신 타입 - by 1-blue
  */
 export type ApiGetFiltersResponse = ApiResponse & { filters: Filter[] };
+
+/**
+ * 2022/08/25 - 특정 상품 상세 데이터 송신 타입 - by 1-blue
+ */
+export type ApiGetProductBody = { productIdx: number };
+/**
+ * 2022/08/25 - 특정 상품 상세 데이터 수신 타입 - by 1-blue
+ */
+export type ApiGetProductResponse = ApiResponse & { product: DetailProduct };
+
+/**
+ * 2022/08/26 - 로그인한 유저가 특정 상품에 찜하기를 눌렀는지 여부 송신 타입 - by 1-blue
+ */
+export type ApiGetWishBody = { productIdx: number };
+/**
+ * 2022/08/26 - 로그인한 유저가 특정 상품에 찜하기를 눌렀는지 여부 수신 타입 - by 1-blue
+ */
+export type ApiGetWishResponse = ApiResponse & { isWish: boolean };
+
+/**
+ * 2022/08/26 - 송신 타입 - by 1-blue
+ */
+export type ApiGetRelatedProductsBody = {
+  productIdx: number;
+  keywords: string[];
+};
+/**
+ * 2022/08/26 - 수신 타입 - by 1-blue
+ */
+export type ApiGetRelatedProductsResponse = ApiResponse & {
+  products: Product[];
+};

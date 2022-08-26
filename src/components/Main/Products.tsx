@@ -152,11 +152,11 @@ const Products = () => {
               }
             >
               <Link href={`/product/${product.idx}`}>
-                <a className="rounded-md bg-white border-4 border-transparent z-[2] group-hover:border-gray-400 focus:outline-blue-400 focus:outline-4">
+                <a className="flex flex-col h-full rounded-md bg-white border-4 border-transparent z-[2] group-hover:border-gray-400 focus:outline-blue-400 focus:outline-4">
                   <Photo path={product.photo} cover className="h-60" />
-                  <div className="space-y-2 px-2 py-1">
+                  <div className="flex-1 flex flex-col space-y-2 px-2 py-1">
                     <h3 className="font-bolder text-xl">{product.name}</h3>
-                    <p className="whitespace-pre overflow-hidden text-ellipsis">
+                    <p className="flex-1 whitespace-pre overflow-hidden text-ellipsis">
                       {product.description}
                     </p>
                     <div className="flex justify-between">

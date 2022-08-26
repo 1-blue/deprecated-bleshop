@@ -49,11 +49,11 @@ model User {
   // 유저와 상품 ( 장바구니 ) => N:M
   baskets Basket[]
 
-  // 유저와 댓글 ( 좋아요 ) => N:M
-  evaluations Evaluation[]
-
   // 유저와 주소 => 1 : N
   addresses Address[]
+
+  // 상품과 유저 ( 찜하기 ) => N:M
+  wishes Wish[]
 }
 
 // 주소
@@ -77,7 +77,7 @@ model Product {
   name        String
   color       String?
   size        String?
-  description String
+  description String   @db.VarChar(2000)
   brand       String
   company     String
   period      String
@@ -99,7 +99,7 @@ model Product {
   baskets Basket[]
 
   // 상품과 댓글 => 1:N
-  commments Comment[]
+  comments Comment[]
 
   // 상품과 카테고리 => N:M
   categories ProductsOnCategories[]
@@ -109,6 +109,9 @@ model Product {
 
   // 상품과 필터 => N:M
   filters ProductsOnFilters[]
+
+  // 상품과 유저 ( 찜하기 ) => N:M
+  wishes Wish[]
 }
 
 // 카테고리
@@ -165,6 +168,30 @@ model ProductsOnFilters {
   @@id([productIdx, filterIdx])
 }
 
+// 유저와 상품 중간 테이블 (찜하기) ( N:M )
+model Wish {
+  user       User    @relation(fields: [userIdx], references: [idx])
+  userIdx    Int
+  product    Product @relation(fields: [productIdx], references: [idx])
+  productIdx Int
+
+  @@id([userIdx, productIdx])
+}
+
+// 댓글
+model Comment {
+  idx      Int    @id @default(autoincrement())
+  score    Int
+  contents String
+
+  // 상품과 댓글 => 1:N
+  Product    Product? @relation(fields: [productIdx], references: [idx])
+  productIdx Int?
+
+  // 댓글과 이미지 => 1:N
+  photos Photo[]
+}
+
 // 주문
 model Order {
   idx Int @id @default(autoincrement())
@@ -186,34 +213,4 @@ model Basket {
   productIdx Int
 
   @@id([userIdx, productIdx])
-}
-
-// 댓글
-model Comment {
-  idx      Int    @id @default(autoincrement())
-  score    Int
-  contents String
-
-  // 유저와 댓글 ( 좋아요 ) => N:M
-  evaluations Evaluation[]
-
-  // 상품과 댓글 => 1:N
-  Product    Product? @relation(fields: [productIdx], references: [idx])
-  productIdx Int?
-
-  // 댓글과 이미지 => 1:N
-  photos Photo[]
-}
-
-// 평가... 좋아요/싫어요 ( 유저와 댓글 )
-model Evaluation {
-  user       User    @relation(fields: [userIdx], references: [idx])
-  userIdx    Int
-  comment    Comment @relation(fields: [commentIdx], references: [idx])
-  commentIdx Int
-
-  // 좋다/싫다
-  isLike Boolean
-
-  @@id([userIdx, commentIdx])
 }

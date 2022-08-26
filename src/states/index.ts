@@ -1,4 +1,4 @@
-import { atom, selector } from "recoil";
+import { atom, selector, selectorFamily } from "recoil";
 import { v1 } from "uuid";
 
 // api
@@ -6,6 +6,15 @@ import apiService from "@src/api";
 
 // type
 import type { Category, Filter, Product } from "@prisma/client";
+import type { ProductToBuy } from "@src/types";
+
+import productService from "./product";
+
+const stateService = {
+  productService,
+};
+
+export default stateService;
 
 /**
  * 구글링으로 알아본 결과 "next.js"와 "recoil"을 같이 사용하면 어떤 문제로 인해서 "key" 중복 경고가 발생함
@@ -106,4 +115,12 @@ export const filtersState = selector<Filter[]>({
 export const selectedFiltersState = atom<string[]>({
   key: "selectedFiltersState",
   default: [],
+});
+
+/**
+ * 2022/08/26 - 구매할 상품 정보 + 선택한 옵션 ( 수량, 색상, 사이즈 등 ) - by 1-blue
+ */
+export const productToBuy = atom<null | ProductToBuy>({
+  key: "productToBuy",
+  default: null,
 });

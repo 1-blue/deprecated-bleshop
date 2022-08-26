@@ -4,23 +4,48 @@ import prisma from "@src/prisma";
 
 // type
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { ApiCreateProductResponse } from "@src/types";
+import type {
+  ApiCreateProductResponse,
+  ApiGetProductResponse,
+} from "@src/types";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ApiCreateProductResponse>
+  res: NextApiResponse<ApiGetProductResponse | ApiCreateProductResponse>
 ) {
   const { method } = req;
   const session = await getSession({ req });
 
-  if (!session || !session.user)
-    return res.status(403).json({ message: "접근 권한이 없습니다." });
-
-  const userIdx = session.user.idx;
-
   try {
+    // 특정 상품 상세 정보 요청
+    if (method === "GET") {
+      const productIdx = Number(req.query.productIdx);
+
+      const product = await prisma.product.findUnique({
+        where: { idx: productIdx },
+        include: {
+          photos: true,
+          keywords: true,
+        },
+      });
+
+      if (!product)
+        return res
+          .status(404)
+          .json({ message: "찾는 상품이 존재하지 않습니다." });
+
+      return res.status(200).json({
+        product,
+        message: "특정 상품에 대한 데이터입니다.",
+      });
+    }
     // 상품 생성
-    if (method === "POST") {
+    else if (method === "POST") {
+      if (!session || !session.user)
+        return res.status(403).json({ message: "접근 권한이 없습니다." });
+
+      const userIdx = session.user.idx;
+
       const {
         name,
         category,
@@ -82,11 +107,14 @@ export default async function handler(
       ]);
 
       // 상품 생성 오류
-      if (createdProductResult.status === "rejected")
+      if (createdProductResult.status === "rejected") {
+        console.log(createdProductResult);
+
         return res.status(418).json({
           message:
             "서버측에서 오류가 발생했습니다. 잠시후에 다시 시도해주세요!",
         });
+      }
 
       // 상품 - 카테고리, 상품 - 키워드들, 상품 - 필터들 연결
       const createdProduct = await prisma.product.update({

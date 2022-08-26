@@ -4,10 +4,14 @@ import { axiosInstance } from ".";
 import type {
   ApiCreateProductBody,
   ApiCreateProductResponse,
+  ApiGetProductBody,
+  ApiGetProductResponse,
   ApiGetProductsBody,
   ApiGetProductsByKeywordBody,
   ApiGetProductsByKeywordResponse,
   ApiGetProductsResponse,
+  ApiGetRelatedProductsBody,
+  ApiGetRelatedProductsResponse,
 } from "@src/types";
 
 /**
@@ -56,12 +60,35 @@ const apiGetProductsByKeyword = ({
 };
 
 /**
+ * 2022/08/25 - 특정 상품의 상세 정보 요청 - by 1-blue
+ * @param productIdx 특정 상품의 식별자
+ * @returns 특정 상품의 상세 정보 ( 연관 이미지들, 검색 키워드들 )
+ */
+const apiGetProduct = ({ productIdx }: ApiGetProductBody) =>
+  axiosInstance.get<ApiGetProductResponse>(`/product?productIdx=${productIdx}`);
+
+/**
+ * 2022/08/26 - 특정 상품과 관련된 상품들 요청 - by 1-blue
+ * @param 특정 상품의 식별자 ( productIdx ), 상품이 가진 키워드 ( keywords )
+ * @returns 특정 상품과 연관된 상품들의 정보
+ */
+const apiGetRelatedProducts = ({
+  productIdx,
+  keywords,
+}: ApiGetRelatedProductsBody) =>
+  axiosInstance.get<ApiGetRelatedProductsResponse>(
+    `/products/related?productIdx=${productIdx}&keywords=${keywords}`
+  );
+
+/**
  * 2022/08/19 - 상품 관련 api 요청 객체 - by 1-blue
  */
 const productService = {
   apiCreateProduct,
   apiGetProducts,
   apiGetProductsByKeyword,
+  apiGetProduct,
+  apiGetRelatedProducts,
 };
 
 export default productService;
