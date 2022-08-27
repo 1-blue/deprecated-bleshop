@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { useRecoilValueLoadable } from "recoil";
+import { useRecoilValue } from "recoil";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
@@ -15,12 +15,14 @@ import {
 // api
 import apiService from "@src/api";
 
-// atom
-import { categoriesState } from "@src/states";
+// state
+import stateService from "@src/states";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
 import Tool from "@src/components/common/Tool";
+import NotAuthPage from "@src/components/common/403";
+import NotLogInPage from "@src/components/common/401";
 
 // type
 import type { NextPage } from "next";
@@ -41,8 +43,9 @@ const Upload: NextPage = () => {
   const router = useRouter();
   const { data } = useSession();
   // 2022/08/19 - 저장된 모든 카테고리들 - by 1-blue
-  const { state, contents: categories } =
-    useRecoilValueLoadable(categoriesState);
+  const categories = useRecoilValue(
+    stateService.categoryService.categoriesState
+  );
   const {
     control,
     register,
@@ -109,9 +112,9 @@ const Upload: NextPage = () => {
           autoClose: 1500,
         });
 
-        router.push(`/products/${productIdx}`);
+        router.push(`/product/${productIdx}`);
       } catch (error) {
-        console.error(error);
+        console.error("error >> ", error);
 
         if (error instanceof AxiosError) {
           toast.update(toastId, {
@@ -146,15 +149,11 @@ const Upload: NextPage = () => {
     setValue("information.price", numberWithComma(price));
   }, [getValues, setValue]);
 
-  // "useRecoilValueLoadable()"에 의해 사용 ( 미사용시 에러 발생 )
-  if (state === "loading") return <h3>로딩중입니다...</h3>;
-  if (state === "hasError")
-    return <h3>에러가 발생했습니다. 새고로침을 시도해주세요.</h3>;
-
+  // 로그인 유무 확인
+  if (!data) return <NotLogInPage />;
+  if (!data.user) return <NotLogInPage />;
   // 상품 등록 권한이 있는지 확인
-  if (!data) return <h3>로그인후에 접근해주세요.</h3>;
-  if (!data.user) return <h3>로그인후에 접근해주세요.</h3>;
-  if (!data.user.isAdmin) return <h3>접근 권한이 없습니다.</h3>;
+  if (data.user.isAdmin) return <NotAuthPage />;
 
   return (
     <>
@@ -197,6 +196,7 @@ const Upload: NextPage = () => {
           register={register("category", {
             required: { message: "카테고리를 선택해주세요.", value: true },
           })}
+          className="min-w-[200px] max-w-[600px] w-full"
         >
           {categories.map(({ category }) => (
             <option key={category} value={category}>

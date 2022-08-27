@@ -2,10 +2,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
 
-// state
-import { keywordsState, searchWordState } from "@src/states";
+// api
+import apiService from "@src/api";
 
 // hook
 import useDebounce from "@src/hooks/useDebounce";
@@ -13,6 +12,9 @@ import useDebounce from "@src/hooks/useDebounce";
 // component
 import Tool from "@src/components/common/Tool";
 import Icon from "@src/components/common/Icon";
+
+// type
+import type { Keyword } from "@prisma/client";
 
 type SearchForm = {
   searchWord: string;
@@ -22,25 +24,27 @@ const SearchBar = () => {
   const router = useRouter();
   const { register, handleSubmit, watch } = useForm<SearchForm>();
 
-  // 2022/08/23 - 검색할 키워드 수정 - by 1-blue
-  const setSearchWord = useSetRecoilState(searchWordState);
-
-  // 2022/08/23 - 검색중인 단어를 포함하는 키워드들 ( 추천 검색어들 ) - by 1-blue
-  const { state: keywordResult, contents: keywords } =
-    useRecoilValueLoadable(keywordsState);
-
   // 2022/08/23 - 현재 검색창에 입력한 단어 - by 1-blue
   const searchWord = watch("searchWord");
 
   // 2022/08/23 - 검색 디바운스 적용할때 사용할 값 - by 1-blue
   const [debounce] = useDebounce({ value: searchWord, time: 300 });
 
+  // 2022/08/27 - 추천 검색어들 - by 1-blue
+  const [keywords, setKeywords] = useState<Keyword[]>([]);
+
   // 2022/08/23 - 디바운싱 적용한 추천 검색어 요청 - by 1-blue
   useEffect(() => {
     if (!debounce) return;
 
-    setSearchWord(searchWord);
-  }, [searchWord, debounce, setSearchWord]);
+    (async () => {
+      const {
+        data: { keywords },
+      } = await apiService.keywordService.apiGetKeywords({ word: searchWord });
+
+      setKeywords(keywords);
+    })();
+  }, [searchWord, debounce]);
 
   // 2022/08/23 - 검색창 포커스 여부 - by 1-blue
   const [isFocus, setIsFocus] = useState(false);
@@ -69,9 +73,6 @@ const SearchBar = () => {
       router.push(`/search?searchWord=${searchWord}`),
     [router]
   );
-
-  if (keywordResult === "hasError")
-    return <h3>에러가 발생했습니다. 새고로침을 시도해주세요.</h3>;
 
   return (
     <form
@@ -109,7 +110,6 @@ const SearchBar = () => {
       <div className="relative w-full">
         <ul className="absolute top-0 left-0 w-full bg-gray-200 rounded-b-md z-[1]">
           {isFocus &&
-            keywordResult === "hasValue" &&
             keywords.map(({ keyword }) => (
               <li key={keyword}>
                 <Link href={`/search?searchWord=${keyword}`}>

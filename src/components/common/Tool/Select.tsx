@@ -4,6 +4,7 @@ import ErrorMessage from "./ErrorMessage";
 
 // type
 import type { UseFormRegisterReturn } from "react-hook-form";
+import { combineClassNames } from "@src/libs";
 
 type Props = {
   name: string;
@@ -11,6 +12,7 @@ type Props = {
   children: React.ReactNode;
   placeholder?: string;
   errorMessage?: string;
+  className?: string;
 };
 
 const Select = ({
@@ -19,6 +21,7 @@ const Select = ({
   children,
   placeholder,
   errorMessage,
+  className,
 }: Props) => {
   return (
     <>
@@ -27,7 +30,10 @@ const Select = ({
       <select
         id={name}
         {...register}
-        className="min-w-[200px] max-w-[600px] w-full p-2 border-2 cursor-pointer focus:outline-blue-400"
+        className={combineClassNames(
+          "p-2 border-2 cursor-pointer focus:outline-blue-400",
+          className ? className : ""
+        )}
       >
         {placeholder && <option value="">{placeholder}</option>}
         {children}

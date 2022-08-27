@@ -32,7 +32,7 @@ const Button = ({
       if (!loading) return;
 
       e.preventDefault();
-      toast.warning("회원가입 처리중입니다. 잠시 기다려주세요!");
+      toast.warning("처리중입니다. 잠시 기다려주세요!");
     },
     [loading, onClick]
   );

@@ -19,10 +19,17 @@ module.exports = {
           "0%": { transform: "scale(1, 1)", opacity: 0.5 },
           "100%": { transform: "scale(1.2, 1.2)", opacity: 0.01 },
         },
+        "loading-spinner": {
+          "0%": { "-webkit-transform": "scale(0)" },
+          "80%": { "-webkit-transform": "scale(0)" },
+          "100%": { "-webkit-transform": "scale(0)" },
+          "40%": { "-webkit-transform": "scale(1.0)" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.2s linear",
         "my-ping": "my-ping 1s linear infinite",
+        "loading-spinner": "loading-spinner 1.4s infinite ease-in-out both",
       },
     },
     fontFamily: {

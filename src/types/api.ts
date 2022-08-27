@@ -286,6 +286,8 @@ export type ApiGetWishResponse = ApiResponse & { isWish: boolean };
  * 2022/08/26 - 송신 타입 - by 1-blue
  */
 export type ApiGetRelatedProductsBody = {
+  limit: LIMIT;
+  lastIdx: number;
   productIdx: number;
   keywords: string[];
 };

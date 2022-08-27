@@ -73,11 +73,13 @@ const apiGetProduct = ({ productIdx }: ApiGetProductBody) =>
  * @returns 특정 상품과 연관된 상품들의 정보
  */
 const apiGetRelatedProducts = ({
+  lastIdx,
+  limit,
   productIdx,
   keywords,
 }: ApiGetRelatedProductsBody) =>
   axiosInstance.get<ApiGetRelatedProductsResponse>(
-    `/products/related?productIdx=${productIdx}&keywords=${keywords}`
+    `/products/related?lastIdx=${lastIdx}&limit=${limit}&productIdx=${productIdx}&keywords=${keywords}`
   );
 
 /**

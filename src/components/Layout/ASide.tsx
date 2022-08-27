@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 // util
 import { combineClassNames, throttleHelper } from "@src/libs";
@@ -11,6 +12,8 @@ import ToTopButton from "@src/components/Layout/ToTopButton";
 import ToCreateProductButton from "@src/components/Layout/ToCreateProductButton";
 
 const ASide = () => {
+  const { data } = useSession();
+
   // 2022/08/10 - 현재 가로 길이 - by 1-blue
   const [screenWidth, setScreenWidth] = useState(0);
 
@@ -40,12 +43,12 @@ const ASide = () => {
   return (
     <aside
       className={combineClassNames(
-        "fixed bottom-2 right-2 flex transition-all duration-500 space-x-2",
+        "fixed bottom-2 right-2 flex transition-all duration-500 space-x-2 z-10",
         locationCondition
       )}
     >
       <ToTopButton showCondition={showCondition} />
-      <ToCreateProductButton />
+      {data?.user?.isAdmin && <ToCreateProductButton />}
     </aside>
   );
 };

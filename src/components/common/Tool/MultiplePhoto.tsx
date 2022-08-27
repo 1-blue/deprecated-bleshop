@@ -52,11 +52,10 @@ const MultiplePhoto = ({
 
       const files = e.target.files;
 
+      const toastId = toast.loading(
+        "이미지들을 업로드하는중입니다. 잠시 기다려주세요!"
+      );
       try {
-        const toastId = toast.loading(
-          "이미지들을 업로드하는중입니다. 잠시 기다려주세요!"
-        );
-
         const response = await apiService.photoService.apiCreatePhotos({
           files,
         });
@@ -98,11 +97,19 @@ const MultiplePhoto = ({
       } catch (error) {
         console.error(error);
         if (error instanceof AxiosError) {
-          toast.error(error.response?.data.message);
+          toast.update(toastId, {
+            render: error.response?.data.message,
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
         } else {
-          toast.error(
-            "알 수 없는 에러가 발생했습니다. 새로고침후에 다시 시도해주세요!"
-          );
+          toast.update(toastId, {
+            render: "알 수 없는 에러가 발생했습니다.",
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
         }
       }
     },
@@ -159,7 +166,11 @@ const MultiplePhoto = ({
         {photoURLs.length === 0 ? (
           <Icon shape="plus" className="w-12 h-12" />
         ) : (
-          <Carousel currentDot={currentDot} setCurrentDot={setCurrentDot}>
+          <Carousel
+            currentDot={currentDot}
+            setCurrentDot={setCurrentDot}
+            className="min-w-[200px] max-w-[600px]"
+          >
             {photoURLs.map((photoURL) => (
               <div key={photoURL} className="relative">
                 <button

@@ -1,3 +1,4 @@
+import React from "react";
 import type { AppProps } from "next/app";
 import { RecoilRoot } from "recoil";
 import { SessionProvider } from "next-auth/react";
@@ -9,23 +10,26 @@ import "react-toastify/dist/ReactToastify.css";
 
 // component
 import Layout from "@src/components/Layout";
+import MyLoading from "@src/components/common/MyLoading";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SessionProvider>
       <RecoilRoot>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <React.Suspense fallback={<MyLoading />}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
 
-        <ToastContainer
-          position="top-center"
-          autoClose={1000}
-          theme="dark"
-          closeOnClick
-          hideProgressBar
-          limit={3}
-        />
+          <ToastContainer
+            position="top-center"
+            autoClose={1000}
+            theme="dark"
+            closeOnClick
+            hideProgressBar
+            limit={3}
+          />
+        </React.Suspense>
       </RecoilRoot>
     </SessionProvider>
   );

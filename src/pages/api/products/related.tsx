@@ -13,7 +13,10 @@ export default async function handler(
   try {
     // lastIdx 기준으로 상품들 요청
     if (method === "GET") {
+      const limit = Number(req.query.limit);
+      const lastIdx = Number(req.query.lastIdx);
       const productIdx = Number(req.query.productIdx);
+
       let where: Object = {
         NOT: {
           idx: productIdx,
@@ -37,7 +40,10 @@ export default async function handler(
 
       const products = await prisma.product.findMany({
         where,
-        take: 9,
+        take: limit,
+        skip: lastIdx === -1 ? 0 : 1,
+        ...(lastIdx !== -1 && { cursor: { idx: lastIdx } }),
+        orderBy: { updatedAt: "desc" },
       });
 
       return res.status(200).json({

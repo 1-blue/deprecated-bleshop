@@ -1,20 +1,20 @@
 import { useCallback } from "react";
-import { useRecoilState, useRecoilValueLoadable } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 // state
-import { filtersState, selectedFiltersState } from "@src/states";
+import stateService from "@src/states";
 
 // util
 import { combineClassNames } from "@src/libs";
 
 const FilterSelector = () => {
   // 2022/08/22 - 등록된 모든 필터들 - by 1-blue
-  const { state: filterResult, contents: filters } =
-    useRecoilValueLoadable(filtersState);
+  const filters = useRecoilValue(stateService.filterService.filtersState);
 
   // 2022/08/24 - 현재 선택한 필터들 - by 1-blue
-  const [selectedFilters, setSelectedFilters] =
-    useRecoilState(selectedFiltersState);
+  const [selectedFilters, setSelectedFilters] = useRecoilState(
+    stateService.filterService.selectedFiltersState
+  );
 
   // 2022/08/24 - 필터 클릭 이벤트 함수 - by 1-blue
   const onClickFilter = useCallback(
@@ -27,11 +27,6 @@ const FilterSelector = () => {
       }),
     [setSelectedFilters]
   );
-
-  // "useRecoilValueLoadable()"에 의해 사용 ( 미사용시 에러 발생 )
-  if (filterResult === "loading") return <h3>로딩중입니다...</h3>;
-  if (filterResult === "hasError")
-    return <h3>에러가 발생했습니다. 새고로침을 시도해주세요.</h3>;
 
   return (
     <ul className="flex flex-wrap space-x-2">

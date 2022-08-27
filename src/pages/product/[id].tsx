@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-import Link from "next/link";
 
 // util
 import { dateOrTimeFormat, numberWithComma } from "@src/libs";
@@ -12,13 +11,15 @@ import { dateOrTimeFormat, numberWithComma } from "@src/libs";
 import apiService from "@src/api";
 
 // state
-import stateService, { productToBuy } from "@src/states";
+import stateService from "@src/states";
 
 // component
 import Carousel from "@src/components/common/Carousel";
 import Nav from "@src/components/common/Nav";
 import Photo from "@src/components/common/Photo";
 import Tool from "@src/components/common/Tool";
+import MyError from "@src/components/common/MyError";
+import RelatedProducts from "@src/components/Product/RelatedProducts";
 
 // type
 import type { NextPage } from "next";
@@ -40,18 +41,11 @@ const Product: NextPage = () => {
   }, [router.query, setProductIdx]);
 
   // 2022/08/26 - 현재 상품의 상세 정보 - by 1-blue
-  const { state: productResult, contents: product } = useRecoilValueLoadable(
-    stateService.productService.productState
-  );
-
-  // 2022/08/26 - 현재 상품과 연관된 상품들의 정보 - by 1-blue
-  const { state: relatedProductResult, contents: relatedProducts } =
-    useRecoilValueLoadable(stateService.productService.relatedProductsState);
+  const product = useRecoilValue(stateService.productService.productState);
 
   // 2022/08/26 - 현재 상품에 찜하기를 눌렀는지 여부 - by 1-blue
   const [isWish, setIsWish] = useState(false);
   useEffect(() => {
-    if (productResult === "loading" || productResult === "hasError") return;
     if (!product) return;
     if (!data?.user) return;
 
@@ -62,10 +56,12 @@ const Product: NextPage = () => {
 
       setIsWish(isWish);
     })();
-  }, [productResult, product, data]);
+  }, [product, data]);
 
   // 2022/08/26 - 구매/장바구니 관련 데이터 - by 1-blue
-  const setProductToBuy = useSetRecoilState(productToBuy);
+  const setProductToBuy = useSetRecoilState(
+    stateService.buyService.productToBuy
+  );
 
   // 2022/08/26 - 상품 구매/장바구니 관련 폼 - by 1-blue
   const { register, watch, setValue, handleSubmit } =
@@ -79,24 +75,19 @@ const Product: NextPage = () => {
   // 2022/08/26 - 상품 구매버튼 클릭 시 실행 - by 1-blue
   const onSubmit = useCallback(
     (option: ProductOptionForm) => {
-      if (productResult === "loading" || productResult === "hasError") return;
       if (!product) return;
 
       setProductToBuy({ product, option });
 
       // 구매 페이지로 이동
     },
-    [productResult, product, setProductToBuy]
+    [product, setProductToBuy]
   );
 
   // 2022/08/26 - 현재 상품의 이미지들중에 보여지는 이미지 번호 - by 1-blue
   const [currentDot, setCurrentDot] = useState(0);
 
-  if (productResult === "loading")
-    return <h3>상품 데이터를 받아오는 중입니다...</h3>;
-  if (productResult === "hasError")
-    return <h3>상품 데이터를 받아오는 중에 에러가 발생했습니다.</h3>;
-  if (product === null) return <h3>상품이 존재하지 않습니다.</h3>;
+  if (product === null) return <MyError message="상품이 존재하지 않습니다." />;
 
   return (
     <article className="pt-4 space-y-4">
@@ -230,46 +221,10 @@ const Product: NextPage = () => {
       {/* 상품평 */}
 
       {/* 유사 상품 */}
-      {relatedProductResult === "hasValue" && relatedProducts.length !== 0 && (
-        <section className="flex flex-col p-2 xsm:p-3 md:p-4 bg-white rounded-md shadow-2xl">
-          <h2 className="pl-1 text-gray-800 font-bolder text-lg xs:text-xl md:text-2xl">
-            연관된 상품들
-          </h2>
-
-          <ul className="grid grid-cols-1 xsm:grid-cols-2 md:grid-cols-3 gap-2">
-            {relatedProducts.map((product) => (
-              <li
-                key={product.idx}
-                className="group relative flex flex-col shadow-lg rounded-md bg-gray-100 overflow-hidden hover:overflow-visible"
-              >
-                <Link href={`/product/${product.idx}`}>
-                  <a className="flex flex-col h-full rounded-md bg-white border-4 border-transparent z-[2] group-hover:border-gray-400 focus:outline-blue-400 focus:outline-4">
-                    <Photo path={product.photo} cover className="h-60" />
-                    <div className="flex-1 flex flex-col space-y-2 px-2 py-1">
-                      <h3 className="font-bolder text-xl">{product.name}</h3>
-                      <p className="flex-1 whitespace-pre overflow-hidden text-ellipsis">
-                        {product.description}
-                      </p>
-                      <div className="flex justify-between">
-                        <span>{numberWithComma(product.price)}원</span>
-                        <time className="text-xs sm:text-sm text-gray-400">
-                          {dateOrTimeFormat(
-                            product.updatedAt,
-                            "YYYY-MM-DD-hh-mm-ss"
-                          )}
-                        </time>
-                      </div>
-                    </div>
-                  </a>
-                </Link>
-
-                {/* ping 애니메이션을 위함 */}
-                <div className="absolute top-0 left-0 w-full h-full rounded-md bg-gray-400 -z-10 group-hover:animate-my-ping group-hover:z-[1]" />
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <RelatedProducts
+        productIdx={product.idx}
+        keywords={product.keywords.map(({ keywordIdx }) => keywordIdx)}
+      />
     </article>
   );
 };

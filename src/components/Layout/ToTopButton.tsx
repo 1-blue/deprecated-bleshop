@@ -13,7 +13,7 @@ const ToTopButton = ({ showCondition }: Props) => {
     <button
       type="button"
       className={combineClassNames(
-        "rounded-full bg-white border border-gray-300 shadow-md p-2 flex flex-col items-center  hover:text-blue-600 hover:border-blue-600 transition-all duration-500",
+        "rounded-full bg-white border border-gray-300 shadow-md p-2 flex flex-col items-center  hover:text-blue-600 hover:border-blue-600 focus:outline-none focus:text-blue-600 focus:border-blue-600 transition-all duration-500",
         showCondition
       )}
       onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "smooth" })}

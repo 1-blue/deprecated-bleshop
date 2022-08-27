@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
 
 // state
-import { productsState } from "@src/states";
+import stateService from "@src/states";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
@@ -16,7 +16,7 @@ import type { NextPage } from "next";
 
 const Search: NextPage = () => {
   const router = useRouter();
-  const products = useRecoilValue(productsState);
+  const products = useRecoilValue(stateService.productsService.productsState);
 
   return (
     <>

@@ -10,10 +10,12 @@ type Props = {
 const Layout = ({ children }: Props) => {
   return (
     <>
-      <header className="sticky top-0">
+      <header className="sticky top-0 z-10">
         <ScrollProgress />
       </header>
+
       <main className="px-4">{children}</main>
+
       <footer className="bg-gray-200">
         <NavBar />
       </footer>

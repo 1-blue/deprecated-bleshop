@@ -4,10 +4,10 @@ import Link from "next/link";
 import HeadInfo from "@src/components/common/HeadInfo";
 import Icon from "@src/components/common/Icon";
 
-const NotFoundPage = () => {
+const NotLogInPage = () => {
   return (
     <>
-      <HeadInfo title="BleShop - 잘못된 경로" />
+      <HeadInfo title="BleShop - 비로그인" />
 
       <article>
         <section className="flex justify-center items-center text-[#FF0000] text-[120px] xs:text-[180px] space-x-2">
@@ -21,6 +21,8 @@ const NotFoundPage = () => {
             viewBox="0 0 40 40"
             xmlSpace="preserve"
             fill="#FF0000"
+            // width="140px"
+            // height="140px"
             className="w-[90px] h-[90px] xs:w-[140px] xs:h-[140px]"
           >
             <g>
@@ -28,11 +30,13 @@ const NotFoundPage = () => {
               <path d="M25.2,5.1C31.5,7.3,36,13.6,36,21c0,4.5-1.8,8.9-4.8,12L25.2,5.1 M20,0l8.6,40C35.3,36.5,40,29.4,40,21C40,9.4,31,0,20,0L20,0z" />
             </g>
           </svg>
-          <span>4</span>
+          <span>3</span>
         </section>
         <section>
           <h1 className="whitespace-pre-line text-center text-xl xs:text-2xl font-bolder">
-            {"찾을 수 없는 페이지 입니다.\n경로를 확인하고 다시 입력해주세요!"}
+            {
+              "로그인하지 않으면 접근할 수 없는 페이지입니다.\n로그인후에 접근해주세요!"
+            }
           </h1>
         </section>
         <section className="flex flex-col mt-10 text-red-400">
@@ -40,9 +44,9 @@ const NotFoundPage = () => {
             shape="doubleDown"
             className="w-10 h-10 xs:w-14 xs:h-14 animate-bounce mx-auto"
           />
-          <Link href="/">
+          <Link href="/login">
             <a className="mx-auto px-6 py-2 xs:px-8 xs:py-4 text-lg xs:text-xl font-bolder border-2 border-red-400 rounded-md transition-colors hover:bg-red-400 hover:text-white">
-              홈 페이지로 이동
+              로그인 페이지로 이동
             </a>
           </Link>
         </section>
@@ -51,4 +55,4 @@ const NotFoundPage = () => {
   );
 };
 
-export default NotFoundPage;
+export default NotLogInPage;

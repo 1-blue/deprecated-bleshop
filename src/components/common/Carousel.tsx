@@ -16,9 +16,17 @@ type Props = {
   children: React.ReactNode;
   currentDot: number;
   setCurrentDot: Dispatch<SetStateAction<number>>;
+  autoPlay?: boolean;
+  className?: string;
 };
 
-const Carousel = ({ children, currentDot, setCurrentDot }: Props) => {
+const Carousel = ({
+  children,
+  currentDot,
+  setCurrentDot,
+  autoPlay,
+  className,
+}: Props) => {
   const [settings, setSettings] = useState<Settings>({
     dots: true,
     infinite: true,
@@ -27,18 +35,19 @@ const Carousel = ({ children, currentDot, setCurrentDot }: Props) => {
     slidesToScroll: 1,
     adaptiveHeight: true,
     arrows: false,
+    autoplay: autoPlay,
     beforeChange: (prev, next) => setCurrentDot(next),
     appendDots: (dots) => <ul style={{ bottom: "-40px" }}>{dots}</ul>,
   });
 
   return (
     <Slider
-      className="min-w-[200px] max-w-[600px]"
+      className={combineClassNames(className ? className : "")}
       {...settings}
       customPaging={(i) => (
         <div
           className={combineClassNames(
-            "w-6 border-2 border-blue-400 hover:border-blue-600 hover:bg-blue-600 hover:text-white transition-colors focus:outline-none focus:bg-blue-600 focus:text-white focus:border-blue-600",
+            "text-[8px] xs:text-xs md:text-sm border-2 border-blue-400 hover:border-blue-600 hover:bg-blue-600 hover:text-white transition-colors focus:outline-none focus:bg-blue-600 focus:text-white focus:border-blue-600",
             currentDot === i ? "bg-blue-400 text-white" : ""
           )}
           tabIndex={0}

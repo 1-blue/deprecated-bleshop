@@ -20,7 +20,7 @@ const ScrollProgress = () => {
 
   return (
     <aside
-      className="absolute top-0 z-1 max-w-[1024px] h-[6px] shadow-lg m-0 bg-gradient-to-r from-teal-400 via-blue-400 to-indigo-400"
+      className="absolute top-0 max-w-[1024px] h-[6px] shadow-lg m-0 bg-gradient-to-r from-teal-400 via-blue-400 to-indigo-400"
       style={{ width: currentPositionY * 100 + "%" }}
     />
   );

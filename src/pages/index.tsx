@@ -1,7 +1,7 @@
 import { useRecoilValue } from "recoil";
 
 // state
-import { productsState } from "@src/states";
+import stateService from "@src/states";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
@@ -15,7 +15,8 @@ import FilterSelector from "@src/components/Main/FilterSelector";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
-  const products = useRecoilValue(productsState);
+  // 2022/08/22 - 상품들 - by 1-blue
+  const products = useRecoilValue(stateService.productsService.productsState);
 
   return (
     <>

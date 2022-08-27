@@ -77,19 +77,40 @@ const InformationUpdate = () => {
 
   // 2022/08/14 - 유저 정보 수정 요청 - by 1-blue
   const onSubmitUser = useCallback(async (body: UserEditForm) => {
+    const toastId = toast.loading("정보를 수정하고 있습니다.");
+
     try {
-      const result = await apiService.userService.apiEditUser({
+      const {
+        data: { message },
+      } = await apiService.userService.apiEditUser({
         ...body,
         phone: removeSeparatorToPhone(body.phone),
       });
 
-      toast.success(result.data.message);
+      toast.update(toastId, {
+        render: message,
+        type: "success",
+        isLoading: false,
+        autoClose: 1500,
+      });
       signOut({ redirect: true, callbackUrl: "/login" });
     } catch (error) {
+      console.error("error >> ", error);
+
       if (error instanceof AxiosError) {
-        toast.error(error.response?.data.message);
+        toast.update(toastId, {
+          render: error.response?.data.message,
+          type: "error",
+          isLoading: false,
+          autoClose: 1500,
+        });
       } else {
-        toast.error("알 수 없는 에러입니다. 잠시후에 다시 시도해주세요!");
+        toast.update(toastId, {
+          render: "알 수 없는 에러가 발생했습니다.",
+          type: "error",
+          isLoading: false,
+          autoClose: 1500,
+        });
       }
     }
   }, []);
@@ -119,19 +140,36 @@ const InformationUpdate = () => {
   const onClickDeletePhoto = useCallback(async () => {
     if (!data?.user?.idx) return toast.error("로그인후에 접근해주세요");
 
+    const toastId = toast.loading("프로필 이미지를 제거하는 중입니다.");
+
     try {
       const { message } = await apiService.photoService.apiDeleteUserPhoto();
-      toast.success(message);
+
+      toast.update(toastId, {
+        render: message,
+        type: "success",
+        isLoading: false,
+        autoClose: 1500,
+      });
+
       setShowModal(false);
     } catch (error) {
-      console.error(error);
+      console.error("error >> ", error);
 
       if (error instanceof AxiosError) {
-        toast.error(error.response?.data.message);
+        toast.update(toastId, {
+          render: error.response?.data.message,
+          type: "error",
+          isLoading: false,
+          autoClose: 1500,
+        });
       } else {
-        toast.error(
-          "알 수 없는 에러가 발생했습니다. 새로고침후에 다시 시도해주세요!"
-        );
+        toast.update(toastId, {
+          render: "알 수 없는 에러가 발생했습니다.",
+          type: "error",
+          isLoading: false,
+          autoClose: 1500,
+        });
       }
     }
   }, [data]);
@@ -143,32 +181,46 @@ const InformationUpdate = () => {
       if (!photo) return;
       if (photo.length === 0) return;
 
+      const toastId = toast.loading("프로필 이미지를 등록하는 중입니다.");
+
       try {
-        const { message, photoURL } =
-          await apiService.photoService.apiEditUserPhoto({
-            file: photo[0],
-          });
+        const { photoURL } = await apiService.photoService.apiEditUserPhoto({
+          file: photo[0],
+        });
 
         if (!photoURL) return;
 
-        toast.success(message);
-
-        const response = await apiService.userService.apiUpdateUserPhoto({
+        const {
+          data: { message },
+        } = await apiService.userService.apiUpdateUserPhoto({
           path: photoURL,
         });
 
-        toast.success(response.data.message);
+        toast.update(toastId, {
+          render: message,
+          type: "success",
+          isLoading: false,
+          autoClose: 1500,
+        });
 
         setShowModal(false);
       } catch (error) {
-        console.error(error);
+        console.error("error >> ", error);
 
         if (error instanceof AxiosError) {
-          toast.error(error.response?.data.message);
+          toast.update(toastId, {
+            render: error.response?.data.message,
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
         } else {
-          toast.error(
-            "알 수 없는 에러가 발생했습니다. 새로고침후에 다시 시도해주세요!"
-          );
+          toast.update(toastId, {
+            render: "알 수 없는 에러가 발생했습니다.",
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
         }
       } finally {
         setValue("photo", null);

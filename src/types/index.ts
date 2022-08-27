@@ -43,9 +43,20 @@ export type {
   ApiGetProductsByKeywordResponse,
   ApiGetFiltersBody,
   ApiGetFiltersResponse,
+  ApiGetProductBody,
+  ApiGetProductResponse,
+  ApiGetWishBody,
+  ApiGetWishResponse,
+  ApiGetRelatedProductsBody,
+  ApiGetRelatedProductsResponse,
 } from "./api";
 
-export type { UserWithPhoto } from "./data";
+export type {
+  UserWithPhoto,
+  ProductOptionForm,
+  ProductToBuy,
+  DetailProduct,
+} from "./data";
 
 // 2022/08/21 - 최대 요청 개수 - by 1-blue
 export type LIMIT = 15;

@@ -45,11 +45,10 @@ const SinglePhoto = ({
 
       const file = e.target.files[0];
 
+      const toastId = toast.loading(
+        "이미지를 업로드하는중입니다. 잠시 기다려주세요!"
+      );
       try {
-        const toastId = toast.loading(
-          "이미지를 업로드하는중입니다. 잠시 기다려주세요!"
-        );
-
         const { photoURL } = await apiService.photoService.apiCreatePhoto({
           file,
         });
@@ -70,13 +69,22 @@ const SinglePhoto = ({
           autoClose: 1500,
         });
       } catch (error) {
-        console.error(error);
+        console.error("error >> ", error);
+
         if (error instanceof AxiosError) {
-          toast.error(error.response?.data.message);
+          toast.update(toastId, {
+            render: error.response?.data.message,
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
         } else {
-          toast.error(
-            "알 수 없는 에러가 발생했습니다. 새로고침후에 다시 시도해주세요!"
-          );
+          toast.update(toastId, {
+            render: "알 수 없는 에러가 발생했습니다.",
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
         }
       }
     },

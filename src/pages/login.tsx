@@ -11,6 +11,7 @@ import Tool from "@src/components/common/Tool";
 // type
 import type { NextPage } from "next";
 import type { ApiLogInBody } from "@src/types";
+import { AxiosError } from "axios";
 
 const LogIn: NextPage = () => {
   const router = useRouter();
@@ -23,22 +24,47 @@ const LogIn: NextPage = () => {
   // 2022/08/12 - 로그인 요청 - by 1-blue
   const onSubmit = useCallback(
     async (body: ApiLogInBody) => {
+      const toastId = toast.loading("회원가입중입니다.");
+
       try {
         const result = await signIn("credentials", {
           redirect: false,
           ...body,
         });
 
-        if (result?.error) return toast.error(result.error);
+        if (result?.error)
+          return toast.update(toastId, {
+            render: result?.error,
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
 
-        toast.success("로그인 성공. 메인 페이지로 이동합니다.");
+        toast.update(toastId, {
+          render: "로그인 성공. 메인 페이지로 이동합니다.",
+          type: "success",
+          isLoading: false,
+          autoClose: 1500,
+        });
         router.push("/");
       } catch (error) {
         console.error("error >> ", error);
 
-        toast.error(
-          "알 수 없는 에러로 로그인에 실패했습니다. 잠시후에 다시 시도해주세요!"
-        );
+        if (error instanceof AxiosError) {
+          toast.update(toastId, {
+            render: error.response?.data.message,
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
+        } else {
+          toast.update(toastId, {
+            render: "알 수 없는 에러가 발생했습니다.",
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
+        }
       }
     },
     [router]
@@ -62,6 +88,7 @@ const LogIn: NextPage = () => {
           register={register("id")}
           placeholder="아이디를 입력하세요."
           errorMessage={errors.id?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
         <Tool.Input
           name="비밀번호"
@@ -69,6 +96,7 @@ const LogIn: NextPage = () => {
           register={register("password")}
           placeholder="비밀번호를 입력하세요."
           errorMessage={errors.password?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
 
         <Tool.Button

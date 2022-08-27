@@ -38,6 +38,8 @@ const SignUp: NextPage = () => {
   // 2022/08/11 - 회원가입 요청 - by 1-blue
   const onSubmit = useCallback(
     async (body: SignUpForm) => {
+      const toastId = toast.loading("회원가입중입니다.");
+
       try {
         const { id, email, name, password, phone, isAdmin } = body;
 
@@ -53,15 +55,30 @@ const SignUp: NextPage = () => {
           isAdmin,
         });
 
-        toast.success(message);
+        toast.update(toastId, {
+          render: message,
+          type: "success",
+          isLoading: false,
+          autoClose: 1500,
+        });
         router.push("/login");
       } catch (error) {
         console.error(error);
 
         if (error instanceof AxiosError) {
-          toast.error(error.response?.data.message);
+          toast.update(toastId, {
+            render: error.response?.data.message,
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
         } else {
-          toast.error("알 수 없는 에러입니다. 잠시후에 다시 시도해주세요!");
+          toast.update(toastId, {
+            render: "알 수 없는 에러가 발생했습니다.",
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
         }
       }
     },
@@ -112,6 +129,7 @@ const SignUp: NextPage = () => {
             },
           })}
           errorMessage={errors.id?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
         <Tool.Input
           type="password"
@@ -126,6 +144,7 @@ const SignUp: NextPage = () => {
             },
           })}
           errorMessage={errors.password?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
         <Tool.Input
           type="password"
@@ -137,6 +156,7 @@ const SignUp: NextPage = () => {
               value === password.current || "비밀번호가 일치하지 않습니다.",
           })}
           errorMessage={errors.passwordConfirm?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
         <Tool.Input
           type="text"
@@ -150,6 +170,7 @@ const SignUp: NextPage = () => {
             },
           })}
           errorMessage={errors.name?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
         <Tool.Input
           type="text"
@@ -163,6 +184,7 @@ const SignUp: NextPage = () => {
             },
           })}
           errorMessage={errors.email?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
         <Tool.Input
           type="text"
@@ -184,6 +206,7 @@ const SignUp: NextPage = () => {
             },
           })}
           errorMessage={errors.phone?.message}
+          className="min-w-[200px] max-w-[600px] w-full"
         />
         {/* 프로필 이미지 */}
         <Tool.SinglePhoto

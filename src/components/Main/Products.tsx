@@ -11,12 +11,7 @@ import apiService from "@src/api";
 import { dateOrTimeFormat, numberWithComma } from "@src/libs";
 
 // state
-import {
-  productLastIdxState,
-  productsState,
-  selectedCategoryState,
-  selectedFiltersState,
-} from "@src/states";
+import stateService from "@src/states";
 
 // component
 import Photo from "@src/components/common/Photo";
@@ -30,18 +25,25 @@ const limit: LIMIT = 15;
 const Products = () => {
   const router = useRouter();
   // 2022/08/22 - 화면에 랜더링할 상품들 - by 1-blue
-  const [products, setProducts] = useRecoilState(productsState);
+  const [products, setProducts] = useRecoilState(
+    stateService.productsService.productsState
+  );
   // 2022/08/22 - 가장 최근에 요청한 상품의 마지막 식별자 ( 해당 식별자를 기준으로 다음 상품들의 데이터를 요청 ) - by 1-blue
-  const [productLastIdx, setProductLastIdx] =
-    useRecoilState(productLastIdxState);
+  const [productLastIdx, setProductLastIdx] = useRecoilState(
+    stateService.productsService.productLastIdxState
+  );
   // 2022/08/22 - 마지막 상품의 ref - by 1-blue
   const [lastProductRef, setLastProductRef] = useState<HTMLLIElement | null>(
     null
   );
   // 2022/08/23 - 현재 선택한 카테고리 - by 1-blue
-  const selectedCategory = useRecoilValue(selectedCategoryState);
+  const selectedCategory = useRecoilValue(
+    stateService.categoryService.selectedCategoryState
+  );
   // 2022/08/23 - 현재 선택한 카테고리 - by 1-blue
-  const selectedFilters = useRecoilValue(selectedFiltersState);
+  const selectedFilters = useRecoilValue(
+    stateService.filterService.selectedFiltersState
+  );
 
   // 2022/08/22 - 처음 한번 상품들의 데이터 요청 - by 1-blue
   useEffect(() => {
@@ -49,11 +51,17 @@ const Products = () => {
       // 이전에 상품 데이터들을 받아왔을 경우를 대비해서 미리 초기화
       setProductLastIdx(-1);
 
+      let toastId = null;
+
       try {
         // 특정 키워드를 가진 상품들 요청
         if (typeof router.query.searchWord === "string") {
+          toastId = toast.loading(
+            `"${router.query.searchWord}"인 상품을 검색합니다.`
+          );
+
           const {
-            data: { products },
+            data: { products, message },
           } = await apiService.productService.apiGetProductsByKeyword({
             limit,
             lastIdx: -1,
@@ -63,11 +71,20 @@ const Products = () => {
           });
 
           setProducts(products);
+
+          toast.update(toastId, {
+            render: message,
+            type: "success",
+            isLoading: false,
+            autoClose: 1500,
+          });
         }
         // 모든 상품들 요청
         else {
+          toastId = toast.loading(`모든 상품을 검색합니다.`);
+
           const {
-            data: { products },
+            data: { products, message },
           } = await apiService.productService.apiGetProducts({
             limit,
             lastIdx: -1,
@@ -76,14 +93,31 @@ const Products = () => {
           });
 
           setProducts(products);
+
+          toast.update(toastId, {
+            render: message,
+            type: "success",
+            isLoading: false,
+            autoClose: 1500,
+          });
         }
       } catch (error) {
         console.error(error);
 
         if (error instanceof AxiosError) {
-          toast.error(error.response?.data.message);
+          toast.update(toastId!, {
+            render: error.response?.data.message,
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
         } else {
-          toast.error("알 수 없는 에러입니다. 잠시후에 다시 시도해주세요!");
+          toast.update(toastId!, {
+            render: "알 수 없는 에러가 발생했습니다.",
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
         }
       }
     })();

@@ -18,12 +18,19 @@ const Information: NextPage = () => {
   const { data } = useSession();
 
   const onClickLogOut = useCallback(() => {
+    const toastId = toast.loading("로그아웃중입니다.");
+
     signOut({
       callbackUrl: "/login",
       redirect: true,
     });
 
-    toast.success("로그아웃이 완료되면 로그인페이지로 이동됩니다.");
+    toast.update(toastId, {
+      render: "로그아웃이 완료되었습니다. 로그인페이지로 이동합니다.",
+      type: "success",
+      isLoading: false,
+      autoClose: 1500,
+    });
   }, []);
 
   return (

@@ -84,33 +84,55 @@ const AddressUpdate = () => {
   // 2022/08/15 - 주소 등록/수정 - by 1-blue
   const submitAddress = useCallback(
     async (body: ApiUpdateAddressBody) => {
+      const toastId = toast.loading("주소지를 등록/수정하는 중입니다.");
+
       try {
         // 주소 수정
         if (body.idx) {
-          const response = await apiService.addressService.apiUpdateAddress(
-            body
-          );
+          const {
+            data: { message },
+          } = await apiService.addressService.apiUpdateAddress(body);
 
-          toast.success(response.data.message);
+          toast.update(toastId, {
+            render: message,
+            type: "success",
+            isLoading: false,
+            autoClose: 1500,
+          });
         }
         // 주소 등록
         else {
           const { idx, ...restBody } = body;
-          const response = await apiService.addressService.apiCreateAddress(
-            restBody
-          );
+          const {
+            data: { message },
+          } = await apiService.addressService.apiCreateAddress(restBody);
 
-          toast.success(response.data.message);
+          toast.update(toastId, {
+            render: message,
+            type: "success",
+            isLoading: false,
+            autoClose: 1500,
+          });
         }
 
         router.push("/information/address");
       } catch (error) {
-        if (error instanceof AxiosError) {
-          return toast.error(error.response?.data.message);
-        } else {
-          console.error(error);
+        console.error("error >> ", error);
 
-          toast.error("알 수 없는 에러입니다. 잠시후에 다시 시도해주세요!");
+        if (error instanceof AxiosError) {
+          toast.update(toastId, {
+            render: error.response?.data.message,
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
+        } else {
+          toast.update(toastId, {
+            render: "알 수 없는 에러가 발생했습니다.",
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
         }
       }
     },
@@ -143,6 +165,7 @@ const AddressUpdate = () => {
               },
             })}
             errorMessage={errors.name?.message}
+            className="min-w-[200px] max-w-[600px] w-full"
           />
           <div className="relative flex flex-col items-center min-w-[200px] max-w-[600px] w-full">
             <Tool.Input
@@ -154,6 +177,7 @@ const AddressUpdate = () => {
               })}
               errorMessage={errors.address?.message}
               disabled
+              className="min-w-[200px] max-w-[600px] w-full"
             />
 
             <button
@@ -175,6 +199,7 @@ const AddressUpdate = () => {
               required: "상세 주소를 입력해주세요!",
             })}
             errorMessage={errors.residence?.message}
+            className="min-w-[200px] max-w-[600px] w-full"
           />
           <Tool.Input
             type="text"
@@ -196,6 +221,7 @@ const AddressUpdate = () => {
               },
             })}
             errorMessage={errors.phone?.message}
+            className="min-w-[200px] max-w-[600px] w-full"
           />
           <Tool.Input
             type="text"
@@ -203,6 +229,7 @@ const AddressUpdate = () => {
             placeholder="요청 사항을 입력해주세요!"
             register={register("message")}
             errorMessage={errors.message?.message}
+            className="min-w-[200px] max-w-[600px] w-full"
           />
           <Tool.Checkbox
             name="기본 배송지로 선택"

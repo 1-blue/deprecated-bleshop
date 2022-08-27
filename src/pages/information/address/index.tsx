@@ -29,48 +29,87 @@ const Address = () => {
         "주소지들을 불러오는 중입니다. 잠시만 기다려주세요!"
       );
 
-      const {
-        data: { addresses },
-      } = await apiService.addressService.apiGetAllAddress();
+      try {
+        const {
+          data: { addresses, message },
+        } = await apiService.addressService.apiGetAllAddress();
 
-      if (!addresses)
+        if (!addresses || addresses?.length === 0)
+          return toast.update(toastId, {
+            render: "저장된 주소지가 존재하지 않습니다.",
+            type: "warning",
+            isLoading: false,
+            autoClose: 1500,
+          });
+
+        if (addresses[0].isDefault) setAddresses(addresses);
+        else setAddresses(addresses.sort((a) => (a.isDefault ? -1 : 1)));
+
         return toast.update(toastId, {
-          render: "저장된 주소지가 존재하지 않습니다.",
-          type: "warning",
+          render: message,
+          type: "success",
           isLoading: false,
           autoClose: 1500,
         });
+      } catch (error) {
+        console.error("error >> ", error);
 
-      if (addresses[0].isDefault) setAddresses(addresses);
-      else setAddresses(addresses.sort((a) => (a.isDefault ? -1 : 1)));
-
-      return toast.update(toastId, {
-        render: "모든 주소지들을 가져왔습니다.",
-        type: "success",
-        isLoading: false,
-        autoClose: 1500,
-      });
+        if (error instanceof AxiosError) {
+          toast.update(toastId, {
+            render: error.response?.data.message,
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
+        } else {
+          toast.update(toastId, {
+            render: "알 수 없는 에러가 발생했습니다.",
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
+        }
+      }
     })();
   }, []);
 
   // 2022/08/15 - 배송지 제거 - by 1-blue
   const onDeleteAddress = useCallback(
     (idx: number) => async () => {
+      const toastId = toast.loading("배송지를 제거하는중입니다.");
+
       try {
-        const response = await apiService.addressService.apiDeleteAddress({
+        const {
+          data: { message },
+        } = await apiService.addressService.apiDeleteAddress({
           idx,
         });
 
         setAddresses((prev) => prev.filter((v) => v.idx !== idx));
 
-        toast.success(response.data.message);
+        toast.update(toastId, {
+          render: message,
+          type: "success",
+          isLoading: false,
+          autoClose: 1500,
+        });
       } catch (error) {
-        console.error(error);
+        console.error("error >> ", error);
 
         if (error instanceof AxiosError) {
-          toast.error(error.response?.data.message);
+          toast.update(toastId, {
+            render: error.response?.data.message,
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
         } else {
-          toast.error("알 수 없는 에러입니다. 잠시후에 다시 시도해주세요!");
+          toast.update(toastId, {
+            render: "알 수 없는 에러가 발생했습니다.",
+            type: "error",
+            isLoading: false,
+            autoClose: 1500,
+          });
         }
       }
     },

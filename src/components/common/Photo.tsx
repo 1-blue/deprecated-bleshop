@@ -51,7 +51,7 @@ const Photo = ({
             src={combinePhotoUrl(path)}
             layout="fill"
             className={combineClassNames(
-              avatar ? "rounded-full" : "rounded-md",
+              avatar ? "rounded-full" : "",
               cover ? "object-cover" : "",
               contain ? "object-contain" : ""
             )}
