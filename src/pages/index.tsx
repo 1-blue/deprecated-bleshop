@@ -12,7 +12,7 @@ import CategorySelector from "@src/components/Main/CategorySelector";
 import FilterSelector from "@src/components/Main/FilterSelector";
 
 // type
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 
 const Home: NextPage = () => {
   // 2022/08/22 - 상품들 - by 1-blue
@@ -76,3 +76,9 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};

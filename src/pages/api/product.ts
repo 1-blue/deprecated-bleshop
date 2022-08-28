@@ -8,6 +8,7 @@ import type {
   ApiCreateProductResponse,
   ApiGetProductResponse,
 } from "@src/types";
+import { movePhoto } from "@src/libs";
 
 export default async function handler(
   req: NextApiRequest,
@@ -60,13 +61,19 @@ export default async function handler(
 
       // "string[]"이 아니라면
       if (
-        typeof photos !== "object" ||
-        typeof keywords !== "object" ||
-        typeof filters !== "object"
+        !Array.isArray(photos) ||
+        !Array.isArray(keywords) ||
+        !Array.isArray(filters)
       )
         return res
           .status(418)
           .json({ message: "잘못된 데이터를 전달받았습니다." });
+
+      // 상품 이미지들 확정으로 위치 이동
+      const photoPromise = movePhoto(photo, "product");
+      const photosPromise = photos.map((photo) => movePhoto(photo, "product"));
+
+      await Promise.allSettled([photoPromise, ...photosPromise]);
 
       // 상품 생성
       const productPromise = prisma.product.create({
@@ -79,10 +86,12 @@ export default async function handler(
           period,
           color,
           size,
-          photo,
+          photo: photo.replace("/temporary", ""),
           photos: {
             createMany: {
-              data: (photos as string[]).map((photo) => ({ path: photo })),
+              data: photos.map((photo) => ({
+                path: photo.replace("/temporary", ""),
+              })),
             },
           },
           User: { connect: { idx: userIdx } },
@@ -90,12 +99,12 @@ export default async function handler(
       });
       // 키워드 생성
       const keywordPromise = prisma.keyword.createMany({
-        data: (keywords as string[]).map((keyword) => ({ keyword })),
+        data: keywords.map((keyword) => ({ keyword })),
         skipDuplicates: true,
       });
       // 필터 생성
       const filterPromise = prisma.filter.createMany({
-        data: (filters as string[]).map((filter) => ({ filter })),
+        data: filters.map((filter) => ({ filter })),
         skipDuplicates: true,
       });
 
@@ -123,17 +132,13 @@ export default async function handler(
           categories: { create: { categoryIdx: category } },
           keywords: {
             createMany: {
-              data: (keywords as string[]).map((keyword) => ({
-                keywordIdx: keyword,
-              })),
+              data: keywords.map((keyword) => ({ keywordIdx: keyword })),
               skipDuplicates: true,
             },
           },
           filters: {
             createMany: {
-              data: (filters as string[]).map((filter) => ({
-                filterIdx: filter,
-              })),
+              data: filters.map((filter) => ({ filterIdx: filter })),
               skipDuplicates: true,
             },
           },

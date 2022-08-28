@@ -58,6 +58,7 @@ const MultiplePhoto = ({
       try {
         const response = await apiService.photoService.apiCreatePhotos({
           files,
+          kinds: "product",
         });
 
         if (response.length === 0)

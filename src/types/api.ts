@@ -1,4 +1,4 @@
-import type { LIMIT, DetailProduct } from ".";
+import type { LIMIT, DetailProduct, PhotoKinds } from ".";
 import type {
   Address,
   Category,
@@ -19,7 +19,7 @@ type ApiResponse = {
  * 2022/08/12 - 단일 이미지 업로드 송신 타입 - by 1-blue
  * 바로 이미지 업로드가 아닌 "preSignedUrl"을 요청하는 것
  */
-export type ApiCreatePhotoBody = { file: File };
+export type ApiCreatePhotoBody = { file: File; kinds: PhotoKinds };
 /**
  * 2022/08/12 - 단일 이미지 업로드 수신 타입 - by 1-blue
  * 바로 이미지 업로드가 아닌 "preSignedUrl"을 요청하는 것
@@ -33,7 +33,7 @@ export type ApiCreatePhotoResponse = ApiResponse & {
  * 2022/08/12 - 여러 이미지들 업로드 송신 타입 - by 1-blue
  * 바로 이미지 업로드가 아닌 "preSignedUrl"을 요청하는 것
  */
-export type ApiCreatePhotosBody = { files: FileList };
+export type ApiCreatePhotosBody = { files: FileList; kinds: PhotoKinds };
 /**
  * 2022/08/12 - 여러 이미지들 업로드 수신 타입 - by 1-blue
  * 바로 이미지 업로드가 아닌 "preSignedUrl"을 요청하는 것

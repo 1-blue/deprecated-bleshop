@@ -21,17 +21,18 @@ import { isFulFilled } from "@src/libs";
 
 /**
  * 2022/08/11 - presignedURL을 이용해서 이미지를 업로드하는 함수 - by 1-blue
- * @param file File 형태 입력
+ * @param file: File 형태 입력, kinds: 이미지 종류 ( 유저, 상품 )
  * @returns 업로드된 이미지 URL(photoURL)반환 ( "photoURL"가 null이 아니면 성공 )
  */
 const apiCreatePhoto = async ({
   file,
+  kinds,
 }: ApiCreatePhotoBody): Promise<ApiCreatePhotoResponse> => {
   try {
     const {
       data: { preSignedURL, photoURL, message },
     } = await axiosInstance.get<ApiCreatePhotoResponse>(
-      `/photo?name=${file.name}`
+      `/photo?name=${file.name}&kinds=${kinds}`
     );
 
     // 예측 불가능한 에러
@@ -73,11 +74,14 @@ const apiCreatePhoto = async ({
  */
 const apiCreatePhotos = async ({
   files,
+  kinds,
 }: ApiCreatePhotosBody): Promise<ApiCreatePhotosResponse> => {
   try {
     // 각 이미지들의 "preSignedURL"의 promise 얻음
     const preSignedUrlPromiseList = [...files].map((file) =>
-      axiosInstance.get<ApiCreatePhotoResponse>(`/photo?name=${file.name}`)
+      axiosInstance.get<ApiCreatePhotoResponse>(
+        `/photo?name=${file.name}&kinds=${kinds}`
+      )
     );
 
     // promise 병렬 처리

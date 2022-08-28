@@ -22,7 +22,7 @@ import MyError from "@src/components/common/MyError";
 import RelatedProducts from "@src/components/Product/RelatedProducts";
 
 // type
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import type { ProductOptionForm } from "@src/types";
 
 const Product: NextPage = () => {
@@ -230,3 +230,9 @@ const Product: NextPage = () => {
 };
 
 export default Product;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};

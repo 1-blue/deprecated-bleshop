@@ -6,6 +6,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import type {
   ApiDeleteUserPhotoResponse,
   ApiCreatePhotoResponse,
+  PhotoKinds,
 } from "@src/types";
 
 export default async function handler(
@@ -17,14 +18,17 @@ export default async function handler(
   // 이미지 업로드 url 받기
   if (method === "GET") {
     if (typeof query.name === "string") {
-      const { name } = query;
+      const { name, kinds } = query;
 
-      const { photoURL, preSignedURL } = getSignedURL(name);
+      const { photoURL, preSignedURL } = getSignedURL(
+        name,
+        kinds as PhotoKinds
+      );
 
       return res.status(200).json({
         preSignedURL,
         photoURL,
-        message: "프로필 이미지를 업로드중입니다. 잠시만 기다려주세요!",
+        message: "이미지를 업로드중입니다. 잠시만 기다려주세요!",
       });
     }
   }
@@ -34,7 +38,7 @@ export default async function handler(
     if (typeof query.names === "object") {
       const { names } = query;
 
-      names.forEach((name) => movePhoto(name));
+      names.forEach((name) => movePhoto(name, "remove"));
 
       return res
         .status(200)
@@ -44,7 +48,7 @@ export default async function handler(
     else if (typeof query.name === "string") {
       const { name } = query;
 
-      movePhoto(name);
+      movePhoto(name, "remove");
 
       return res
         .status(200)

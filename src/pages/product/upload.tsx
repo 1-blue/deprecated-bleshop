@@ -25,7 +25,7 @@ import NotAuthPage from "@src/components/common/403";
 import NotLogInPage from "@src/components/common/401";
 
 // type
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import type { ApiCreateProductBody } from "@src/types";
 import { AxiosError } from "axios";
 
@@ -153,7 +153,7 @@ const Upload: NextPage = () => {
   if (!data) return <NotLogInPage />;
   if (!data.user) return <NotLogInPage />;
   // 상품 등록 권한이 있는지 확인
-  if (data.user.isAdmin) return <NotAuthPage />;
+  if (!data.user.isAdmin) return <NotAuthPage />;
 
   return (
     <>
@@ -231,6 +231,7 @@ const Upload: NextPage = () => {
           register={register("photo", {
             required: { message: "대표 이미지는 필수입니다!", value: true },
           })}
+          kinds="product"
           errorMessage={errors.photo?.message}
         />
 
@@ -315,3 +316,9 @@ const Upload: NextPage = () => {
 };
 
 export default Upload;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};

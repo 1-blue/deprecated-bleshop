@@ -12,7 +12,7 @@ import CategorySelector from "@src/components/Main/CategorySelector";
 import FilterSelector from "@src/components/Main/FilterSelector";
 
 // type
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 
 const Search: NextPage = () => {
   const router = useRouter();
@@ -67,3 +67,9 @@ const Search: NextPage = () => {
 };
 
 export default Search;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};

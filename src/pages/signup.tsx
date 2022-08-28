@@ -214,6 +214,7 @@ const SignUp: NextPage = () => {
           setPhotoURL={setPhotoURL}
           name="프로필 이미지"
           register={register("photo")}
+          kinds="user"
         />
 
         <Tool.Button

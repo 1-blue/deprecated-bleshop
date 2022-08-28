@@ -14,6 +14,7 @@ import apiService from "@src/api";
 import type { ChangeEvent } from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
 import type { Dispatch, SetStateAction } from "react";
+import type { PhotoKinds } from "@src/types";
 import { AxiosError } from "axios";
 
 type Props = {
@@ -21,6 +22,7 @@ type Props = {
   setPhotoURL: Dispatch<SetStateAction<string>>;
   name: string;
   register: UseFormRegisterReturn;
+  kinds: PhotoKinds;
   errorMessage?: string;
   disabled?: boolean;
 };
@@ -30,6 +32,7 @@ const SinglePhoto = ({
   setPhotoURL,
   name,
   register,
+  kinds,
   errorMessage,
   disabled,
 }: Props) => {
@@ -51,6 +54,7 @@ const SinglePhoto = ({
       try {
         const { photoURL } = await apiService.photoService.apiCreatePhoto({
           file,
+          kinds,
         });
 
         if (!photoURL)
@@ -88,7 +92,7 @@ const SinglePhoto = ({
         }
       }
     },
-    [setPhotoURL]
+    [setPhotoURL, kinds]
   );
 
   return (

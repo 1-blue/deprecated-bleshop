@@ -60,3 +60,6 @@ export type {
 
 // 2022/08/21 - 최대 요청 개수 - by 1-blue
 export type LIMIT = 15;
+
+// 2022/08/28 - 이미지 종류 - by 1-blue
+export type PhotoKinds = "user" | "product" | "benner" | "remove";
