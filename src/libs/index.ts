@@ -18,6 +18,7 @@ export {
   deleteSeparator,
   numberWithComma,
   numberWithoutComma,
+  sliceLineOfString,
 } from "./utils";
 
 export { getSignedURL, movePhoto, deletePhoto, copyPhoto } from "./s3";

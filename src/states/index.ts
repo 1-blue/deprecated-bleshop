@@ -3,6 +3,7 @@ import productsService from "./products";
 import categoryService from "./category";
 import filterService from "./filter";
 import buyService from "./buy";
+import wishService from "./wish";
 
 const stateService = {
   productService,
@@ -10,6 +11,7 @@ const stateService = {
   categoryService,
   filterService,
   buyService,
+  wishService,
 };
 
 export default stateService;

@@ -141,3 +141,24 @@ export const numberWithComma = (number: number | string) =>
  */
 export const numberWithoutComma = (price: string) =>
   price.toString().split(",").join("");
+
+/**
+ * 문자열 줄단위로 자르기
+ * @param string 자를 문자열
+ * @param line 자를 줄
+ * @returns 잘린 문자열 + "..."
+ */
+export const sliceLineOfString = (string: string, line: number) => {
+  let sliceIndex = null;
+
+  for (let i = 1; i <= line; i++) {
+    if (sliceIndex === -1) continue;
+    if (sliceIndex === null) sliceIndex = -1;
+
+    sliceIndex = string.indexOf("\n", sliceIndex + 1);
+  }
+
+  if (sliceIndex === -1 || sliceIndex === null) return string;
+
+  return string.slice(0, sliceIndex) + "...";
+};

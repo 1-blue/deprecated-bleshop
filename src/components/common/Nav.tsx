@@ -1,7 +1,9 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 // component
 import Icon from "@src/components/common/Icon";
+import { combineClassNames } from "@src/libs";
 
 type TitleNavProps = {
   title: string;
@@ -24,10 +26,56 @@ const TitleNav = ({ title }: TitleNavProps) => {
   );
 };
 
-type NavType = {
-  TitleNav: typeof TitleNav;
+const CartNav = () => {
+  const { asPath } = useRouter();
+
+  return (
+    <ul className="flex justify-between bg-white rounded-md shadow-2xl overflow-hidden w-full min-w-[300px] divide-x-4">
+      <li className="flex-1 flex">
+        <Link href="/cart/order">
+          <a
+            className={combineClassNames(
+              "flex-1 text-center py-2 xs:py-3 font-bolder text-sm xs:text-base sm:text-lg hover:bg-blue-500 hover:text-white transition-colors",
+              asPath.includes("/cart/order") ? "bg-blue-400 text-white" : ""
+            )}
+          >
+            구매 목록
+          </a>
+        </Link>
+      </li>
+      <li className="flex-1 flex">
+        <Link href="/cart">
+          <a
+            className={combineClassNames(
+              "flex-1 text-center py-2 xs:py-3 font-bolder text-sm xs:text-base sm:text-lg hover:bg-blue-500 hover:text-white transition-colors",
+              asPath.endsWith("/cart") ? "bg-blue-400 text-white" : ""
+            )}
+          >
+            장바구니 상품들
+          </a>
+        </Link>
+      </li>
+      <li className="flex-1 flex">
+        <Link href="/cart/wish">
+          <a
+            className={combineClassNames(
+              "flex-1 text-center py-2 xs:py-3 font-bolder text-sm xs:text-base sm:text-lg hover:bg-blue-500 hover:text-white transition-colors",
+              asPath.includes("/cart/wish") ? "bg-blue-400 text-white" : ""
+            )}
+          >
+            찜한 상품들
+          </a>
+        </Link>
+      </li>
+    </ul>
+  );
 };
 
-const Nav: NavType = { TitleNav };
+type NavType = {
+  TitleNav: typeof TitleNav;
+  CartNav: typeof CartNav;
+};
+
+const Nav: NavType = { TitleNav, CartNav };
 
 export default Nav;
