@@ -3,6 +3,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 // util
 import { dateOrTimeFormat, numberWithComma } from "@src/libs";
@@ -24,6 +25,7 @@ import RelatedProducts from "@src/components/Product/RelatedProducts";
 // type
 import type { GetServerSideProps, NextPage } from "next";
 import type { ProductOptionForm } from "@src/types";
+import { AxiosError } from "axios";
 
 const Product: NextPage = () => {
   const { data } = useSession();
@@ -42,21 +44,6 @@ const Product: NextPage = () => {
 
   // 2022/08/26 - 현재 상품의 상세 정보 - by 1-blue
   const product = useRecoilValue(stateService.productService.productState);
-
-  // 2022/08/26 - 현재 상품에 찜하기를 눌렀는지 여부 - by 1-blue
-  const [isWish, setIsWish] = useState(false);
-  useEffect(() => {
-    if (!product) return;
-    if (!data?.user) return;
-
-    (async () => {
-      const {
-        data: { isWish },
-      } = await apiService.wishService.apiGetWish({ productIdx: product.idx });
-
-      setIsWish(isWish);
-    })();
-  }, [product, data]);
 
   // 2022/08/26 - 구매/장바구니 관련 데이터 - by 1-blue
   const setProductToBuy = useSetRecoilState(
@@ -86,6 +73,83 @@ const Product: NextPage = () => {
 
   // 2022/08/26 - 현재 상품의 이미지들중에 보여지는 이미지 번호 - by 1-blue
   const [currentDot, setCurrentDot] = useState(0);
+
+  // 2022/08/26 - 현재 상품에 찜하기를 눌렀는지 여부 - by 1-blue
+  const [isWish, setIsWish] = useState(false);
+  useEffect(() => {
+    if (!product) return;
+    if (!data?.user) return;
+
+    (async () => {
+      const {
+        data: { isWish },
+      } = await apiService.wishService.apiGetWish({ productIdx: product.idx });
+
+      setIsWish(isWish);
+    })();
+  }, [product, data]);
+
+  // 2022/08/30 - 찜하기/찜취소하기 - by 1-blue
+  const onClickWishButton = useCallback(async () => {
+    if (typeof router.query.id !== "string") return;
+
+    const toastId = toast.loading("찜하기 요청을 처리중입니다.");
+
+    try {
+      // 찜취소하기 요청
+      if (isWish) {
+        const {
+          data: { message },
+        } = await apiService.wishService.apiDeleteWish({
+          productIdx: +router.query.id,
+        });
+
+        toast.update(toastId, {
+          render: message,
+          type: "success",
+          isLoading: false,
+          autoClose: 1500,
+        });
+
+        setIsWish(false);
+      }
+      // 찜하기 요청
+      else {
+        const {
+          data: { message },
+        } = await apiService.wishService.apiCreateWish({
+          productIdx: +router.query.id,
+        });
+
+        toast.update(toastId, {
+          render: message,
+          type: "success",
+          isLoading: false,
+          autoClose: 1500,
+        });
+
+        setIsWish(true);
+      }
+    } catch (error) {
+      console.error(error);
+
+      if (error instanceof AxiosError) {
+        toast.update(toastId, {
+          render: error.response?.data.message,
+          type: "error",
+          isLoading: false,
+          autoClose: 1500,
+        });
+      } else {
+        toast.update(toastId, {
+          render: "알 수 없는 에러가 발생했습니다.",
+          type: "error",
+          isLoading: false,
+          autoClose: 1500,
+        });
+      }
+    }
+  }, [isWish, router.query]);
 
   if (product === null) return <MyError message="상품이 존재하지 않습니다." />;
 
@@ -201,6 +265,7 @@ const Product: NextPage = () => {
         <button
           type="button"
           className="flex-1 p-2 bg-red-400 text-white font-bold hover:bg-red-600 transition-colors"
+          onClick={onClickWishButton}
         >
           {isWish ? "취소하기" : "찜하기"}
         </button>

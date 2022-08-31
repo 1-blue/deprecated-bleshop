@@ -12,6 +12,8 @@ import type {
   ApiGetProductsResponse,
   ApiGetRelatedProductsBody,
   ApiGetRelatedProductsResponse,
+  ApiGetWishProductsBody,
+  ApiGetWishProductsResponse,
 } from "@src/types";
 
 /**
@@ -83,6 +85,16 @@ const apiGetRelatedProducts = ({
   );
 
 /**
+ * 2022/08/30 - 찜한 상품들 요청 - by 1-blue
+ * @param 마지막 상품 식별자(lastIdx)와 요청 개수(limit)
+ * @returns 로그인한 유저가 찜한 상품들
+ */
+const apiGetWishProducts = ({ lastIdx, limit }: ApiGetWishProductsBody) =>
+  axiosInstance.get<ApiGetWishProductsResponse>(
+    `/products/wish?lastIdx=${lastIdx}&limit=${limit}`
+  );
+
+/**
  * 2022/08/19 - 상품 관련 api 요청 객체 - by 1-blue
  */
 const productService = {
@@ -91,6 +103,7 @@ const productService = {
   apiGetProductsByKeyword,
   apiGetProduct,
   apiGetRelatedProducts,
+  apiGetWishProducts,
 };
 
 export default productService;

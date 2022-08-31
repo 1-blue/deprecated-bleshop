@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -216,4 +216,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default React.memo(Products);

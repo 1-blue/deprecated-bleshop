@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
 // api
@@ -47,13 +46,9 @@ const RelatedProducts = ({ productIdx, keywords }: Props) => {
       // 이전에 상품 데이터들을 받아왔을 경우를 대비해서 미리 초기화
       setProductLastIdx(-1);
 
-      let toastId = null;
-
       try {
-        toastId = toast.loading(`특정 상품과 연관된 상품들을 검색합니다.`);
-
         const {
-          data: { products, message },
+          data: { products },
         } = await apiService.productService.apiGetRelatedProducts({
           limit,
           lastIdx: -1,
@@ -62,30 +57,13 @@ const RelatedProducts = ({ productIdx, keywords }: Props) => {
         });
 
         setRelatedProducts(products);
-
-        toast.update(toastId, {
-          render: message,
-          type: "success",
-          isLoading: false,
-          autoClose: 1500,
-        });
       } catch (error) {
         console.error(error);
 
         if (error instanceof AxiosError) {
-          toast.update(toastId!, {
-            render: error.response?.data.message,
-            type: "error",
-            isLoading: false,
-            autoClose: 1500,
-          });
+          toast.error(error.response?.data.message);
         } else {
-          toast.update(toastId!, {
-            render: "알 수 없는 에러가 발생했습니다.",
-            type: "error",
-            isLoading: false,
-            autoClose: 1500,
-          });
+          toast.error("알 수 없는 에러가 발생했습니다.");
         }
       }
     })();
@@ -98,15 +76,9 @@ const RelatedProducts = ({ productIdx, keywords }: Props) => {
 
       // 지정한 엘리먼트가 "threshold"만큼을 제외하고 뷰포트에 들어왔다면 실행
       if (isIntersecting) {
-        let toastId = null;
-
         try {
-          toastId = toast.loading(
-            `특정 상품과 연관된 상품들을 추가로 검색합니다.`
-          );
-
           const {
-            data: { products, message },
+            data: { products },
           } = await apiService.productService.apiGetRelatedProducts({
             limit,
             lastIdx: productLastIdx,
@@ -115,30 +87,13 @@ const RelatedProducts = ({ productIdx, keywords }: Props) => {
           });
 
           setRelatedProducts((prev) => [...prev, ...products]);
-
-          toast.update(toastId, {
-            render: message,
-            type: "success",
-            isLoading: false,
-            autoClose: 1500,
-          });
         } catch (error) {
           console.error(error);
 
           if (error instanceof AxiosError) {
-            toast.update(toastId!, {
-              render: error.response?.data.message,
-              type: "error",
-              isLoading: false,
-              autoClose: 1500,
-            });
+            toast.error(error.response?.data.message);
           } else {
-            toast.update(toastId!, {
-              render: "알 수 없는 에러가 발생했습니다.",
-              type: "error",
-              isLoading: false,
-              autoClose: 1500,
-            });
+            toast.error("알 수 없는 에러가 발생했습니다.");
           }
         }
       }
@@ -207,4 +162,4 @@ const RelatedProducts = ({ productIdx, keywords }: Props) => {
   );
 };
 
-export default RelatedProducts;
+export default React.memo(RelatedProducts);

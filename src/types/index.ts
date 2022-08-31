@@ -49,6 +49,12 @@ export type {
   ApiGetWishResponse,
   ApiGetRelatedProductsBody,
   ApiGetRelatedProductsResponse,
+  ApiCreateWishBody,
+  ApiCreateWishResponse,
+  ApiDeleteWishBody,
+  ApiDeleteWishResponse,
+  ApiGetWishProductsBody,
+  ApiGetWishProductsResponse,
 } from "./api";
 
 export type {

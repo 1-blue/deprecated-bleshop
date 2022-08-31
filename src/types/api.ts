@@ -283,7 +283,7 @@ export type ApiGetWishBody = { productIdx: number };
 export type ApiGetWishResponse = ApiResponse & { isWish: boolean };
 
 /**
- * 2022/08/26 - 송신 타입 - by 1-blue
+ * 2022/08/26 - 연관된 상품들 요청 송신 타입 - by 1-blue
  */
 export type ApiGetRelatedProductsBody = {
   limit: LIMIT;
@@ -292,8 +292,39 @@ export type ApiGetRelatedProductsBody = {
   keywords: string[];
 };
 /**
- * 2022/08/26 - 수신 타입 - by 1-blue
+ * 2022/08/26 - 연관된 상품들 요청 수신 타입 - by 1-blue
  */
 export type ApiGetRelatedProductsResponse = ApiResponse & {
+  products: Product[];
+};
+
+/**
+ * 2022/08/30 - 찜하기 요청 송신 타입 - by 1-blue
+ */
+export type ApiCreateWishBody = { productIdx: number };
+/**
+ * 2022/08/30 - 찜하기 요청 수신 타입 - by 1-blue
+ */
+export type ApiCreateWishResponse = ApiResponse & {};
+/**
+ * 2022/08/30 - 찜하기 취소하기 요청 송신 타입 - by 1-blue
+ */
+export type ApiDeleteWishBody = { productIdx: number };
+/**
+ * 2022/08/30 - 찜하기 취소하기 요청 수신 타입 - by 1-blue
+ */
+export type ApiDeleteWishResponse = ApiResponse & {};
+
+/**
+ * 2022/08/30 - 찜한 상품들 요청 송신 타입 - by 1-blue
+ */
+export type ApiGetWishProductsBody = {
+  limit: LIMIT;
+  lastIdx: number;
+};
+/**
+ * 2022/08/30 - 찜한 상품들 요청 수신 타입 - by 1-blue
+ */
+export type ApiGetWishProductsResponse = ApiResponse & {
   products: Product[];
 };
