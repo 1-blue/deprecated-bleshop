@@ -178,6 +178,21 @@ model Wish {
   @@id([userIdx, productIdx])
 }
 
+// 장바구니 ( 유저와 상품 )
+model Basket {
+  size     String
+  color    String
+  quantity Int
+  skip     Boolean @default(false)
+
+  user       User    @relation(fields: [userIdx], references: [idx])
+  userIdx    Int
+  product    Product @relation(fields: [productIdx], references: [idx])
+  productIdx Int
+
+  @@id([userIdx, productIdx])
+}
+
 // 댓글
 model Comment {
   idx      Int    @id @default(autoincrement())
@@ -203,14 +218,4 @@ model Order {
   // 상품과 주문 => 1:N
   Product    Product? @relation(fields: [productIdx], references: [idx])
   productIdx Int?
-}
-
-// 장바구니 ( 유저와 상품 )
-model Basket {
-  user       User    @relation(fields: [userIdx], references: [idx])
-  userIdx    Int
-  product    Product @relation(fields: [productIdx], references: [idx])
-  productIdx Int
-
-  @@id([userIdx, productIdx])
 }

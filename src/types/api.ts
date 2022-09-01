@@ -1,6 +1,7 @@
 import type { LIMIT, DetailProduct, PhotoKinds } from ".";
 import type {
   Address,
+  Basket,
   Category,
   Filter,
   Keyword,
@@ -328,3 +329,54 @@ export type ApiGetWishProductsBody = {
 export type ApiGetWishProductsResponse = ApiResponse & {
   products: Product[];
 };
+
+/**
+ * 2022/08/31 - 장바구니 모든 상품들 요청 송신 타입 - by 1-blue
+ */
+export type ApiGetBasketProductsBody = {};
+/**
+ * 2022/08/31 - 장바구니 모든 상품들 요청 수신 타입 - by 1-blue
+ */
+export type ApiGetBasketProductsResponse = ApiResponse & {
+  baskets: (Basket & {
+    product: Product;
+  })[];
+};
+
+/**
+ * 2022/08/31 - 장바구니 상품 추가 송신 타입 - by 1-blue
+ */
+export type ApiCreateBasketBody = {
+  size: string;
+  color: string;
+  quantity: number;
+  productIdx: number;
+};
+/**
+ * 2022/08/31 - 장바구니 상품 추가 요청 수신 타입 - by 1-blue
+ */
+export type ApiCreateBasketResponse = ApiResponse & {};
+
+/**
+ * 2022/08/31 - 장바구니 상품 제거 송신 타입 - by 1-blue
+ */
+export type ApiDeleteBasketBody = {
+  productIdx: number;
+};
+/**
+ * 2022/08/31 - 장바구니 상품 제거 요청 수신 타입 - by 1-blue
+ */
+export type ApiDeleteBasketResponse = ApiResponse & {};
+
+/**
+ * 2022/09/01 - 장바구니 상품중 하나 수정 송신 타입 - by 1-blue
+ */
+export type ApiUpdateBasketBody = {
+  productIdx: number;
+  quantity?: number;
+  skip?: boolean;
+};
+/**
+ * 2022/08/31 - 장바구니 상품중 하나 수정 수신 타입 - by 1-blue
+ */
+export type ApiUpdateBasketResponse = ApiResponse & {};
