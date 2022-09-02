@@ -4,6 +4,8 @@ import { axiosInstance } from ".";
 import type {
   ApiCreateProductBody,
   ApiCreateProductResponse,
+  // ApiGetBasketProductsBody,
+  ApiGetBasketProductsResponse,
   ApiGetProductBody,
   ApiGetProductResponse,
   ApiGetProductsBody,
@@ -95,6 +97,13 @@ const apiGetWishProducts = ({ lastIdx, limit }: ApiGetWishProductsBody) =>
   );
 
 /**
+ * 2022/08/31 - 장바구니에 담긴 모든 상품들 요청 - by 1-blue
+ * @returns 결과 메시지
+ */
+const apiGetBasketProducts = () =>
+  axiosInstance.get<ApiGetBasketProductsResponse>(`/products/basket`);
+
+/**
  * 2022/08/19 - 상품 관련 api 요청 객체 - by 1-blue
  */
 const productService = {
@@ -104,6 +113,7 @@ const productService = {
   apiGetProduct,
   apiGetRelatedProducts,
   apiGetWishProducts,
+  apiGetBasketProducts,
 };
 
 export default productService;

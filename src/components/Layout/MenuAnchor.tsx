@@ -13,7 +13,7 @@ import type { ICON } from "@src/types";
 type Props = {
   shape: ICON;
   name: string;
-  url: "category" | "search" | "" | "information" | "cart";
+  url: "category" | "search" | "" | "information" | "basket";
 };
 
 const MenuAnchor = ({ shape, name, url }: Props) => {

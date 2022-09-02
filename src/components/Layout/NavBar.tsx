@@ -22,7 +22,7 @@ const NavBar = () => {
       <MenuAnchor shape="search" name="검색" url="search" />
       <MenuAnchor shape="home" name="홈" url="" />
       <MenuAnchor shape="user" name="내 정보" url="information" />
-      <MenuAnchor shape="cart" name="장바구니" url="cart" />
+      <MenuAnchor shape="basket" name="장바구니" url="basket" />
     </ul>
   );
 };

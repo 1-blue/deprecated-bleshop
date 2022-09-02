@@ -26,17 +26,17 @@ const TitleNav = ({ title }: TitleNavProps) => {
   );
 };
 
-const CartNav = () => {
+const BasketNav = () => {
   const { asPath } = useRouter();
 
   return (
     <ul className="flex justify-between bg-white rounded-md shadow-2xl overflow-hidden w-full min-w-[300px] divide-x-4">
       <li className="flex-1 flex">
-        <Link href="/cart/order">
+        <Link href="/basket/order">
           <a
             className={combineClassNames(
               "flex-1 text-center py-2 xs:py-3 font-bolder text-sm xs:text-base sm:text-lg hover:bg-blue-500 hover:text-white transition-colors",
-              asPath.includes("/cart/order") ? "bg-blue-400 text-white" : ""
+              asPath.includes("/basket/order") ? "bg-blue-400 text-white" : ""
             )}
           >
             구매 목록
@@ -44,11 +44,11 @@ const CartNav = () => {
         </Link>
       </li>
       <li className="flex-1 flex">
-        <Link href="/cart">
+        <Link href="/basket">
           <a
             className={combineClassNames(
               "flex-1 text-center py-2 xs:py-3 font-bolder text-sm xs:text-base sm:text-lg hover:bg-blue-500 hover:text-white transition-colors",
-              asPath.endsWith("/cart") ? "bg-blue-400 text-white" : ""
+              asPath.endsWith("/basket") ? "bg-blue-400 text-white" : ""
             )}
           >
             장바구니 상품들
@@ -56,11 +56,11 @@ const CartNav = () => {
         </Link>
       </li>
       <li className="flex-1 flex">
-        <Link href="/cart/wish">
+        <Link href="/basket/wish">
           <a
             className={combineClassNames(
               "flex-1 text-center py-2 xs:py-3 font-bolder text-sm xs:text-base sm:text-lg hover:bg-blue-500 hover:text-white transition-colors",
-              asPath.includes("/cart/wish") ? "bg-blue-400 text-white" : ""
+              asPath.includes("/basket/wish") ? "bg-blue-400 text-white" : ""
             )}
           >
             찜한 상품들
@@ -73,9 +73,9 @@ const CartNav = () => {
 
 type NavType = {
   TitleNav: typeof TitleNav;
-  CartNav: typeof CartNav;
+  BasketNav: typeof BasketNav;
 };
 
-const Nav: NavType = { TitleNav, CartNav };
+const Nav: NavType = { TitleNav, BasketNav };
 
 export default Nav;

@@ -1,5 +1,5 @@
 export type ICON =
-  | "cart"
+  | "basket"
   | "list"
   | "search"
   | "home"

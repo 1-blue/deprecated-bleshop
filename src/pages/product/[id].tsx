@@ -20,7 +20,7 @@ import Nav from "@src/components/common/Nav";
 import Photo from "@src/components/common/Photo";
 import Tool from "@src/components/common/Tool";
 import MyError from "@src/components/common/MyError";
-import RelatedProducts from "@src/components/Product/RelatedProducts";
+import RelatedProducts from "@src/components/Products/RelatedProducts";
 
 // type
 import type { GetServerSideProps, NextPage } from "next";
@@ -51,7 +51,7 @@ const Product: NextPage = () => {
   );
 
   // 2022/08/26 - 상품 구매/장바구니 관련 폼 - by 1-blue
-  const { register, watch, setValue, handleSubmit } =
+  const { register, watch, setValue, handleSubmit, getValues } =
     useForm<ProductOptionForm>({
       defaultValues: { quantity: 1 },
     });
@@ -150,6 +150,47 @@ const Product: NextPage = () => {
       }
     }
   }, [isWish, router.query]);
+
+  // 2022/08/31 - 장바구니 담기 - by 1-blue
+  const onAddBasket = useCallback(async () => {
+    if (typeof router.query.id !== "string") return;
+
+    const toastId = toast.loading("장바구니에 상품을 넣는중입니다.");
+
+    try {
+      const {
+        data: { message },
+      } = await apiService.basketService.apiCreateBasket({
+        ...getValues(),
+        productIdx: +router.query.id,
+      });
+
+      toast.update(toastId, {
+        render: message,
+        type: "success",
+        isLoading: false,
+        autoClose: 1500,
+      });
+    } catch (error) {
+      console.error(error);
+
+      if (error instanceof AxiosError) {
+        toast.update(toastId, {
+          render: error.response?.data.message,
+          type: "error",
+          isLoading: false,
+          autoClose: 1500,
+        });
+      } else {
+        toast.update(toastId, {
+          render: "알 수 없는 에러가 발생했습니다.",
+          type: "error",
+          isLoading: false,
+          autoClose: 1500,
+        });
+      }
+    }
+  }, [getValues, router.query]);
 
   if (product === null) return <MyError message="상품이 존재하지 않습니다." />;
 
@@ -278,6 +319,7 @@ const Product: NextPage = () => {
         <button
           type="button"
           className="flex-1 p-2 bg-indigo-400 text-white font-bold hover:bg-indigo-600 transition-colors"
+          onClick={onAddBasket}
         >
           장바구니
         </button>

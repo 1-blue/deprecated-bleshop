@@ -147,6 +147,34 @@ const WishProducts = () => {
     [setWishProducts]
   );
 
+  // 2022/09/01 - 찜한 상품 장바구니로 옮기기 - by 1-blue
+  // >>> 나중에 수정 wish에 "color", "size", "quantity" 추가하기
+  const onMoveBasket = useCallback(
+    (productIdx: number) => async () => {
+      try {
+        const {
+          data: { message },
+        } = await apiService.basketService.apiCreateBasket({
+          color: "임시",
+          size: "임시",
+          quantity: 1,
+          productIdx,
+        });
+
+        toast.success(message);
+      } catch (error) {
+        console.error(error);
+
+        if (error instanceof AxiosError) {
+          toast.error(error.response?.data.message);
+        } else {
+          toast.error("알 수 없는 오류입니다.");
+        }
+      }
+    },
+    []
+  );
+
   return (
     <>
       {wishProducts.length === 0 ? (
@@ -208,6 +236,7 @@ const WishProducts = () => {
                         type="button"
                         text="장바구니 담기"
                         className="text-[8px] sm:text-xs px-1 sm:px-2 py-[2px] sm:py-1 border border-blue-500 text-blue-500 font-bold rounded-sm"
+                        onClick={onMoveBasket(wishProduct.idx)}
                       />
                     </div>
                   </div>
