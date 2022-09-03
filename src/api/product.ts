@@ -88,17 +88,14 @@ const apiGetRelatedProducts = ({
 
 /**
  * 2022/08/30 - 찜한 상품들 요청 - by 1-blue
- * @param 마지막 상품 식별자(lastIdx)와 요청 개수(limit)
  * @returns 로그인한 유저가 찜한 상품들
  */
-const apiGetWishProducts = ({ lastIdx, limit }: ApiGetWishProductsBody) =>
-  axiosInstance.get<ApiGetWishProductsResponse>(
-    `/products/wish?lastIdx=${lastIdx}&limit=${limit}`
-  );
+const apiGetWishProducts = () =>
+  axiosInstance.get<ApiGetWishProductsResponse>(`/products/wish`);
 
 /**
  * 2022/08/31 - 장바구니에 담긴 모든 상품들 요청 - by 1-blue
- * @returns 결과 메시지
+ * @returns 로그인한 유저가 장바구니에 담은 상품들
  */
 const apiGetBasketProducts = () =>
   axiosInstance.get<ApiGetBasketProductsResponse>(`/products/basket`);

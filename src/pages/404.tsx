@@ -10,7 +10,7 @@ const NotFoundPage = () => {
       <HeadInfo title="BleShop - 잘못된 경로" />
 
       <article>
-        <section className="flex justify-center items-center text-[#FF0000] text-[120px] xs:text-[180px] space-x-2">
+        <section className="flex justify-center items-center text-[#FF0000] text-[120px] xs:text-[140px] sm:text-[180px] space-x-2">
           <span>4</span>
           <svg
             version="1.1"
@@ -21,7 +21,7 @@ const NotFoundPage = () => {
             viewBox="0 0 40 40"
             xmlSpace="preserve"
             fill="#FF0000"
-            className="w-[90px] h-[90px] xs:w-[140px] xs:h-[140px]"
+            className="w-[90px] h-[90px] xs:w-[110px] xs:h-[110px] sm:w-[140px] sm:h-[140px]"
           >
             <g>
               <path d="M14.8,5.1L8.8,33C5.8,29.9,4,25.5,4,21C4,13.6,8.5,7.3,14.8,5.1 M20,0C9,0,0,9.4,0,21c0,8.4,4.7,15.5,11.4,19L20,0L20,0z" />

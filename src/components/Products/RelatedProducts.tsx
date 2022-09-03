@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import Link from "next/link";
 import { toast } from "react-toastify";
 
@@ -14,6 +14,7 @@ import stateService from "@src/states";
 
 // component
 import Photo from "@src/components/common/Photo";
+import Support from "@src/components/common/Support";
 
 // type
 import type { LIMIT } from "@src/types";
@@ -32,42 +33,13 @@ const RelatedProducts = ({ productIdx, keywords }: Props) => {
     stateService.productService.relatedProductsState
   );
   // 2022/08/27 - 가장 최근에 요청한 상품의 마지막 식별자 ( 해당 식별자를 기준으로 다음 상품들의 데이터를 요청 ) - by 1-blue
-  const [productLastIdx, setProductLastIdx] = useRecoilState(
+  const productLastIdx = useRecoilValue(
     stateService.productService.relatedProductsLastIdxState
   );
   // 2022/08/27 - 마지막 상품의 ref - by 1-blue
   const [lastProductRef, setLastProductRef] = useState<HTMLLIElement | null>(
     null
   );
-
-  // 2022/08/27 - 처음 한번 연관된 상품들의 데이터 요청 - by 1-blue
-  useEffect(() => {
-    (async () => {
-      // 이전에 상품 데이터들을 받아왔을 경우를 대비해서 미리 초기화
-      setProductLastIdx(-1);
-
-      try {
-        const {
-          data: { products },
-        } = await apiService.productService.apiGetRelatedProducts({
-          limit,
-          lastIdx: -1,
-          productIdx,
-          keywords,
-        });
-
-        setRelatedProducts(products);
-      } catch (error) {
-        console.error(error);
-
-        if (error instanceof AxiosError) {
-          toast.error(error.response?.data.message);
-        } else {
-          toast.error("알 수 없는 에러가 발생했습니다.");
-        }
-      }
-    })();
-  }, [productIdx, keywords, setRelatedProducts, setProductLastIdx]);
 
   // 2022/08/27 - observer로 인해 실행할 이벤트 함수 ( 제일 마지막 상품이 뷰포트에 들어오면 실행할 이벤트 함수 ) - by 1-blue
   const onScroll = useCallback(
@@ -118,7 +90,7 @@ const RelatedProducts = ({ productIdx, keywords }: Props) => {
   return (
     <>
       {relatedProducts.length === 0 ? (
-        <h3>조건에 맞는 상품이 없습니다.</h3>
+        <Support.Error text="조건에 맞는 상품이 없습니다." />
       ) : (
         <ul className="grid grid-cols-1 xsm:grid-cols-2 md:grid-cols-3 gap-2">
           {relatedProducts.map((relatedProduct, i) => (

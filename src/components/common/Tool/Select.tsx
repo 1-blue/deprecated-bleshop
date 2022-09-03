@@ -31,7 +31,7 @@ const Select = ({
         id={name}
         {...register}
         className={combineClassNames(
-          "p-2 border-2 cursor-pointer focus:outline-blue-400",
+          "p-1 xs:p-1.5 sm:p-2 text-xs xs:text-sm sm:text-base border-2 cursor-pointer focus:outline-blue-400",
           className ? className : ""
         )}
       >

@@ -25,7 +25,8 @@ export default async function handler(
       .json({ isWish: false, message: "접근 권한이 없습니다." });
 
   const userIdx = session.user.idx;
-  const productIdx = Number(req.query.productIdx);
+  const productIdx =
+    Number(req.query.productIdx) || Number(req.body.productIdx);
 
   try {
     const exProduct = await prisma.product.findUnique({
@@ -47,12 +48,14 @@ export default async function handler(
     }
     // 찜하기 요청
     else if (method === "POST") {
+      const { productIdx, ...body } = req.body;
+
       if (exWish)
         return res
           .status(409)
           .json({ message: "이미 찜하기를 누른 상품입니다." });
 
-      await prisma.wish.create({ data: { productIdx, userIdx } });
+      await prisma.wish.create({ data: { productIdx, userIdx, ...body } });
 
       return res.status(201).json({ message: "찜하기를 성공했습니다." });
     }

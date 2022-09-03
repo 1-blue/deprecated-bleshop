@@ -12,6 +12,7 @@ type Props = {
   contain?: boolean;
   priority?: boolean;
   avatar?: boolean;
+  isFocus?: boolean;
   onClick?: () => void;
 };
 
@@ -23,6 +24,7 @@ const Photo = ({
   contain,
   priority,
   avatar,
+  isFocus,
   onClick,
 }: Props) => {
   const photoRef = useRef<HTMLElement>(null);
@@ -36,7 +38,10 @@ const Photo = ({
       {path ? (
         <figure
           className={combineClassNames(
-            "relative bg-black focus:ring-2 focus:ring-blue-400 focus:ring-offset-4",
+            "relative bg-black",
+            isFocus
+              ? "focus:ring-2 focus:ring-blue-400 focus:ring-offset-4"
+              : "",
             avatar ? "rounded-full" : "rounded-md",
             className ? className : ""
           )}

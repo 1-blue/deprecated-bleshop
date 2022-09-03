@@ -31,7 +31,7 @@ const Textarea = ({
     if (!textRef.current) return;
 
     textRef.current.style.height = "auto";
-    textRef.current.style.height = textRef.current?.scrollHeight + "px";
+    textRef.current.style.height = textRef.current?.scrollHeight + 4 + "px";
   }, []);
 
   return (

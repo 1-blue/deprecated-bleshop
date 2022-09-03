@@ -170,6 +170,10 @@ model ProductsOnFilters {
 
 // 유저와 상품 중간 테이블 (찜하기) ( N:M )
 model Wish {
+  size     String
+  color    String
+  quantity Int
+
   user       User    @relation(fields: [userIdx], references: [idx])
   userIdx    Int
   product    Product @relation(fields: [productIdx], references: [idx])

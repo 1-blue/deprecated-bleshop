@@ -24,7 +24,7 @@ const LogIn: NextPage = () => {
   // 2022/08/12 - 로그인 요청 - by 1-blue
   const onSubmit = useCallback(
     async (body: ApiLogInBody) => {
-      const toastId = toast.loading("회원가입중입니다.");
+      const toastId = toast.loading("로그인중입니다.");
 
       try {
         const result = await signIn("credentials", {
@@ -34,7 +34,7 @@ const LogIn: NextPage = () => {
 
         if (result?.error)
           return toast.update(toastId, {
-            render: result?.error,
+            render: result.error,
             type: "error",
             isLoading: false,
             autoClose: 1500,
@@ -48,7 +48,7 @@ const LogIn: NextPage = () => {
         });
         router.push("/");
       } catch (error) {
-        console.error("error >> ", error);
+        console.error(error);
 
         if (error instanceof AxiosError) {
           toast.update(toastId, {
@@ -85,7 +85,7 @@ const LogIn: NextPage = () => {
         <Tool.Input
           name="아이디"
           type="text"
-          register={register("id")}
+          register={register("id", { required: "아이디를 입력해주세요!" })}
           placeholder="아이디를 입력하세요."
           errorMessage={errors.id?.message}
           className="min-w-[200px] max-w-[600px] w-full"
@@ -93,7 +93,9 @@ const LogIn: NextPage = () => {
         <Tool.Input
           name="비밀번호"
           type="password"
-          register={register("password")}
+          register={register("password", {
+            required: "비밀번호를 입력해주세요!",
+          })}
           placeholder="비밀번호를 입력하세요."
           errorMessage={errors.password?.message}
           className="min-w-[200px] max-w-[600px] w-full"

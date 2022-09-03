@@ -249,7 +249,11 @@ const Upload: NextPage = () => {
           register={register("description", {
             required: { message: "상품 설명을 입력해주세요!", value: true },
             maxLength: {
-              message: "2,000자 이내로 입력해주세요!",
+              message:
+                "2,000자 이내로 입력해주세요!" +
+                `( ${numberWithComma(
+                  getValues("description") ? getValues("description").length : 0
+                )}/2,000 )`,
               value: 2000,
             },
           })}

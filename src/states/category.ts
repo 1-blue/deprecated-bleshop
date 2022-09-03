@@ -1,7 +1,4 @@
-import { atom, selector } from "recoil";
-
-// api
-import apiService from "@src/api";
+import { atom } from "recoil";
 
 // type
 import type { Category } from "@prisma/client";
@@ -9,24 +6,9 @@ import type { Category } from "@prisma/client";
 /**
  * 2022/08/20 - 저장된 모든 카테고리들 요청 - by 1-blue
  */
-export const categoriesState = selector<Category[]>({
+export const categoriesState = atom<Category[]>({
   key: "categoriesState",
-  get: async () => {
-    try {
-      const {
-        data: { categories },
-      } = await apiService.categoryService.apiGetCategory();
-
-      return categories;
-    } catch (error) {
-      console.log("error categories >> ", error);
-
-      return [];
-    }
-  },
-  set({ set }, newValue) {
-    set(categoriesState, newValue);
-  },
+  default: [],
 });
 /**
  * 2022/08/24 - 현재 선택한 카테고리 - by 1-blue

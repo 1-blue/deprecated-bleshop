@@ -22,7 +22,14 @@ type SearchForm = {
 
 const SearchBar = () => {
   const router = useRouter();
-  const { register, handleSubmit, watch } = useForm<SearchForm>();
+  const { register, handleSubmit, watch, setValue } = useForm<SearchForm>({
+    defaultValues: {
+      searchWord:
+        typeof router.query.searchWord === "string"
+          ? router.query.searchWord
+          : "",
+    },
+  });
 
   // 2022/08/23 - 현재 검색창에 입력한 단어 - by 1-blue
   const searchWord = watch("searchWord");
@@ -52,12 +59,12 @@ const SearchBar = () => {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   // 2022/08/23 - 영역외 클릭 시 추천 키워드 창 닫기 - by 1-blue
   const handleCloseModal = useCallback(
-    (e: any) => {
-      if (
-        isFocus &&
-        (!wrapperRef.current || !wrapperRef.current.contains(e.target))
-      )
-        setIsFocus(false);
+    (e: MouseEvent) => {
+      if (!isFocus) return;
+      if (!(e.target instanceof Node)) return;
+      if (wrapperRef.current && wrapperRef.current.contains(e.target)) return;
+
+      setIsFocus(false);
     },
     [isFocus, setIsFocus, wrapperRef]
   );
@@ -107,13 +114,19 @@ const SearchBar = () => {
         </button>
       </div>
 
-      <div className="relative w-full">
-        <ul className="absolute top-0 left-0 w-full bg-gray-200 rounded-b-md z-[1]">
+      <div className="relative w-full z-[3]">
+        <ul className="absolute top-0 left-0 w-full bg-gray-200 rounded-b-md">
           {isFocus &&
-            keywords.map(({ keyword }) => (
+            keywords.map(({ keyword }, i) => (
               <li key={keyword}>
                 <Link href={`/search?searchWord=${keyword}`}>
-                  <a className="inline-block w-full px-4 py-2 text-[8px] xs:text-sm sm:text-base hover:bg-gray-300 focus:outline-none focus:bg-gray-300 transition-colors">
+                  <a
+                    className="inline-block w-full px-4 py-2 text-[8px] xs:text-sm sm:text-base hover:bg-gray-300 focus:outline-none focus:bg-gray-300 transition-colors"
+                    onBlur={() =>
+                      i === keywords.length - 1 ? setIsFocus(false) : null
+                    }
+                    onClick={() => setValue("searchWord", keyword)}
+                  >
                     {keyword}
                   </a>
                 </Link>

@@ -61,6 +61,7 @@ const SignUp: NextPage = () => {
           isLoading: false,
           autoClose: 1500,
         });
+
         router.push("/login");
       } catch (error) {
         console.error(error);
@@ -112,7 +113,7 @@ const SignUp: NextPage = () => {
 
         <button
           type="button"
-          className="fixed top-2 right-2 bg-transparent p-1"
+          className="fixed top-2 right-2 bg-transparent p-1 cursor-auto"
           onClick={() => setIsShow((prev) => !prev)}
         />
 

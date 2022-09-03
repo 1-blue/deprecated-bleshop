@@ -31,14 +31,14 @@ export default async function handler(
     // 이미 프로필 이미지가 존재하는 경우 이미지 제거
     if (exPhoto) {
       // AWS-S3에서 제거
-      movePhoto(exPhoto.path);
+      movePhoto(exPhoto.path, "user");
 
       // DB에서 제거
       await prisma.photo.delete({ where: { userIdx } });
     }
 
     if (typeof query.name === "string") {
-      const { preSignedURL, photoURL } = getSignedURL(query.name);
+      const { preSignedURL, photoURL } = getSignedURL(query.name, "user");
 
       return res.status(200).json({
         preSignedURL,
@@ -54,7 +54,7 @@ export default async function handler(
     // 이미 프로필 이미지가 존재하는 경우 이미지 제거
     if (exPhoto) {
       // AWS-S3에서 제거
-      movePhoto(exPhoto.path);
+      movePhoto(exPhoto.path, "user");
 
       // DB에서 제거
       await prisma.photo.delete({ where: { userIdx } });

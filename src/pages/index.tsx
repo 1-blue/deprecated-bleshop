@@ -1,4 +1,8 @@
-import { useRecoilValue } from "recoil";
+import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+
+// api
+import apiService from "@src/api";
 
 // state
 import stateService from "@src/states";
@@ -10,13 +14,37 @@ import Products from "@src/components/Main/Products";
 import SearchBar from "@src/components/Main/SearchBar";
 import CategorySelector from "@src/components/Main/CategorySelector";
 import FilterSelector from "@src/components/Main/FilterSelector";
+import Support from "@src/components/common/Support";
 
 // type
 import type { GetServerSideProps, NextPage } from "next";
+import type { Category, Filter, Product } from "@prisma/client";
+import type { LIMIT } from "@src/types";
 
-const Home: NextPage = () => {
-  // 2022/08/22 - 상품들 - by 1-blue
-  const products = useRecoilValue(stateService.productsService.productsState);
+const limit: LIMIT = 15;
+
+type Props = {
+  photo: string | null;
+  categories: Category[];
+  filters: Filter[];
+  products: Product[];
+};
+
+const Home: NextPage<Props> = ({ photo, categories, filters, products }) => {
+  const setCategories = useSetRecoilState(
+    stateService.categoryService.categoriesState
+  );
+  const setFilters = useSetRecoilState(stateService.filterService.filtersState);
+  const setProducts = useSetRecoilState(
+    stateService.productsService.productsState
+  );
+
+  // 2022/09/03 - getServerSideProps에서 받아온 카테고리들, 필터들, 상품들 recoil에 초기화 - by 1-blue
+  useEffect(() => {
+    setCategories(categories);
+    setFilters(filters);
+    setProducts(products);
+  }, [setCategories, categories, setFilters, filters, setProducts, products]);
 
   return (
     <>
@@ -25,51 +53,41 @@ const Home: NextPage = () => {
         description={
           "BleShop의 메인 페이지입니다.\n검색창, 광고 배너, 최근 업로드한 상품들을 볼 수 있습니다."
         }
-        photo={products?.[0]?.photo}
+        photo={photo}
       />
 
       <article className="pt-4 space-y-4">
         {/* 검색창과 카테고리 */}
-        <section className="p-2 xsm:p-3 md:p-4 space-y-2 bg-white rounded-md shadow-2xl">
+        <Support.Background className="space-y-2" hasPadding>
           <div>
-            <h2 className="pl-1 text-gray-800 font-bolder text-lg xs:text-xl md:text-2xl">
-              상품 검색
-            </h2>
+            <Support.Title text="상품 검색" />
             <SearchBar />
           </div>
 
           <div>
-            <h2 className="pl-1 text-gray-800 font-bolder text-sm xs:text-base md:text-lg">
-              카테고리
-            </h2>
+            <Support.SubTitle text="카테고리" />
             <CategorySelector />
           </div>
 
           <div>
-            <h2 className="pl-1 text-gray-800 font-bolder text-sm xs:text-base md:text-lg">
-              필터
-            </h2>
+            <Support.SubTitle text="필터" />
             <FilterSelector />
           </div>
-        </section>
+        </Support.Background>
 
         {/* 광고 케루셀 */}
-        <section className="p-2 xsm:p-3 md:p-4 space-y-1 bg-white rounded-md shadow-2xl w-full">
-          <h2 className="pl-1 text-gray-800 font-bolder text-lg xs:text-xl md:text-2xl">
-            광고
-          </h2>
+        <Support.Background className="space-y-2" hasPadding>
+          <Support.Title text="광고" />
           <Benner />
 
           <div className="pb-10" />
-        </section>
+        </Support.Background>
 
         {/* 상품 리스트 */}
-        <section className="space-y-4 p-2 xsm:p-3 md:p-4 bg-white rounded-md shadow-2xl">
-          <h2 className="pl-1 text-gray-800 font-bolder text-lg xs:text-xl md:text-2xl">
-            상품들
-          </h2>
+        <Support.Background className="space-y-2" hasPadding>
+          <Support.Title text="상품들" />
           <Products />
-        </section>
+        </Support.Background>
       </article>
     </>
   );
@@ -77,8 +95,47 @@ const Home: NextPage = () => {
 
 export default Home;
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  return {
-    props: {},
-  };
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  try {
+    const categoriesPromise = apiService.categoryService.apiGetCategory();
+    const filtersPromise = apiService.filterService.apiGetFilters();
+    const productsPromise = apiService.productService.apiGetProducts({
+      limit,
+      lastIdx: -1,
+      selectedCategory: "",
+      selectedFilters: [],
+    });
+
+    const [
+      {
+        data: { categories },
+      },
+      {
+        data: { filters },
+      },
+      {
+        data: { products },
+      },
+    ] = await Promise.all([categoriesPromise, filtersPromise, productsPromise]);
+
+    return {
+      props: {
+        photo: products[0].photo,
+        categories,
+        filters,
+        products,
+      },
+    };
+  } catch (error) {
+    console.error("getServerSideProps index >> ", error);
+
+    return {
+      props: {
+        photo: null,
+        categories: [],
+        filters: [],
+        products: [],
+      },
+    };
+  }
 };

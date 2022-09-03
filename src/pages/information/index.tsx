@@ -9,6 +9,7 @@ import HeadInfo from "@src/components/common/HeadInfo";
 import Tool from "@src/components/common/Tool";
 import Icon from "@src/components/common/Icon";
 import Photo from "@src/components/common/Photo";
+import Support from "@src/components/common/Support";
 
 // type
 import type { NextPage } from "next";
@@ -20,10 +21,7 @@ const Information: NextPage = () => {
   const onClickLogOut = useCallback(() => {
     const toastId = toast.loading("로그아웃중입니다.");
 
-    signOut({
-      callbackUrl: "/login",
-      redirect: true,
-    });
+    signOut({ callbackUrl: "/login", redirect: true });
 
     toast.update(toastId, {
       render: "로그아웃이 완료되었습니다. 로그인페이지로 이동합니다.",
@@ -41,63 +39,62 @@ const Information: NextPage = () => {
       />
 
       <article className="pt-4 space-y-4">
-        <section className="space-y-4 p-4 bg-white rounded-md shadow-2xl">
+        <Support.Background className="space-y-2 sm:space-y-4" hasPadding>
           <div className="flex justify-center">
             <Photo
               path={data?.user?.photo?.path}
               cover
               avatar
+              isFocus
               className="w-16 h-16 xs:w-20 xs:h-20 sm:w-32 sm:h-32 cursor-pointer"
               onClick={() => router.push("/information/update")}
             />
           </div>
 
-          <div>
-            <section className="flex space-x-4">
-              {data?.user ? (
-                <>
-                  <Link href="/information/update">
-                    <a className="flex-1 p-2 text-center text-sm xs:text-lg sm:text-xl font-bold bg-blue-400 text-white rounded-md transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400">
-                      {data.user.name}
-                    </a>
-                  </Link>
+          <section className="flex space-x-4">
+            {data?.user ? (
+              <>
+                <Link href="/information/update">
+                  <a className="flex-1 p-2 text-center text-sm xs:text-lg sm:text-xl font-bold bg-blue-400 text-white rounded-md transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400">
+                    {data.user.name}
+                  </a>
+                </Link>
 
-                  <Tool.Button
-                    type="button"
-                    text="로그아웃"
-                    onClick={onClickLogOut}
-                    className="flex-1 p-2 text-center text-sm xs:text-lg sm:text-xl font-bold bg-gray-400 text-white rounded-md transition-colors hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
-                  />
-                </>
-              ) : (
-                <>
-                  <Link href="/login">
-                    <a className="flex-1 p-2 text-center text-sm xs:text-lg sm:text-xl font-bold bg-gray-400 text-white rounded-md transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 focus:bg-blue-500">
-                      로그인
-                    </a>
-                  </Link>
+                <Tool.Button
+                  type="button"
+                  text="로그아웃"
+                  onClick={onClickLogOut}
+                  className="flex-1 p-2 text-center text-sm xs:text-lg sm:text-xl font-bold bg-gray-400 text-white rounded-md transition-colors hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+                />
+              </>
+            ) : (
+              <>
+                <Link href="/login">
+                  <a className="flex-1 p-2 text-center text-sm xs:text-lg sm:text-xl font-bold bg-gray-400 text-white rounded-md transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 focus:bg-blue-500">
+                    로그인
+                  </a>
+                </Link>
 
-                  <Link href="/signup">
-                    <a className="flex-1 p-2 text-center text-sm xs:text-lg sm:text-xl font-bold bg-gray-400 text-white rounded-md transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 focus:bg-blue-500">
-                      회원가입
-                    </a>
-                  </Link>
-                </>
-              )}
-            </section>
-          </div>
-        </section>
+                <Link href="/signup">
+                  <a className="flex-1 p-2 text-center text-sm xs:text-lg sm:text-xl font-bold bg-gray-400 text-white rounded-md transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 focus:bg-blue-500">
+                    회원가입
+                  </a>
+                </Link>
+              </>
+            )}
+          </section>
+        </Support.Background>
 
-        <section className="space-y-4 bg-white rounded-md shadow-2xl">
+        <Support.Background hasPadding>
           <h2>최근본상품</h2>
           <ul>
             <li>리스트1</li>
             <li>리스트2</li>
             <li>리스트3</li>
           </ul>
-        </section>
+        </Support.Background>
 
-        <section className="bg-white rounded-md shadow-2xl overflow-hidden">
+        <Support.Background className="overflow-hidden">
           <ul className="divide-y-2">
             <li>
               <Link href="/">
@@ -122,7 +119,7 @@ const Information: NextPage = () => {
               </Link>
             </li>
           </ul>
-        </section>
+        </Support.Background>
       </article>
     </>
   );

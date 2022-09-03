@@ -7,6 +7,7 @@ import type {
   Keyword,
   Product,
   User,
+  Wish,
 } from "@prisma/client";
 
 /**
@@ -302,7 +303,12 @@ export type ApiGetRelatedProductsResponse = ApiResponse & {
 /**
  * 2022/08/30 - 찜하기 요청 송신 타입 - by 1-blue
  */
-export type ApiCreateWishBody = { productIdx: number };
+export type ApiCreateWishBody = {
+  productIdx: number;
+  size: string;
+  color: string;
+  quantity: number;
+};
 /**
  * 2022/08/30 - 찜하기 요청 수신 타입 - by 1-blue
  */
@@ -319,15 +325,14 @@ export type ApiDeleteWishResponse = ApiResponse & {};
 /**
  * 2022/08/30 - 찜한 상품들 요청 송신 타입 - by 1-blue
  */
-export type ApiGetWishProductsBody = {
-  limit: LIMIT;
-  lastIdx: number;
-};
+export type ApiGetWishProductsBody = {};
 /**
  * 2022/08/30 - 찜한 상품들 요청 수신 타입 - by 1-blue
  */
 export type ApiGetWishProductsResponse = ApiResponse & {
-  products: Product[];
+  wishes: (Wish & {
+    product: Product;
+  })[];
 };
 
 /**

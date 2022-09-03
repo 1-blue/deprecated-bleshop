@@ -19,97 +19,17 @@ import stateService from "@src/states";
 // component
 import Photo from "@src/components/common/Photo";
 import Tool from "@src/components/common/Tool";
+import Support from "@src/components/common/Support";
 
 // type
-import type { LIMIT } from "@src/types";
+import type { Wish } from "@prisma/client";
 import { AxiosError } from "axios";
-
-const limit: LIMIT = 15;
 
 const WishProducts = () => {
   // 2022/08/30 - 화면에 랜더링할 찜한 상품들 - by 1-blue
   const [wishProducts, setWishProducts] = useRecoilState(
     stateService.wishService.wishProductsState
   );
-  // 2022/08/30 - 가장 최근에 요청한 상품의 마지막 식별자 ( 해당 식별자를 기준으로 다음 상품들의 데이터를 요청 ) - by 1-blue
-  const [productLastIdx, setProductLastIdx] = useRecoilState(
-    stateService.wishService.wishProductsLastIdxState
-  );
-  // 2022/08/30 - 마지막 상품의 ref - by 1-blue
-  const [lastProductRef, setLastProductRef] = useState<HTMLLIElement | null>(
-    null
-  );
-
-  // 2022/08/30 - 처음 한번 연관된 상품들의 데이터 요청 - by 1-blue
-  useEffect(() => {
-    (async () => {
-      // 이전에 상품 데이터들을 받아왔을 경우를 대비해서 미리 초기화
-      setProductLastIdx(-1);
-
-      try {
-        const {
-          data: { products },
-        } = await apiService.productService.apiGetWishProducts({
-          limit,
-          lastIdx: -1,
-        });
-
-        setWishProducts(products);
-      } catch (error) {
-        console.error(error);
-
-        if (error instanceof AxiosError) {
-          toast.error(error.response?.data.message);
-        } else {
-          toast.error("알 수 없는 에러가 발생했습니다.");
-        }
-      }
-    })();
-  }, [setWishProducts, setProductLastIdx]);
-
-  // 2022/08/30 - observer로 인해 실행할 이벤트 함수 ( 제일 마지막 상품이 뷰포트에 들어오면 실행할 이벤트 함수 ) - by 1-blue
-  const onScroll = useCallback(
-    async ([{ isIntersecting }]: IntersectionObserverEntry[]) => {
-      if (!lastProductRef) return;
-
-      // 지정한 엘리먼트가 "threshold"만큼을 제외하고 뷰포트에 들어왔다면 실행
-      if (isIntersecting) {
-        try {
-          const {
-            data: { products },
-          } = await apiService.productService.apiGetWishProducts({
-            limit,
-            lastIdx: productLastIdx,
-          });
-
-          setWishProducts((prev) => [...prev, ...products]);
-        } catch (error) {
-          console.error(error);
-
-          if (error instanceof AxiosError) {
-            toast.error(error.response?.data.message);
-          } else {
-            toast.error("알 수 없는 에러가 발생했습니다.");
-          }
-        }
-      }
-    },
-    [lastProductRef, productLastIdx, setWishProducts]
-  );
-
-  // 2022/08/30 - observer 등록 ( 제일 마지막 상품이 뷰포트에 들어오면 실행할 이벤트 함수를 등록 ) - by 1-blue
-  useEffect(() => {
-    if (!lastProductRef) return;
-    if (wishProducts.length % limit !== 0) return;
-
-    let observer = new IntersectionObserver(onScroll, {
-      threshold: 0.1,
-      rootMargin: "20px",
-    });
-    observer.observe(lastProductRef);
-
-    return () => observer?.disconnect();
-  }, [lastProductRef, onScroll, wishProducts]);
 
   // 2022/08/30 - 현재 브라우저 가로 길이 구하기 - by 1-blue
   const [width, setWidth] = useState(0);
@@ -130,7 +50,7 @@ const WishProducts = () => {
         } = await apiService.wishService.apiDeleteWish({ productIdx });
 
         setWishProducts((prev) =>
-          prev.filter((product) => product.idx !== productIdx)
+          prev.filter((wishProduct) => wishProduct.productIdx !== productIdx)
         );
 
         toast.success(message);
@@ -148,50 +68,47 @@ const WishProducts = () => {
   );
 
   // 2022/09/01 - 찜한 상품 장바구니로 옮기기 - by 1-blue
-  // >>> 나중에 수정 wish에 "color", "size", "quantity" 추가하기
   const onMoveBasket = useCallback(
-    (productIdx: number) => async () => {
-      try {
-        const {
-          data: { message },
-        } = await apiService.basketService.apiCreateBasket({
-          color: "임시",
-          size: "임시",
-          quantity: 1,
-          productIdx,
-        });
+    ({ productIdx, color, size, quantity }: Wish) =>
+      async () => {
+        try {
+          const {
+            data: { message },
+          } = await apiService.basketService.apiCreateBasket({
+            productIdx,
+            color,
+            size,
+            quantity,
+          });
 
-        toast.success(message);
-      } catch (error) {
-        console.error(error);
+          toast.success(message);
+        } catch (error) {
+          console.error(error);
 
-        if (error instanceof AxiosError) {
-          toast.error(error.response?.data.message);
-        } else {
-          toast.error("알 수 없는 오류입니다.");
+          if (error instanceof AxiosError) {
+            toast.error(error.response?.data.message);
+          } else {
+            toast.error("알 수 없는 오류입니다.");
+          }
         }
-      }
-    },
+      },
     []
   );
 
   return (
     <>
       {wishProducts.length === 0 ? (
-        <h3>조건에 맞는 상품이 없습니다.</h3>
+        <Support.Error text="조건에 맞는 상품이 없습니다." />
       ) : (
         <ul className="space-y-2 sm:space-y-4">
           {wishProducts.map((wishProduct, i) => (
             <li
-              key={wishProduct.idx}
+              key={wishProduct.productIdx}
               className="group relative flex flex-col shadow-lg rounded-md bg-gray-100 overflow-hidden hover:overflow-visible"
-              ref={(e) =>
-                wishProducts.length === i + 1 ? setLastProductRef(e) : null
-              }
             >
-              <Link href={`/product/${wishProduct.idx}`}>
+              <Link href={`/product/${wishProduct.productIdx}`}>
                 <a
-                  className="p-2 space-x-4 flex h-full rounded-md bg-white border-4 border-transparent z-[2] group-hover:border-gray-400 focus:outline-blue-400 focus:outline-4"
+                  className="p-2 space-x-4 flex h-full rounded-md bg-white border-4 border-transparent z-[2] group-hover:border-gray-400 focus:outline-blue-500"
                   onClick={(e) => {
                     const target = e.target as HTMLElement;
 
@@ -199,27 +116,27 @@ const WishProducts = () => {
                   }}
                 >
                   <Photo
-                    path={wishProduct.photo}
+                    path={wishProduct.product.photo}
                     cover
                     className="flex-shrink-0 w-[120px] h-[120px] sm:w-[160px] sm:h-[160px]"
                   />
                   <div className="flex-1 flex flex-col space-y-1">
                     <h3 className="font-bolder sm:text-lg">
-                      {wishProduct.name}
+                      {wishProduct.product.name}
                     </h3>
                     <p className="flex-1 whitespace-pre-wrap overflow-hidden text-ellipsis text-xs">
                       {sliceLineOfString(
-                        wishProduct.description,
+                        wishProduct.product.description,
                         width > 638 ? 4 : 2
                       ).slice(0, width > 638 ? 200 : 60)}
                     </p>
                     <div className="flex justify-between">
                       <span className="text-xs sm:text-sm font-bold">
-                        {numberWithComma(wishProduct.price)}원
+                        {numberWithComma(wishProduct.product.price)}원
                       </span>
                       <time className="text-[8px] sm:text-xs text-gray-400">
                         {dateOrTimeFormat(
-                          wishProduct.updatedAt,
+                          wishProduct.product.updatedAt,
                           "YYYY-MM-DD-hh-mm-ss"
                         )}
                       </time>
@@ -229,14 +146,14 @@ const WishProducts = () => {
                       <Tool.Button
                         type="button"
                         text="삭제"
-                        className="text-[8px] sm:text-xs px-1 sm:px-2 py-[2px] sm:py-1 border border-gray-400 text-gray-500 font-bold rounded-sm"
-                        onClick={onDeleteWishProduct(wishProduct.idx)}
+                        className="text-[8px] sm:text-xs px-1 sm:px-2 py-[2px] sm:py-1 border border-gray-400 text-gray-500 font-bold rounded-sm hover:bg-gray-400 hover:text-white focus:outline-none focus:bg-gray-400 focus:text-white transition-colors"
+                        onClick={onDeleteWishProduct(wishProduct.productIdx)}
                       />
                       <Tool.Button
                         type="button"
                         text="장바구니 담기"
-                        className="text-[8px] sm:text-xs px-1 sm:px-2 py-[2px] sm:py-1 border border-blue-500 text-blue-500 font-bold rounded-sm"
-                        onClick={onMoveBasket(wishProduct.idx)}
+                        className="text-[8px] sm:text-xs px-1 sm:px-2 py-[2px] sm:py-1 border border-blue-500 text-blue-500 font-bold rounded-sm hover:bg-blue-500 hover:text-white focus:outline-none focus:bg-blue-500 focus:text-white  transition-colors"
+                        onClick={onMoveBasket(wishProduct)}
                       />
                     </div>
                   </div>

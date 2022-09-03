@@ -20,11 +20,11 @@ const apiGetWish = ({ productIdx }: ApiGetWishBody) =>
 
 /**
  * 2022/08/30 - 특정 상품 찜하기 요청 - by 1-blue
- * @param productIdx 특정 상품의 식별자
+ * @param body 특정 상품의 식별자, 색상, 사이즈, 구매 개수
  * @returns 결과 메시지
  */
-const apiCreateWish = ({ productIdx }: ApiCreateWishBody) =>
-  axiosInstance.post<ApiCreateWishResponse>(`/wish?productIdx=${productIdx}`);
+const apiCreateWish = (body: ApiCreateWishBody) =>
+  axiosInstance.post<ApiCreateWishResponse>(`/wish`, body);
 
 /**
  * 2022/08/30 - 특정 상품 찜하기 취소 요청 - by 1-blue

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import { useRecoilState } from "recoil";
 import Link from "next/link";
 import { toast } from "react-toastify";
@@ -28,27 +28,6 @@ const BasketProducts = () => {
   const [basketProducts, setBasketProducts] = useRecoilState(
     stateService.basketService.basketProductsState
   );
-
-  // 2022/09/01 - 장바구니 상품들 요청 - by 1-blue
-  useEffect(() => {
-    (async () => {
-      try {
-        const {
-          data: { baskets },
-        } = await apiService.productService.apiGetBasketProducts();
-
-        setBasketProducts(baskets);
-      } catch (error) {
-        console.error(error);
-
-        if (error instanceof AxiosError) {
-          toast.error(error.response?.data.message);
-        } else {
-          toast.error("알 수 없는 오류입니다.");
-        }
-      }
-    })();
-  }, [setBasketProducts]);
 
   // 2022/09/01 - 장바구니 상품에서 제거 - by 1-blue
   const onDeleteBasketProduct = useCallback(
@@ -194,7 +173,7 @@ const BasketProducts = () => {
                           basketProduct.productIdx,
                           basketProduct.quantity - 1
                         )}
-                        className="py-1 px-1.5 sm:px-2 text-xs sm:text-base"
+                        className="py-1 px-1.5 sm:px-2 text-xs sm:text-base focus:outline-blue-500"
                       >
                         –
                       </button>
@@ -207,7 +186,7 @@ const BasketProducts = () => {
                           basketProduct.productIdx,
                           basketProduct.quantity + 1
                         )}
-                        className="py-1 px-1.5 sm:px-2 text-xs sm:text-base"
+                        className="py-1 px-1.5 sm:px-2 text-xs sm:text-base focus:outline-blue-500"
                       >
                         +
                       </button>
@@ -224,7 +203,7 @@ const BasketProducts = () => {
                       <Tool.Button
                         type="button"
                         text="삭제"
-                        className="text-[8px] sm:text-xs px-1 sm:px-2 py-[2px] sm:py-1 border border-gray-400 text-gray-500 font-bold rounded-sm"
+                        className="text-[8px] sm:text-xs px-1 sm:px-2 py-[2px] sm:py-1 border border-gray-400 text-gray-500 font-bold rounded-sm focus:outline-none focus:bg-gray-400 focus:text-white transition-colors"
                         onClick={onDeleteBasketProduct(
                           basketProduct.productIdx
                         )}

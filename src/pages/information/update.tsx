@@ -20,6 +20,7 @@ import Icon from "@src/components/common/Icon";
 import Photo from "@src/components/common/Photo";
 import Modal from "@src/components/common/Modal";
 import Nav from "@src/components/common/Nav";
+import Support from "@src/components/common/Support";
 
 // type
 import type { ApiUpdateUserBody } from "@src/types";
@@ -93,6 +94,7 @@ const InformationUpdate = () => {
         isLoading: false,
         autoClose: 1500,
       });
+
       signOut({ redirect: true, callbackUrl: "/login" });
     } catch (error) {
       console.error("error >> ", error);
@@ -242,12 +244,16 @@ const InformationUpdate = () => {
       <article className="pt-4 space-y-4">
         <Nav.TitleNav title="내 정보" />
 
-        <section className="min-w-[300px] space-x-2 xs:space-x-4 px-4 py-2 xs:py-3 md:py-4 bg-white rounded-md shadow-2xl flex items-center">
+        <Support.Background
+          className="flex items-center space-x-2 xs:space-x-4"
+          hasPadding
+        >
           <Photo
             path={data?.user?.photo?.path}
             alt="유저 이미지"
             avatar
             cover
+            isFocus
             className="w-12 h-12 xs:w-16 xs:h-16 sm:w-20 sm:h-20 cursor-pointer"
             onClick={() => setShowModal(true)}
           />
@@ -262,14 +268,14 @@ const InformationUpdate = () => {
           >
             로그아웃
           </button>
-        </section>
+        </Support.Background>
 
         {showModal && (
           <Modal
             title="프로필 이미지 설정"
             onCloseModal={() => setShowModal(false)}
           >
-            <section className="flex flex-col divide-y">
+            <Support.Background className="flex flex-col divide-y">
               <button
                 type="button"
                 className="text-xs xs:text-sm md:text-base py-2 transition-colors hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
@@ -305,11 +311,11 @@ const InformationUpdate = () => {
               >
                 취소
               </button>
-            </section>
+            </Support.Background>
           </Modal>
         )}
 
-        <section className="bg-white rounded-md shadow-2xl overflow-hidden">
+        <Support.Background className="overflow-hidden">
           <form onSubmit={handleSubmit(onSubmitUser)}>
             <ul className="divide-y-2">
               <li className="flex">
@@ -426,9 +432,9 @@ const InformationUpdate = () => {
               </li>
             </ul>
           </form>
-        </section>
+        </Support.Background>
 
-        <section className="space-y-4 bg-white rounded-md shadow-2xl overflow-hidden">
+        <Support.Background className="space-y-4 overflow-hidden">
           {defaultAddress ? (
             <ul className="divide-y-2">
               <li className="flex items-center">
@@ -501,7 +507,7 @@ const InformationUpdate = () => {
               </li>
             </ul>
           )}
-        </section>
+        </Support.Background>
       </article>
     </>
   );

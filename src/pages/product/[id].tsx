@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
@@ -15,40 +15,37 @@ import apiService from "@src/api";
 import stateService from "@src/states";
 
 // component
+import HeadInfo from "@src/components/common/HeadInfo";
 import Carousel from "@src/components/common/Carousel";
 import Nav from "@src/components/common/Nav";
 import Photo from "@src/components/common/Photo";
 import Tool from "@src/components/common/Tool";
 import MyError from "@src/components/common/MyError";
 import RelatedProducts from "@src/components/Products/RelatedProducts";
+import Support from "@src/components/common/Support";
 
 // type
-import type { GetServerSideProps, NextPage } from "next";
-import type { ProductOptionForm } from "@src/types";
+import type {
+  GetStaticPaths,
+  GetStaticProps,
+  GetStaticPropsContext,
+  NextPage,
+} from "next";
+import type { LIMIT, DetailProduct, ProductOptionForm } from "@src/types";
+import type { Product } from "@prisma/client";
 import { AxiosError } from "axios";
+import MyLoading from "@src/components/common/MyLoading";
 
-const Product: NextPage = () => {
+const limit: LIMIT = 15;
+
+type Props = {
+  product: DetailProduct | null;
+  relatedProducts: Product[];
+};
+
+const Product: NextPage<Props> = ({ product, relatedProducts }) => {
   const { data } = useSession();
   const router = useRouter();
-
-  // 2022/08/26 - 현재 상품의 식별자 수정자 - by 1-blue
-  const setProductIdx = useSetRecoilState(
-    stateService.productService.productIdxState
-  );
-  // 2022/08/26 - 현재 상품의 식별자로 변경하기 - by 1-blue
-  useEffect(() => {
-    if (typeof router.query.id !== "string") return;
-
-    setProductIdx(+router.query.id);
-  }, [router.query, setProductIdx]);
-
-  // 2022/08/26 - 현재 상품의 상세 정보 - by 1-blue
-  const product = useRecoilValue(stateService.productService.productState);
-
-  // 2022/08/26 - 구매/장바구니 관련 데이터 - by 1-blue
-  const setProductToBuy = useSetRecoilState(
-    stateService.buyService.productToBuy
-  );
 
   // 2022/08/26 - 상품 구매/장바구니 관련 폼 - by 1-blue
   const { register, watch, setValue, handleSubmit, getValues } =
@@ -59,6 +56,11 @@ const Product: NextPage = () => {
   // 2022/08/26 - 구매할 상품 개수 - by 1-blue
   const quantity = watch("quantity");
 
+  // 2022/08/26 - 구매/장바구니 관련 데이터 - by 1-blue
+  const setProductToBuy = useSetRecoilState(
+    stateService.buyService.productToBuy
+  );
+
   // 2022/08/26 - 상품 구매버튼 클릭 시 실행 - by 1-blue
   const onSubmit = useCallback(
     (option: ProductOptionForm) => {
@@ -66,7 +68,7 @@ const Product: NextPage = () => {
 
       setProductToBuy({ product, option });
 
-      // 구매 페이지로 이동
+      // >>> 구매 페이지로 이동
     },
     [product, setProductToBuy]
   );
@@ -119,6 +121,7 @@ const Product: NextPage = () => {
           data: { message },
         } = await apiService.wishService.apiCreateWish({
           productIdx: +router.query.id,
+          ...getValues(),
         });
 
         toast.update(toastId, {
@@ -149,10 +152,10 @@ const Product: NextPage = () => {
         });
       }
     }
-  }, [isWish, router.query]);
+  }, [isWish, router.query, getValues]);
 
   // 2022/08/31 - 장바구니 담기 - by 1-blue
-  const onAddBasket = useCallback(async () => {
+  const onPutBasket = useCallback(async () => {
     if (typeof router.query.id !== "string") return;
 
     const toastId = toast.loading("장바구니에 상품을 넣는중입니다.");
@@ -192,154 +195,206 @@ const Product: NextPage = () => {
     }
   }, [getValues, router.query]);
 
+  const setRelatedProducts = useSetRecoilState(
+    stateService.productService.relatedProductsState
+  );
+
+  useEffect(() => {
+    setRelatedProducts(relatedProducts);
+  }, [setRelatedProducts, relatedProducts]);
+
+  if (router.isFallback) return <MyLoading />;
   if (product === null) return <MyError message="상품이 존재하지 않습니다." />;
 
   return (
-    <article className="pt-4 space-y-4">
-      <Nav.TitleNav title="돌아가기" />
+    <>
+      <HeadInfo
+        title={`BleShop - ${product.name}`}
+        description={product.description}
+        photo={product.photo}
+      />
 
-      {/* 상품 이미지들 */}
-      <section className="p-2 xsm:p-3 md:p-4 space-y-2 bg-white rounded-md shadow-2xl">
-        <h3 className="pl-1 text-gray-800 font-bolder text-lg xs:text-xl md:text-2xl">
-          상품 이미지들
-        </h3>
-        <Carousel currentDot={currentDot} setCurrentDot={setCurrentDot}>
-          <Photo
-            key={product.photo}
-            path={product.photo}
-            className="w-full h-[200px] xs:h-[350px] md:h-[500px]"
-            alt="상품 대표 이미지"
-            cover
-          />
-          {product.photos.map(({ path }) => (
+      <article className="pt-4 space-y-4">
+        <Nav.TitleNav title="돌아가기" />
+
+        {/* 상품 이미지들 */}
+        <Support.Background className="space-y-2" hasPadding>
+          <Support.Title text="상품 이미지들" />
+          <Carousel currentDot={currentDot} setCurrentDot={setCurrentDot}>
             <Photo
-              key={path}
-              path={path}
+              key={product.photo}
+              path={product.photo}
               className="w-full h-[200px] xs:h-[350px] md:h-[500px]"
-              alt="상품 이미지"
+              alt="상품 대표 이미지"
               cover
             />
-          ))}
-        </Carousel>
+            {product.photos.map(({ path }) => (
+              <Photo
+                key={path}
+                path={path}
+                className="w-full h-[200px] xs:h-[350px] md:h-[500px]"
+                alt="상품 이미지"
+                cover
+              />
+            ))}
+          </Carousel>
 
-        <div className="pb-10" />
-      </section>
+          <div className="pb-10" />
+        </Support.Background>
 
-      {/* 상품 정보 */}
-      <section className="flex flex-col p-2 xsm:p-3 md:p-4 bg-white rounded-md shadow-2xl">
-        <h1 className="text-2xl font-bolder mb-2">{product.name}</h1>
-        <div className="flex flex-col divide-y-2 space-y-2">
-          <span className="px-2 font-bold">
-            {numberWithComma(product.price)}원
-          </span>
-          <span className="px-2 pt-2">{product.brand}</span>
-          <span className="px-2 pt-2">{product.company}</span>
-        </div>
-
-        <time className="self-end text-[8px] sm:text-xs text-gray-400">
-          {dateOrTimeFormat(product.updatedAt, "YYYY-MM-DD-hh-mm-ss")}
-        </time>
-      </section>
-
-      {/* 상품 설명 */}
-      <section className="flex flex-col p-2 xsm:p-3 md:p-4 bg-white rounded-md shadow-2xl">
-        <h3 className="text-2xl font-bolder mb-2">상품 설명</h3>
-        <p className="whitespace-pre-line">{product.description}</p>
-      </section>
-
-      {/* 상품 옵션 선택 */}
-      <section className="flex flex-col p-2 xsm:p-3 md:p-4 bg-white rounded-md shadow-2xl">
-        <h3 className="text-2xl font-bolder mb-2">옵션 선택</h3>
-
-        <form className="flex flex-col">
-          {product.size && (
-            <Tool.Select name="사이즈" register={register("size")}>
-              {product.size.split(",").map((v) => (
-                <option key={v}>{v}</option>
-              ))}
-            </Tool.Select>
-          )}
-
-          {product.color && (
-            <Tool.Select name="색상" register={register("color")}>
-              {product.color?.split(",").map((v) => (
-                <option key={v}>{v}</option>
-              ))}
-            </Tool.Select>
-          )}
-
-          <div className="flex justify-between">
-            <div className="rounded-sm border border-gray-600">
-              <button
-                type="button"
-                onClick={() =>
-                  setValue(
-                    "quantity",
-                    quantity - 1 >= 1 ? quantity - 1 : quantity
-                  )
-                }
-                className="py-1 px-2"
-              >
-                –
-              </button>
-              <span className="py-1 px-2 border-x-2 border-gray-300">
-                {watch("quantity")}
-              </span>
-              <button
-                type="button"
-                onClick={() => setValue("quantity", quantity + 1)}
-                className="py-1 px-2"
-              >
-                +
-              </button>
-            </div>
-            <span>가격: {numberWithComma(quantity * product.price)}원</span>
+        {/* 상품 정보 */}
+        <Support.Background className="flex flex-col space-y-2" hasPadding>
+          <Support.Title text={product.name} />
+          <div className="flex flex-col divide-y-2 space-y-2 text-sm sm:text-base">
+            <span className="px-2 font-bold">
+              {numberWithComma(product.price)}원
+            </span>
+            <span className="px-2 pt-2">{product.brand}</span>
+            <span className="px-2 pt-2">{product.company}</span>
           </div>
+
+          <time className="self-end text-[8px] sm:text-xs text-gray-400">
+            {dateOrTimeFormat(product.updatedAt, "YYYY-MM-DD-hh-mm-ss")}
+          </time>
+        </Support.Background>
+
+        {/* 상품 설명 */}
+        <Support.Background className="flex flex-col space-y-2" hasPadding>
+          <Support.Title text="상품 설명" />
+          <p className="text-sm sm:text-base whitespace-pre-line">
+            {product.description}
+          </p>
+        </Support.Background>
+
+        {/* 상품 옵션 선택 */}
+        <Support.Background className="flex flex-col space-y-2" hasPadding>
+          <Support.Title text="옵션 선택" />
+
+          <form className="flex flex-col">
+            {product.size && (
+              <Tool.Select name="사이즈" register={register("size")}>
+                {product.size.split(",").map((v) => (
+                  <option key={v}>{v}</option>
+                ))}
+              </Tool.Select>
+            )}
+
+            {product.color && (
+              <Tool.Select name="색상" register={register("color")}>
+                {product.color?.split(",").map((v) => (
+                  <option key={v}>{v}</option>
+                ))}
+              </Tool.Select>
+            )}
+
+            <div className="flex justify-between items-center">
+              <div className="rounded-sm border border-gray-600">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setValue(
+                      "quantity",
+                      quantity - 1 >= 1 ? quantity - 1 : quantity
+                    )
+                  }
+                  className="py-1 px-1.5 sm:px-2 text-xs sm:text-base focus:outline-blue-500"
+                >
+                  –
+                </button>
+                <span className="py-1 px-1.5 sm:px-2 text-sm sm:text-base border-x-2 border-gray-300">
+                  {watch("quantity")}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setValue("quantity", quantity + 1)}
+                  className="py-1 px-1.5 sm:px-2 text-xs sm:text-base focus:outline-blue-500"
+                >
+                  +
+                </button>
+              </div>
+              <span className="text-sm sm:text-base">
+                가격: {numberWithComma(quantity * product.price)}원
+              </span>
+            </div>
+          </form>
+        </Support.Background>
+
+        {/* 상품 찜하기/구매하기/장바구니 버튼 */}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex p-2 space-x-2 xsm:p-3 md:p-4 bg-white rounded-md shadow-2xl"
+        >
+          <button
+            type="button"
+            className="flex-1 p-1 xs:p-1.5 sm:p-2 bg-red-400 text-xs xs:text-sm sm:text-base text-white font-bold hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            onClick={onClickWishButton}
+          >
+            {isWish ? "취소하기" : "찜하기"}
+          </button>
+          <button
+            type="submit"
+            className="flex-1 p-1 xs:p-1.5 sm:p-2 bg-blue-400 text-xs xs:text-sm sm:text-base text-white font-bold hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            구매하기
+          </button>
+          <button
+            type="button"
+            className="flex-1 p-1 xs:p-1.5 sm:p-2 bg-indigo-400 text-xs xs:text-sm sm:text-base text-white font-bold hover:bg-indigo-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            onClick={onPutBasket}
+          >
+            장바구니
+          </button>
         </form>
-      </section>
 
-      {/* 상품 찜하기/구매하기/장바구니 버튼 */}
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex p-2 space-x-2 xsm:p-3 md:p-4 bg-white rounded-md shadow-2xl"
-      >
-        <button
-          type="button"
-          className="flex-1 p-2 bg-red-400 text-white font-bold hover:bg-red-600 transition-colors"
-          onClick={onClickWishButton}
-        >
-          {isWish ? "취소하기" : "찜하기"}
-        </button>
-        <button
-          type="submit"
-          className="flex-1 p-2 bg-blue-400 text-white font-bold hover:bg-blue-600 transition-colors"
-        >
-          구매하기
-        </button>
-        <button
-          type="button"
-          className="flex-1 p-2 bg-indigo-400 text-white font-bold hover:bg-indigo-600 transition-colors"
-          onClick={onAddBasket}
-        >
-          장바구니
-        </button>
-      </form>
+        {/* >>> 상품평 */}
 
-      {/* 상품평 */}
-
-      {/* 유사 상품 */}
-      <RelatedProducts
-        productIdx={product.idx}
-        keywords={product.keywords.map(({ keywordIdx }) => keywordIdx)}
-      />
-    </article>
+        {/* 유사 상품 */}
+        <Support.Background className="flex flex-col space-y-2" hasPadding>
+          <Support.Title text="연관 상품들" />
+          <RelatedProducts
+            productIdx={product.idx}
+            keywords={product.keywords.map(({ keywordIdx }) => keywordIdx)}
+          />
+        </Support.Background>
+      </article>
+    </>
   );
 };
 
 export default Product;
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps<Props> = async (
+  context: GetStaticPropsContext
+) => {
+  const productIdx = Number(context.params?.id);
+
+  try {
+    // 2022/09/03 - 현재 상품 - by 1-blue
+    const {
+      data: { product },
+    } = await apiService.productService.apiGetProduct({ productIdx });
+
+    // 2022/09/03 - 현재 상품과 연관된 상품들 ( 같은 키워드를 가진 상품들 ) - by 1-blue
+    const {
+      data: { products: relatedProducts },
+    } = await apiService.productService.apiGetRelatedProducts({
+      limit,
+      lastIdx: -1,
+      productIdx,
+      keywords: product.keywords.map(({ keywordIdx }) => encodeURI(keywordIdx)),
+    });
+
+    return { props: { product, relatedProducts } };
+  } catch (error) {
+    console.error("getStaticProps product/[id] >> ", error);
+
+    return { props: { product: null, relatedProducts: [] } };
+  }
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
   return {
-    props: {},
+    paths: [],
+    fallback: "blocking",
   };
 };
