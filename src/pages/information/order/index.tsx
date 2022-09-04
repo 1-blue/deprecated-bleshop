@@ -11,7 +11,7 @@ import stateService from "@src/states";
 import HeadInfo from "@src/components/common/HeadInfo";
 import Nav from "@src/components/common/Nav";
 import Support from "@src/components/common/Support";
-import WishProducts from "@src/components/Products/WishProducts";
+import OrderProducts from "@src/components/Products/OrderProducts";
 
 // type
 import type {
@@ -19,43 +19,45 @@ import type {
   GetServerSidePropsContext,
   NextPage,
 } from "next";
-import type { Product, Wish } from "@prisma/client";
+import type { Order } from "@prisma/client";
 
 type Props = {
-  wishes: (Wish & {
-    product: Product;
+  orderList: (Order & {
+    Product: {
+      name: string;
+      photo: string;
+    };
   })[];
 };
 
-const Wish: NextPage<Props> = ({ wishes }) => {
-  // 2022/09/03 - 화면에 랜더링할 찜한 상품들 수정 함수 - by 1-blue
-  const setWishProducts = useSetRecoilState(
-    stateService.wishService.wishProductsState
+const Order: NextPage<Props> = ({ orderList }) => {
+  // 2022/09/04 - 로그인한 유저의 주문 목록 수정 함수 - by 1-blue
+  const setOrderList = useSetRecoilState(
+    stateService.orderService.orderListState
   );
 
-  useEffect(() => setWishProducts(wishes), [setWishProducts, wishes]);
+  // 2022/09/04 - 로그인한 유저의 주문 목록 초기화 - by 1-blue
+  useEffect(() => setOrderList(orderList), [setOrderList, orderList]);
 
   return (
     <>
       <HeadInfo
-        title="BleShop - 찜한 상품"
-        description="BleShop의 찜한 상품들을 보여주는 페이지"
+        title="BleShop - 구매 목록"
+        description="BleShop의 구매 목록 페이지입니다."
       />
 
       <article className="pt-4 space-y-4">
-        <Nav.TitleNav title="장바구니" />
-
-        <Nav.BasketNav />
+        <Nav.TitleNav title="내 정보" />
 
         <Support.Background hasPadding>
-          <WishProducts />
+          <OrderProducts />
         </Support.Background>
       </article>
     </>
   );
 };
 
-export default Wish;
+export default Order;
 
 export const getServerSideProps: GetServerSideProps<Props> = async (
   context: GetServerSidePropsContext
@@ -64,22 +66,25 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   cookie = cookie ? cookie : "";
   axiosInstance.defaults.headers.Cookie = cookie;
 
-  let wishes: (Wish & {
-    product: Product;
+  let orderList: (Order & {
+    Product: {
+      name: string;
+      photo: string;
+    };
   })[] = [];
 
   try {
-    const { data } = await apiService.productService.apiGetWishProducts();
-    wishes = data.wishes;
+    const { data } = await apiService.orderService.apiGetOrderList();
+    orderList = data.orderList;
   } catch (error) {
-    console.error("getServerSideProps basket/wish >> ", error);
+    console.error("getServerSideProps information/order >> ", error);
   } finally {
     axiosInstance.defaults.headers.Cookie = "";
   }
 
   return {
     props: {
-      wishes,
+      orderList,
     },
   };
 };

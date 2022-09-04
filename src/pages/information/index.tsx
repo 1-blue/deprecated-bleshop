@@ -97,7 +97,7 @@ const Information: NextPage = () => {
         <Support.Background className="overflow-hidden">
           <ul className="divide-y-2">
             <li>
-              <Link href="/">
+              <Link href="/information/order">
                 <a className="flex p-4 items-center transition-colors hover:bg-blue-400 hover:text-white focus:outline-none focus:bg-blue-400 focus:text-white">
                   <Icon shape="catalog" className="w-6 h-6 sm:w-8 sm:h-8" />
                   <span className="font-bolder sm:text-lg pl-3 flex-1">

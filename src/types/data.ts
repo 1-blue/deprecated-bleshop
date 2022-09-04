@@ -23,11 +23,3 @@ export type ProductOptionForm = {
   color: string;
   quantity: number;
 };
-
-/**
- * 2022/08/26 - 구매 예정 상품 타입 - by 1-blue
- */
-export type ProductToBuy = {
-  product: DetailProduct;
-  option: ProductOptionForm;
-};

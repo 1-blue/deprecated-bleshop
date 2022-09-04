@@ -14,7 +14,7 @@ import { numberWithComma } from "@src/libs";
 import HeadInfo from "@src/components/common/HeadInfo";
 import Nav from "@src/components/common/Nav";
 import Support from "@src/components/common/Support";
-import BasketProducts from "@src/components/Products/basketProducts";
+import BasketProducts from "@src/components/Products/BasketProducts";
 
 // type
 import type {

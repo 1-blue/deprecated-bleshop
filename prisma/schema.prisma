@@ -213,13 +213,25 @@ model Comment {
 
 // 주문
 model Order {
-  idx Int @id @default(autoincrement())
+  idx       Int      @id @default(autoincrement())
+  name      String
+  address   String
+  residence String
+  message   String
+  quantity  Int
+  size      String
+  color     String
+  amount    Int
+  email     String
+  phone     String
+  updatedAt DateTime @updatedAt
+  provider  String
 
   // 유저와 주문 => 1:N
-  User    User? @relation(fields: [userIdx], references: [idx])
-  userIdx Int?
+  User    User @relation(fields: [userIdx], references: [idx])
+  userIdx Int
 
   // 상품과 주문 => 1:N
-  Product    Product? @relation(fields: [productIdx], references: [idx])
-  productIdx Int?
+  Product    Product @relation(fields: [productIdx], references: [idx])
+  productIdx Int
 }

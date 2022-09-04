@@ -2,18 +2,20 @@ import productService from "./product";
 import productsService from "./products";
 import categoryService from "./category";
 import filterService from "./filter";
-import buyService from "./buy";
+import paymentService from "./payment";
 import wishService from "./wish";
 import basketService from "./basket";
+import orderService from "./order";
 
 const stateService = {
   productService,
   productsService,
   categoryService,
   filterService,
-  buyService,
+  paymentService,
   wishService,
   basketService,
+  orderService,
 };
 
 export default stateService;

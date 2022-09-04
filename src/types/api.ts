@@ -8,6 +8,7 @@ import type {
   Product,
   User,
   Wish,
+  Order,
 } from "@prisma/client";
 
 /**
@@ -385,3 +386,28 @@ export type ApiUpdateBasketBody = {
  * 2022/08/31 - 장바구니 상품중 하나 수정 수신 타입 - by 1-blue
  */
 export type ApiUpdateBasketResponse = ApiResponse & {};
+
+/**
+ * 2022/09/04 - 결제 내역 등록 송신 타입 - by 1-blue
+ */
+export type ApiCreateOrderBody = Omit<Order, "idx" | "updatedAt" | "userIdx">;
+/**
+ * 2022/09/04 - 결제 내역 등록 수신 타입 - by 1-blue
+ */
+export type ApiCreateOrderResponse = ApiResponse & {};
+
+/**
+ * 2022/09/04 - 모든 결제 내역 요청 송신 타입 - by 1-blue
+ */
+export type ApiGetOrderListBody = {};
+/**
+ * 2022/09/04 - 모든 결제 내역 요청 수신 타입 - by 1-blue
+ */
+export type ApiGetOrderListResponse = ApiResponse & {
+  orderList: (Order & {
+    Product: {
+      name: string;
+      photo: string;
+    };
+  })[];
+};
