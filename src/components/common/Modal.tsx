@@ -39,7 +39,7 @@ const Modal = ({ children, onCloseModal, title, className }: Props) => {
         )}
       >
         {title && (
-          <h3 className="xs:text-xl md:text-2xl text-center text-white font-bolder py-2 xs:py-3 bg-blue-400">
+          <h3 className="xs:text-lg md:text-xl text-center text-white font-bolder py-2 xs:py-3 bg-blue-400">
             {title}
           </h3>
         )}

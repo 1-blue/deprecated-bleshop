@@ -10,7 +10,6 @@ import stateService from "@src/states";
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
 import Nav from "@src/components/common/Nav";
-import Support from "@src/components/common/Support";
 import OrderProducts from "@src/components/Products/OrderProducts";
 
 // type
@@ -20,14 +19,10 @@ import type {
   NextPage,
 } from "next";
 import type { Order } from "@prisma/client";
+import type { ApiGetOrderListResponse } from "@src/types";
 
 type Props = {
-  orderList: (Order & {
-    Product: {
-      name: string;
-      photo: string;
-    };
-  })[];
+  orderList: ApiGetOrderListResponse["orderList"];
 };
 
 const Order: NextPage<Props> = ({ orderList }) => {
@@ -49,9 +44,7 @@ const Order: NextPage<Props> = ({ orderList }) => {
       <article className="pt-4 space-y-4">
         <Nav.TitleNav title="내 정보" />
 
-        <Support.Background hasPadding>
-          <OrderProducts />
-        </Support.Background>
+        <OrderProducts />
       </article>
     </>
   );
@@ -66,12 +59,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   cookie = cookie ? cookie : "";
   axiosInstance.defaults.headers.Cookie = cookie;
 
-  let orderList: (Order & {
-    Product: {
-      name: string;
-      photo: string;
-    };
-  })[] = [];
+  let orderList: ApiGetOrderListResponse["orderList"] = [];
 
   try {
     const { data } = await apiService.orderService.apiGetOrderList();

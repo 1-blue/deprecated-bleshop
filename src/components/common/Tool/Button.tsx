@@ -42,7 +42,7 @@ const Button = ({
       type={type}
       className={combineClassNames(
         primary
-          ? "py-2 xs:py-3 text-xs xs:text-sm md:text-base text-white font-semibold rounded-sm xs:rounded-md bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+          ? "py-2 xs:py-3 text-xs xs:text-sm md:text-base text-white font-semibold rounded-sm xs:rounded-md bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-colors"
           : "",
         className ? className : ""
       )}

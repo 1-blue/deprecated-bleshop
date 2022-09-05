@@ -5,13 +5,17 @@ import prisma from "@src/prisma";
 // type
 import type { NextApiRequest, NextApiResponse } from "next";
 import type {
+  ApiCreateOrderBody,
   ApiCreateOrderResponse,
+  ApiDeleteOrderResponse,
   ApiGetOrderListResponse,
 } from "@src/types";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ApiGetOrderListResponse | ApiCreateOrderResponse>
+  res: NextApiResponse<
+    ApiGetOrderListResponse | ApiCreateOrderResponse | ApiDeleteOrderResponse
+  >
 ) {
   const { method } = req;
   const session = await getSession({ req });
@@ -25,7 +29,18 @@ export default async function handler(
     if (method === "GET") {
       const orderList = await prisma.order.findMany({
         where: { userIdx },
-        include: { Product: { select: { name: true, photo: true } } },
+        include: {
+          products: {
+            include: {
+              product: {
+                select: { name: true, photo: true, price: true },
+              },
+            },
+          },
+        },
+        orderBy: {
+          updatedAt: "desc",
+        },
       });
 
       return res.status(200).json({
@@ -35,17 +50,40 @@ export default async function handler(
     }
     // 주문 내역 등록
     else if (method === "POST") {
-      const { productIdx, ...body } = req.body;
+      const { orderData, singleData } = req.body as ApiCreateOrderBody;
 
-      await prisma.order.create({
-        data: {
-          ...body,
-          Product: { connect: { idx: productIdx } },
-          User: { connect: { idx: userIdx } },
+      const createdOrder = await prisma.order.create({
+        data: { ...orderData, userIdx },
+      });
+
+      await prisma.productsOnOrders.createMany({
+        data: singleData.map((data) => ({
+          ...data,
+          orderIdx: createdOrder.idx,
+        })),
+      });
+
+      // 주문한 상품은 장바구니에서 제거
+      prisma.basket.deleteMany({
+        where: {
+          productIdx: {
+            in: singleData.map((v) => v.productIdx),
+          },
         },
       });
 
       return res.status(201).json({ message: "결제를 완료했습니다." });
+    }
+    // 특정 주문 내역 제거
+    else if (method === "DELETE") {
+      const orderIdx = Number(req.query.orderIdx);
+
+      await prisma.productsOnOrders.deleteMany({ where: { orderIdx } });
+      await prisma.order.delete({ where: { idx: orderIdx } });
+
+      return res
+        .status(200)
+        .json({ message: "특정 주문내역을 삭제했습니다.\n새로고침해주세요!" });
     }
   } catch (error) {
     console.error(error);

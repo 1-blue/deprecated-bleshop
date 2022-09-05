@@ -347,11 +347,15 @@ const Product: NextPage<Props> = ({ product, relatedProducts }) => {
 
         {showAddressModal && (
           <SelectAddressModal
-            product={product}
+            products={[product]}
             onCloseModal={() => setShowAddressModal(false)}
-            color={getValues("color")}
-            size={getValues("size")}
-            quantity={quantity}
+            singleData={[
+              {
+                color: getValues("color"),
+                size: getValues("size"),
+                quantity: quantity,
+              },
+            ]}
           />
         )}
 

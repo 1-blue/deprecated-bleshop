@@ -18,24 +18,16 @@ import Modal from "@src/components/common/Modal";
 import Support from "@src/components/common/Support";
 
 // type
-import type { Address } from "@prisma/client";
-import type { DetailProduct } from "@src/types";
+import type { Address, Product } from "@prisma/client";
+import type { ApiCreateOrderBody, DetailProduct } from "@src/types";
 
 type Props = {
-  product: DetailProduct;
-  size: string;
-  color: string;
-  quantity: number;
+  products: (DetailProduct | Product)[];
+  singleData: ApiCreateOrderBody["singleData"];
   onCloseModal: () => void;
 };
 
-const SelectAddressModal = ({
-  product,
-  color,
-  quantity,
-  size,
-  onCloseModal,
-}: Props) => {
+const SelectAddressModal = ({ products, singleData, onCloseModal }: Props) => {
   const { data } = useSession();
   const router = useRouter();
 
@@ -59,7 +51,6 @@ const SelectAddressModal = ({
   // 2022/09/04 - 주소 선택 및 결제 페이지로 이동 - by 1-blue
   const onSelectAddress = useCallback(
     (selectedAddress: Address) => () => {
-      if (!product) return;
       if (!data?.user) return;
       onCloseModal();
 
@@ -68,41 +59,64 @@ const SelectAddressModal = ({
         selectedAddress.address.lastIndexOf("]")
       );
 
-      setProductToPayment({
-        escrow: false,
-        merchant_uid: `mid_${Date.now()}`,
-        name: product.name,
-        amount: product.price * quantity,
-        custom_data: {
-          residence: selectedAddress.residence,
-          message: selectedAddress.message,
-          quantity,
-          size: size,
-          color: color,
-          price: product.price,
-          productIdx: product.idx,
-        },
-        language: "ko",
-        buyer_name: selectedAddress.name,
-        buyer_tel: selectedAddress.phone,
-        buyer_email: data.user.email,
-        buyer_addr: selectedAddress.address,
-        buyer_postcode: postcode,
-        m_redirect_url: process.env.NEXT_PUBLIC_FRONT_URL + "/basket/order",
-      });
+      // 단일 상품 주문
+      if (products.length === 1) {
+        const product = products[0];
+
+        setProductToPayment({
+          escrow: false,
+          merchant_uid: `mid_${Date.now()}`,
+          name: product.name,
+          amount: product.price * singleData[0].quantity,
+          custom_data: {
+            residence: selectedAddress.residence,
+            message: selectedAddress.message,
+            singleData: [
+              {
+                ...singleData[0],
+                productIdx: product.idx,
+              },
+            ],
+          },
+          language: "ko",
+          buyer_name: selectedAddress.name,
+          buyer_tel: selectedAddress.phone,
+          buyer_email: data.user.email,
+          buyer_addr: selectedAddress.address,
+          buyer_postcode: postcode,
+          m_redirect_url: process.env.NEXT_PUBLIC_FRONT_URL + "/basket/order",
+        });
+      }
+      // 다중 상품 주문
+      else {
+        setProductToPayment({
+          escrow: false,
+          merchant_uid: `mid_${Date.now()}`,
+          name: products[0].name + `외 ${products.length - 1}개`,
+          amount: singleData
+            .map((data, i) => data.quantity * products[i].price)
+            .reduce((curr, prev) => curr + prev),
+          custom_data: {
+            residence: selectedAddress.residence,
+            message: selectedAddress.message,
+            singleData: singleData.map((v, i) => ({
+              ...v,
+              productIdx: products[i].idx,
+            })),
+          },
+          language: "ko",
+          buyer_name: selectedAddress.name,
+          buyer_tel: selectedAddress.phone,
+          buyer_email: data.user.email,
+          buyer_addr: selectedAddress.address,
+          buyer_postcode: postcode,
+          m_redirect_url: process.env.NEXT_PUBLIC_FRONT_URL + "/basket/order",
+        });
+      }
 
       router.push("/payment");
     },
-    [
-      data,
-      product,
-      onCloseModal,
-      setProductToPayment,
-      size,
-      color,
-      quantity,
-      router,
-    ]
+    [data, products, onCloseModal, setProductToPayment, singleData, router]
   );
 
   return (

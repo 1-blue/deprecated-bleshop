@@ -1,19 +1,12 @@
 import { atom } from "recoil";
 
 // type
-import type { Order } from "@prisma/client";
+import type { ApiGetOrderListResponse } from "@src/types";
 
 /**
  * 2022/09/04 - 로그인한 유저의 주문 목록들 - by 1-blue
  */
-export const orderListState = atom<
-  (Order & {
-    Product: {
-      name: string;
-      photo: string;
-    };
-  })[]
->({
+export const orderListState = atom<ApiGetOrderListResponse["orderList"]>({
   key: "orderListState",
   default: [],
 });

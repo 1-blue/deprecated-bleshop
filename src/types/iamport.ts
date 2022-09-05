@@ -1,3 +1,5 @@
+import type { ApiCreateOrderBody } from "@src/types";
+
 interface RequestPayAdditionalParams {
   digital?: boolean;
   vbank_due?: string;
@@ -13,11 +15,7 @@ interface Display {
 interface CustomData {
   residence: string;
   message: string;
-  quantity: number;
-  size: string;
-  color: string;
-  price: number;
-  productIdx: number;
+  singleData: ApiCreateOrderBody["singleData"];
 }
 
 export interface RequestPayParams extends RequestPayAdditionalParams {

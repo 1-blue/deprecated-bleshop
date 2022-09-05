@@ -67,6 +67,8 @@ export type {
   ApiCreateOrderResponse,
   ApiGetOrderListBody,
   ApiGetOrderListResponse,
+  ApiDeleteOrderBody,
+  ApiDeleteOrderResponse,
 } from "./api";
 
 export type { UserWithPhoto, ProductOptionForm, DetailProduct } from "./data";

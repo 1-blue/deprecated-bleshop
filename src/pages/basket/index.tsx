@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
 // api
@@ -13,8 +13,10 @@ import { numberWithComma } from "@src/libs";
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
 import Nav from "@src/components/common/Nav";
+import Tool from "@src/components/common/Tool";
 import Support from "@src/components/common/Support";
 import BasketProducts from "@src/components/Products/BasketProducts";
+import SelectAddressModal from "@src/components/Product/SelectAddressModal";
 
 // type
 import type {
@@ -22,12 +24,11 @@ import type {
   GetServerSidePropsContext,
   NextPage,
 } from "next";
-import type { Basket, Product } from "@prisma/client";
+import type { Basket } from "@prisma/client";
+import type { ApiGetBasketProductsResponse } from "@src/types";
 
 type Props = {
-  baskets: (Basket & {
-    product: Product;
-  })[];
+  baskets: ApiGetBasketProductsResponse["baskets"];
 };
 
 const Basket: NextPage<Props> = ({ baskets }) => {
@@ -38,6 +39,9 @@ const Basket: NextPage<Props> = ({ baskets }) => {
 
   // 2022/09/03 - 내 장바구니 상품들 초기화 - by 1-blue
   useEffect(() => setBasketProducts(baskets), [setBasketProducts, baskets]);
+
+  // 2022/09/05 - 배송지 선택 모달 렌더링 여부 - by 1-blue
+  const [showAddressModal, setShowAddressModal] = useState(false);
 
   return (
     <>
@@ -95,6 +99,32 @@ const Basket: NextPage<Props> = ({ baskets }) => {
                   원
                 </span>
               </li>
+
+              <li className="mt-4 text-end">
+                <Tool.Button
+                  type="button"
+                  text="구매하기"
+                  primary
+                  className="px-4"
+                  onClick={() => setShowAddressModal(true)}
+                />
+              </li>
+
+              {showAddressModal && (
+                <SelectAddressModal
+                  products={basketProducts
+                    .filter((basket) => !basket.skip)
+                    .map((basket) => basket.product)}
+                  onCloseModal={() => setShowAddressModal(false)}
+                  singleData={basketProducts
+                    .filter((basket) => !basket.skip)
+                    .map((basket) => ({
+                      color: basket.color,
+                      quantity: basket.quantity,
+                      size: basket.size,
+                    }))}
+                />
+              )}
             </ul>
           </Support.Background>
         )}
@@ -120,9 +150,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   cookie = cookie ? cookie : "";
   axiosInstance.defaults.headers.Cookie = cookie;
 
-  let baskets: (Basket & {
-    product: Product;
-  })[] = [];
+  let baskets: ApiGetBasketProductsResponse["baskets"] = [];
 
   try {
     const { data } = await apiService.productService.apiGetBasketProducts();

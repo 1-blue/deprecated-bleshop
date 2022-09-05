@@ -84,18 +84,17 @@ const Payment = () => {
             try {
               // >>> 결제 완료 DB 저장 ( 실제 결제라면 유효성 검사를 실시하고 DB에 저장해야함 )
               await apiService.orderService.apiCreateOrder({
-                name: rsp.buyer_name,
-                address: rsp.buyer_addr,
-                residence: rsp.custom_data.residence,
-                message: rsp.custom_data.message,
-                quantity: rsp.custom_data.quantity,
-                size: rsp.custom_data.size,
-                color: rsp.custom_data.color,
-                amount: rsp.paid_amount,
-                email: rsp.buyer_email,
-                phone: rsp.buyer_tel,
-                provider: rsp.pg_provider,
-                productIdx: rsp.custom_data.productIdx,
+                singleData: rsp.custom_data.singleData,
+                orderData: {
+                  name: rsp.buyer_name,
+                  address: rsp.buyer_addr,
+                  residence: rsp.custom_data.residence,
+                  message: rsp.custom_data.message,
+                  amount: rsp.paid_amount,
+                  email: rsp.buyer_email,
+                  phone: rsp.buyer_tel,
+                  provider: rsp.pg_provider,
+                },
               });
 
               toast.success(
