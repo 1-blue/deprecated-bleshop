@@ -32,18 +32,6 @@ const BasketNav = () => {
   return (
     <ul className="flex justify-between bg-white rounded-md shadow-2xl overflow-hidden w-full min-w-[250px] divide-x-4">
       <li className="flex-1 flex">
-        <Link href="/basket/order">
-          <a
-            className={combineClassNames(
-              "flex-1 text-center py-2 xs:py-3 font-bolder text-xs xs:text-base sm:text-lg hover:bg-blue-500 hover:text-white focus:outline-none focus:bg-blue-500 focus:text-white transition-colors",
-              asPath.includes("/basket/order") ? "bg-blue-400 text-white" : ""
-            )}
-          >
-            구매 목록
-          </a>
-        </Link>
-      </li>
-      <li className="flex-1 flex">
         <Link href="/basket">
           <a
             className={combineClassNames(

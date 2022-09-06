@@ -23,6 +23,8 @@ import Tool from "@src/components/common/Tool";
 import MyError from "@src/components/common/MyError";
 import RelatedProducts from "@src/components/Products/RelatedProducts";
 import Support from "@src/components/common/Support";
+import MyLoading from "@src/components/common/MyLoading";
+import SelectAddressModal from "@src/components/Product/SelectAddressModal";
 
 // type
 import type {
@@ -34,7 +36,6 @@ import type {
 import type { LIMIT, DetailProduct, ProductOptionForm } from "@src/types";
 import type { Product } from "@prisma/client";
 import { AxiosError } from "axios";
-import MyLoading from "@src/components/common/MyLoading";
 
 const limit: LIMIT = 15;
 
@@ -56,22 +57,18 @@ const Product: NextPage<Props> = ({ product, relatedProducts }) => {
   // 2022/08/26 - 구매할 상품 개수 - by 1-blue
   const quantity = watch("quantity");
 
-  // 2022/08/26 - 구매/장바구니 관련 데이터 - by 1-blue
-  const setProductToBuy = useSetRecoilState(
-    stateService.buyService.productToBuy
-  );
+  // 2022/09/04 - 배송지 선택 모달 렌더링 여부 - by 1-blue
+  const [showAddressModal, setShowAddressModal] = useState(false);
 
   // 2022/08/26 - 상품 구매버튼 클릭 시 실행 - by 1-blue
-  const onSubmit = useCallback(
-    (option: ProductOptionForm) => {
-      if (!product) return;
+  const onSubmit = useCallback(() => {
+    if (!product) return;
+    if (!data?.user) return toast.error("로그인 후에 시도해주세요!");
 
-      setProductToBuy({ product, option });
+    toast.info("배송지를 선택해주세요!");
 
-      // >>> 구매 페이지로 이동
-    },
-    [product, setProductToBuy]
-  );
+    setShowAddressModal(true);
+  }, [data, product, setShowAddressModal]);
 
   // 2022/08/26 - 현재 상품의 이미지들중에 보여지는 이미지 번호 - by 1-blue
   const [currentDot, setCurrentDot] = useState(0);
@@ -195,10 +192,12 @@ const Product: NextPage<Props> = ({ product, relatedProducts }) => {
     }
   }, [getValues, router.query]);
 
+  // 2022/09/01 - 연관된 상품들 수정 함수 - by 1-blue
   const setRelatedProducts = useSetRecoilState(
     stateService.productService.relatedProductsState
   );
 
+  // 2022/09/01 - 연관된 상품들 초기화 - by 1-blue
   useEffect(() => {
     setRelatedProducts(relatedProducts);
   }, [setRelatedProducts, relatedProducts]);
@@ -345,6 +344,20 @@ const Product: NextPage<Props> = ({ product, relatedProducts }) => {
             장바구니
           </button>
         </form>
+
+        {showAddressModal && (
+          <SelectAddressModal
+            products={[product]}
+            onCloseModal={() => setShowAddressModal(false)}
+            singleData={[
+              {
+                color: getValues("color"),
+                size: getValues("size"),
+                quantity: quantity,
+              },
+            ]}
+          />
+        )}
 
         {/* >>> 상품평 */}
 

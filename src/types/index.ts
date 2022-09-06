@@ -63,14 +63,17 @@ export type {
   ApiDeleteBasketResponse,
   ApiUpdateBasketBody,
   ApiUpdateBasketResponse,
+  ApiCreateOrderBody,
+  ApiCreateOrderResponse,
+  ApiGetOrderListBody,
+  ApiGetOrderListResponse,
+  ApiDeleteOrderBody,
+  ApiDeleteOrderResponse,
 } from "./api";
 
-export type {
-  UserWithPhoto,
-  ProductOptionForm,
-  ProductToBuy,
-  DetailProduct,
-} from "./data";
+export type { UserWithPhoto, ProductOptionForm, DetailProduct } from "./data";
+
+export type { RequestPayParams, Iamport } from "./iamport";
 
 // 2022/08/21 - 최대 요청 개수 - by 1-blue
 export type LIMIT = 15;

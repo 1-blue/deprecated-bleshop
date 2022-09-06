@@ -19,6 +19,7 @@ import stateService from "@src/states";
 // component
 import Photo from "@src/components/common/Photo";
 import Tool from "@src/components/common/Tool";
+import Support from "@src/components/common/Support";
 
 // type
 import { AxiosError } from "axios";
@@ -119,7 +120,7 @@ const BasketProducts = () => {
   return (
     <>
       {basketProducts.length === 0 ? (
-        <h3>조건에 맞는 상품이 없습니다.</h3>
+        <Support.Error text="** 조건에 맞는 상품이 없습니다. **" />
       ) : (
         <ul className="space-y-2 sm:space-y-4">
           {basketProducts.map((basketProduct) => (

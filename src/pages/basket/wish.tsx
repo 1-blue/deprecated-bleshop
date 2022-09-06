@@ -11,7 +11,7 @@ import stateService from "@src/states";
 import HeadInfo from "@src/components/common/HeadInfo";
 import Nav from "@src/components/common/Nav";
 import Support from "@src/components/common/Support";
-import WishProducts from "@src/components/Products/wishProducts";
+import WishProducts from "@src/components/Products/WishProducts";
 
 // type
 import type {

@@ -10,4 +10,5 @@ export type ICON =
   | "catalog"
   | "arrowRight"
   | "arrowLeft"
-  | "plus";
+  | "plus"
+  | "verticalDotDotDot";

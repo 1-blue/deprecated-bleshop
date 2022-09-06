@@ -24,7 +24,7 @@ export const dateFormat = (
 ) => {
   const date = new Date(value);
 
-  const dateArray: (string | undefined)[] = [];
+  const dateArray: (number | string | undefined)[] = [];
   let result = "";
   /**
    * 구분자만 추출 ( YYYY년MM월DD일 ---> ["년", "월", "일"] )
@@ -34,12 +34,12 @@ export const dateFormat = (
   const separatorList = format.match(/[^YMDhms]/g);
   let separatorIndex = 0;
 
-  dateArray.push(String(yearFormat(date, format)));
-  dateArray.push(String(monthFormat(date, format)));
-  dateArray.push(String(dayFormat(date, format)));
-  dateArray.push(String(hourFormat(date, format)));
-  dateArray.push(String(minuteFormat(date, format)));
-  dateArray.push(String(secondFormat(date, format)));
+  dateArray.push(yearFormat(date, format));
+  dateArray.push(monthFormat(date, format));
+  dateArray.push(dayFormat(date, format));
+  dateArray.push(hourFormat(date, format));
+  dateArray.push(minuteFormat(date, format));
+  dateArray.push(secondFormat(date, format));
 
   dateArray.forEach((v) => {
     // undefined일 경우 즉, 포멧하지 않거나 잘못된 입력인 경우 제외
@@ -50,10 +50,10 @@ export const dateFormat = (
     else {
       let targetSeparator: string = "";
 
-      if (separatorList === null) separator = "";
-      else targetSeparator = separatorList[separatorIndex];
+      if (!separatorList) separator = "";
+      else targetSeparator = separatorList[separatorIndex] || "";
 
-      separatorIndex += 1;
+      separatorIndex++;
 
       result += `${v}${targetSeparator}`;
     }
