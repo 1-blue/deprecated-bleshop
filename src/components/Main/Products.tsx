@@ -16,11 +16,16 @@ import Photo from "@src/components/common/Photo";
 import Support from "@src/components/common/Support";
 
 // type
+import type { Product } from "@prisma/client";
 import type { LIMIT } from "@src/types";
 
 const limit: LIMIT = 15;
 
-const Products = () => {
+type Props = {
+  searchWord?: string;
+};
+
+const Products = ({ searchWord }: Props) => {
   // 2022/08/22 - 화면에 랜더링할 상품들 - by 1-blue
   const [products, setProducts] = useRecoilState(
     stateService.productsService.productsState
@@ -42,6 +47,44 @@ const Products = () => {
     stateService.filterService.selectedFiltersState
   );
 
+  // 2022/09/06 - 카테고리, 필터링 바뀌면 초기 상품들 패치 - by 1-blue
+  useEffect(() => {
+    (async () => {
+      try {
+        let products: Product[] = [];
+
+        // 특정 상품들 검색
+        if (searchWord) {
+          const { data } =
+            await apiService.productService.apiGetProductsByKeyword({
+              limit,
+              lastIdx: -1,
+              selectedCategory,
+              selectedFilters,
+              keyword: searchWord,
+            });
+
+          products = data.products;
+        }
+        // 모든 상품들 검색 ( 카테고리, 필터는 예외 )
+        else {
+          const { data } = await apiService.productService.apiGetProducts({
+            limit,
+            lastIdx: -1,
+            selectedCategory,
+            selectedFilters,
+          });
+
+          products = data.products;
+        }
+
+        setProducts(products);
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, [searchWord, setProducts, selectedCategory, selectedFilters]);
+
   // 2022/08/22 - observer로 인해 실행할 이벤트 함수 ( 제일 마지막 상품이 뷰포트에 들어오면 실행할 이벤트 함수 ) - by 1-blue
   const onScroll = useCallback(
     async ([{ isIntersecting }]: IntersectionObserverEntry[]) => {
@@ -49,19 +92,43 @@ const Products = () => {
 
       // 지정한 엘리먼트가 "threshold"만큼을 제외하고 뷰포트에 들어왔다면 실행
       if (isIntersecting) {
-        const {
-          data: { products },
-        } = await apiService.productService.apiGetProducts({
-          limit,
-          lastIdx: productLastIdx,
-          selectedCategory,
-          selectedFilters,
-        });
+        try {
+          let products: Product[] = [];
 
-        setProducts((prev) => [...prev, ...products]);
+          // 특정 상품들 검색
+          if (searchWord) {
+            const { data } =
+              await apiService.productService.apiGetProductsByKeyword({
+                limit,
+                lastIdx: productLastIdx,
+                selectedCategory,
+                selectedFilters,
+                keyword: searchWord,
+              });
+
+            products = data.products;
+          }
+
+          // 모든 상품들 검색 ( 카테고리, 필터는 예외 )
+          else {
+            const { data } = await apiService.productService.apiGetProducts({
+              limit,
+              lastIdx: productLastIdx,
+              selectedCategory,
+              selectedFilters,
+            });
+
+            products = data.products;
+          }
+
+          setProducts((prev) => [...prev, ...products]);
+        } catch (error) {
+          console.error(error);
+        }
       }
     },
     [
+      searchWord,
       lastProductRef,
       productLastIdx,
       setProducts,

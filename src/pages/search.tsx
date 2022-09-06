@@ -91,7 +91,7 @@ const Search: NextPage<Props> = ({ photo, categories, filters, products }) => {
             } 검색 결과`}
           />
 
-          <Products />
+          <Products searchWord={router.query.searchWord as string} />
         </Support.Background>
       </article>
     </>
