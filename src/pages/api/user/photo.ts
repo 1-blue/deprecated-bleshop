@@ -26,15 +26,18 @@ export default async function handler(
 
   // 프로필 이미지 수정
   if (method === "PUT") {
-    const exPhoto = await prisma.photo.findUnique({ where: { userIdx } });
+    const exUser = await prisma.user.findUnique({ where: { idx: userIdx } });
 
     // 이미 프로필 이미지가 존재하는 경우 이미지 제거
-    if (exPhoto) {
+    if (exUser?.photo) {
       // AWS-S3에서 제거
-      movePhoto(exPhoto.path, "user");
+      await movePhoto(exUser.photo, "remove");
 
       // DB에서 제거
-      await prisma.photo.delete({ where: { userIdx } });
+      await prisma.user.update({
+        where: { idx: userIdx },
+        data: { photo: null },
+      });
     }
 
     if (typeof query.name === "string") {
@@ -49,15 +52,18 @@ export default async function handler(
   }
   // 프로필 이미지 제거
   else if (method === "DELETE") {
-    const exPhoto = await prisma.photo.findUnique({ where: { userIdx } });
+    const exUser = await prisma.user.findUnique({ where: { idx: userIdx } });
 
     // 이미 프로필 이미지가 존재하는 경우 이미지 제거
-    if (exPhoto) {
+    if (exUser?.photo) {
       // AWS-S3에서 제거
-      movePhoto(exPhoto.path, "user");
+      await movePhoto(exUser.photo, "remove");
 
       // DB에서 제거
-      await prisma.photo.delete({ where: { userIdx } });
+      await prisma.user.update({
+        where: { idx: userIdx },
+        data: { photo: null },
+      });
 
       return res.status(200).json({
         message: "기본 이미지로 변경 성공! 새로고침하면 적용됩니다.",

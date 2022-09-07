@@ -3,7 +3,7 @@ import { getSession } from "next-auth/react";
 import prisma from "@src/prisma";
 
 // util
-import { isFulFilled } from "@src/libs";
+import { isFulFilled, movePhoto } from "@src/libs";
 
 // type
 import type { ApiUpdateUserResponse } from "@src/types";
@@ -27,10 +27,11 @@ export default async function handler(
 
     // 이미지 수정
     if (path) {
-      await prisma.photo.upsert({
-        where: { userIdx },
-        create: { path, userIdx },
-        update: { path },
+      await movePhoto(path, "user");
+
+      await prisma.user.update({
+        where: { idx: userIdx },
+        data: { photo: path.replace("/temporary", "") },
       });
 
       return res.json({ message: "이미지를 수정했습니다. 새로고침해주세요!" });

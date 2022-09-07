@@ -31,6 +31,7 @@ type UserEditForm = ApiUpdateUserBody & { photo?: FileList | null };
 
 const InformationUpdate = () => {
   const { data } = useSession();
+
   const {
     handleSubmit,
     register,
@@ -249,7 +250,7 @@ const InformationUpdate = () => {
           hasPadding
         >
           <Photo
-            path={data?.user?.photo?.path}
+            path={data?.user?.photo}
             alt="유저 이미지"
             avatar
             cover

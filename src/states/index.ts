@@ -6,6 +6,7 @@ import paymentService from "./payment";
 import wishService from "./wish";
 import basketService from "./basket";
 import orderService from "./order";
+import reviewService from "./review";
 
 const stateService = {
   productService,
@@ -16,6 +17,7 @@ const stateService = {
   wishService,
   basketService,
   orderService,
+  reviewService,
 };
 
 export default stateService;

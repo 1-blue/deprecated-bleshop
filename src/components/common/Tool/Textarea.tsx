@@ -6,6 +6,7 @@ import Label from "./Label";
 
 // type
 import type { UseFormRegisterReturn } from "react-hook-form";
+import { combineClassNames } from "@src/libs";
 
 type Props = {
   name: string;
@@ -13,6 +14,8 @@ type Props = {
   placeholder?: string;
   errorMessage?: string;
   disabled?: boolean;
+  hiddenLabel?: boolean;
+  className?: string;
 };
 
 const Textarea = ({
@@ -21,6 +24,8 @@ const Textarea = ({
   placeholder,
   errorMessage,
   disabled,
+  hiddenLabel,
+  className,
 }: Props) => {
   // 2022/08/18 - register에서 ref 떼내기 - by 1-blue
   const textRef = useRef<HTMLTextAreaElement | null>(null);
@@ -36,14 +41,17 @@ const Textarea = ({
 
   return (
     <>
-      <Label name={name} />
+      {hiddenLabel || <Label name={name} />}
 
       <textarea
         id={name}
         rows={10}
         placeholder={placeholder}
         {...restRegister}
-        className="min-w-[200px] max-w-[600px] w-full px-2 xs:px-4 py-2 font-semibold text-xs xs:text-base rounded-sm border-2 border-gray-200 focus:border-blue-400 focus:outline-none placeholder:text-[8px] xs:placeholder:text-xs resize-none"
+        className={combineClassNames(
+          "min-w-[200px] max-w-[600px] w-full px-2 xs:px-4 py-2 font-semibold text-xs xs:text-base rounded-sm border-2 border-gray-200 focus:border-blue-400 focus:outline-none placeholder:text-[8px] xs:placeholder:text-xs resize-none",
+          className ? className : ""
+        )}
         disabled={disabled}
         ref={(e) => {
           ref(e);

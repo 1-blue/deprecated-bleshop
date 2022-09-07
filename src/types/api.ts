@@ -10,6 +10,7 @@ import type {
   Wish,
   Order,
   ProductsOnOrders,
+  Review,
 } from "@prisma/client";
 
 /**
@@ -393,7 +394,7 @@ export type ApiUpdateBasketResponse = ApiResponse & {};
  */
 export type ApiCreateOrderBody = {
   orderData: Omit<Order, "idx" | "updatedAt" | "userIdx">;
-  singleData: Omit<ProductsOnOrders, "orderIdx">[];
+  singleData: Omit<ProductsOnOrders, "orderIdx" | "isReview">[];
 };
 /**
  * 2022/09/04 - 결제 내역 등록 수신 타입 - by 1-blue
@@ -429,3 +430,52 @@ export type ApiDeleteOrderBody = {
  * 2022/09/05 - 결제 내역 제거 수신 타입 - by 1-blue
  */
 export type ApiDeleteOrderResponse = ApiResponse & {};
+
+/**
+ * 2022/09/07 - 특정 게시글의 리뷰들 요청 송신 타입 - by 1-blue
+ */
+export type ApiGetReviewsBody = {
+  limit: LIMIT;
+  lastIdx: number;
+  productIdx: number;
+};
+/**
+ * 2022/09/07 - 특정 게시글의 리뷰들 요청 수신 타입 - by 1-blue
+ */
+export type ApiGetReviewsResponse = ApiResponse & {
+  reviews: (Review & {
+    User: {
+      name: string;
+      photo: string | null;
+    };
+    photos: {
+      path: string;
+    }[];
+  })[];
+};
+
+/**
+ * 2022/09/07 - 특정 게시글의 리뷰 생성 송신 타입 - by 1-blue
+ */
+export type ApiCreateReviewBody = {
+  orderIdx: number;
+  productIdx: number;
+  score: number;
+  contents: string;
+  photos: string[];
+};
+/**
+ * 2022/09/07 - 특정 게시글의 리뷰 생성 수신 타입 - by 1-blue
+ */
+export type ApiCreateReviewResponse = ApiResponse & {};
+
+/**
+ * 2022/09/07 - 특정 게시글의 리뷰 제거 송신 타입 - by 1-blue
+ */
+export type ApiDeleteReviewBody = {
+  reviewIdx: number;
+};
+/**
+ * 2022/09/07 - 특정 게시글의 리뷰 제거 수신 타입 - by 1-blue
+ */
+export type ApiDeleteReviewResponse = ApiResponse & {};

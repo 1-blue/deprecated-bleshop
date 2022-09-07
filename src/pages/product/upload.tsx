@@ -241,6 +241,8 @@ const Upload: NextPage = () => {
           setPhotoURLs={setPhotoURLs}
           name="추가 이미지"
           register={register("photos")}
+          kinds="product"
+          placeholder="상품 이미지들"
         />
 
         {/* 상세 설명 */}
