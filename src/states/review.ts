@@ -1,12 +1,15 @@
 import { atom, selector } from "recoil";
 
 // type
-import type { ApiGetReviewsResponse, InformationAboutReview } from "@src/types";
+import type {
+  ApiGetReviewsOfProductResponse,
+  InformationAboutReview,
+} from "@src/types";
 
 /**
  * 2022/09/07 - 현재 상품의 리뷰들 - by 1-blue
  */
-export const reviewsState = atom<ApiGetReviewsResponse["reviews"]>({
+export const reviewsState = atom<ApiGetReviewsOfProductResponse["reviews"]>({
   key: "reviewsState",
   default: [],
 });

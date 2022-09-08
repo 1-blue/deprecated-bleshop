@@ -2,65 +2,50 @@ import { getSession } from "next-auth/react";
 
 import prisma from "@src/prisma";
 
+// util
+import { movePhoto } from "@src/libs";
+
 // type
 import type { NextApiRequest, NextApiResponse } from "next";
 import type {
   ApiCreateReviewBody,
   ApiCreateReviewResponse,
   ApiDeleteReviewResponse,
-  ApiGetReviewsResponse,
+  ApiGetReviewsOfProductResponse,
 } from "@src/types";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<
-    ApiGetReviewsResponse | ApiCreateReviewResponse | ApiDeleteReviewResponse
+    | ApiGetReviewsOfProductResponse
+    | ApiCreateReviewResponse
+    | ApiDeleteReviewResponse
   >
 ) {
   const { method } = req;
   const session = await getSession({ req });
 
-  const productIdx =
-    Number(req.query.productIdx) || Number(req.body.productIdx);
+  if (!session || !session.user)
+    return res.status(403).json({ message: "접근 권한이 없습니다." });
+
+  const userIdx = session.user.idx;
 
   try {
-    const exProduct = await prisma.product.findUnique({
-      where: { idx: productIdx },
-    });
-    if (!exProduct)
-      return res.status(404).json({ message: "상품이 존재하지 않습니다." });
-
-    // 특정 상품의 리뷰들 요청
-    if (method === "GET") {
-      const limit = Number(req.query.limit);
-      const lastIdx = Number(req.query.lastIdx);
-
-      const reviews = await prisma.review.findMany({
-        where: { productIdx },
-        take: limit,
-        skip: lastIdx === -1 ? 0 : 1,
-        ...(lastIdx !== -1 && { cursor: { idx: lastIdx } }),
-        orderBy: { updatedAt: "desc" },
-        include: {
-          photos: { select: { path: true } },
-          User: { select: { name: true, photo: true } },
-        },
-      });
-
-      return res.status(200).json({
-        reviews,
-        message: "특정 상품의 리뷰들을 가져왔습니다.",
-      });
-    }
     // 리뷰 생성
-    else if (method === "POST") {
-      if (!session || !session.user)
-        return res.status(403).json({ message: "접근 권한이 없습니다." });
+    if (method === "POST") {
+      const productIdx = Number(req.body.productIdx);
+      const exProduct = await prisma.product.findUnique({
+        where: { idx: productIdx },
+      });
 
-      const userIdx = session.user.idx;
+      if (!exProduct)
+        return res.status(404).json({ message: "상품이 존재하지 않습니다." });
 
       const { contents, score, photos, orderIdx } =
         req.body as ApiCreateReviewBody;
+
+      // aws 이미지 사용 확적으로 위치 이동
+      const photosPromise = photos.map((photo) => movePhoto(photo, "review"));
 
       // 리뷰 생성
       const reviewPromise = prisma.review.create({
@@ -85,7 +70,7 @@ export default async function handler(
         data: { isReview: true },
       });
 
-      await Promise.allSettled([reviewPromise, orderPromise]);
+      await Promise.allSettled([...photosPromise, reviewPromise, orderPromise]);
 
       return res.status(201).json({
         message:
@@ -94,17 +79,23 @@ export default async function handler(
     }
     // 리뷰 제거
     else if (method === "DELETE") {
-      if (!session || !session.user)
-        return res.status(403).json({ message: "접근 권한이 없습니다." });
-
       const reviewIdx = Number(req.query.reviewIdx);
-
-      const deletedReview = await prisma.review.delete({
+      const exReview = await prisma.review.findUnique({
         where: { idx: reviewIdx },
+        include: { photos: { select: { path: true } } },
       });
 
-      // >>> 여기서부터 작업
-      console.log("deletedReview >> ", deletedReview);
+      if (!exReview)
+        return res.status(404).json({ message: "존재하지 않는 리뷰입니다." });
+
+      // aws 이미지 제거
+      const photosPromise = exReview.photos.map(({ path }) =>
+        movePhoto(path, "remove")
+      );
+
+      await Promise.allSettled(photosPromise);
+
+      await prisma.review.delete({ where: { idx: reviewIdx } });
 
       return res.status(200).json({ message: "리뷰를 제거했습니다." });
     }

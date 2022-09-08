@@ -69,12 +69,14 @@ export type {
   ApiGetOrderListResponse,
   ApiDeleteOrderBody,
   ApiDeleteOrderResponse,
-  ApiGetReviewsBody,
-  ApiGetReviewsResponse,
+  ApiGetReviewsOfProductBody,
+  ApiGetReviewsOfProductResponse,
   ApiCreateReviewBody,
   ApiCreateReviewResponse,
   ApiDeleteReviewBody,
   ApiDeleteReviewResponse,
+  ApiGetReviewsOfUserBody,
+  ApiGetReviewsOfUserResponse,
 } from "./api";
 
 export type {

@@ -14,6 +14,8 @@ import type {
   ApiGetProductsResponse,
   ApiGetRelatedProductsBody,
   ApiGetRelatedProductsResponse,
+  ApiGetReviewsOfProductBody,
+  ApiGetReviewsOfProductResponse,
   ApiGetWishProductsBody,
   ApiGetWishProductsResponse,
 } from "@src/types";
@@ -101,6 +103,20 @@ const apiGetBasketProducts = () =>
   axiosInstance.get<ApiGetBasketProductsResponse>(`/products/basket`);
 
 /**
+ * 2022/09/07 - 특정 상품의 리뷰들 요청 - by 1-blue
+ * @param body 리뷰의 마지막 식별자, 요청 개수, 요청 상품 식별자
+ * @returns 결과 메시지
+ */
+const apiGetReviews = ({
+  lastIdx,
+  limit,
+  productIdx,
+}: ApiGetReviewsOfProductBody) =>
+  axiosInstance.get<ApiGetReviewsOfProductResponse>(
+    `/product/review?lastIdx=${lastIdx}&limit=${limit}&productIdx=${productIdx}`
+  );
+
+/**
  * 2022/08/19 - 상품 관련 api 요청 객체 - by 1-blue
  */
 const productService = {
@@ -111,6 +127,7 @@ const productService = {
   apiGetRelatedProducts,
   apiGetWishProducts,
   apiGetBasketProducts,
+  apiGetReviews,
 };
 
 export default productService;

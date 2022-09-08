@@ -38,7 +38,7 @@ import type {
   LIMIT,
   DetailProduct,
   ProductOptionForm,
-  ApiGetReviewsResponse,
+  ApiGetReviewsOfProductResponse,
 } from "@src/types";
 import type { Product } from "@prisma/client";
 import { AxiosError } from "axios";
@@ -48,7 +48,7 @@ const limit: LIMIT = 15;
 type Props = {
   product: DetailProduct | null;
   relatedProducts: Product[];
-  reviews: ApiGetReviewsResponse["reviews"];
+  reviews: ApiGetReviewsOfProductResponse["reviews"];
 };
 
 const Product: NextPage<Props> = ({ product, relatedProducts, reviews }) => {
@@ -418,7 +418,7 @@ export const getStaticProps: GetStaticProps<Props> = async (
       });
 
     // 2022/09/07 - 현재 상품의 리뷰들 - by 1-blue
-    const reviewsPromise = await apiService.reviewService.apiGetReviews({
+    const reviewsPromise = await apiService.productService.apiGetReviews({
       limit,
       lastIdx: -1,
       productIdx,

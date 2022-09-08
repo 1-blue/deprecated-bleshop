@@ -434,7 +434,7 @@ export type ApiDeleteOrderResponse = ApiResponse & {};
 /**
  * 2022/09/07 - 특정 게시글의 리뷰들 요청 송신 타입 - by 1-blue
  */
-export type ApiGetReviewsBody = {
+export type ApiGetReviewsOfProductBody = {
   limit: LIMIT;
   lastIdx: number;
   productIdx: number;
@@ -442,7 +442,7 @@ export type ApiGetReviewsBody = {
 /**
  * 2022/09/07 - 특정 게시글의 리뷰들 요청 수신 타입 - by 1-blue
  */
-export type ApiGetReviewsResponse = ApiResponse & {
+export type ApiGetReviewsOfProductResponse = ApiResponse & {
   reviews: (Review & {
     User: {
       name: string;
@@ -479,3 +479,23 @@ export type ApiDeleteReviewBody = {
  * 2022/09/07 - 특정 게시글의 리뷰 제거 수신 타입 - by 1-blue
  */
 export type ApiDeleteReviewResponse = ApiResponse & {};
+
+/**
+ * 2022/09/08 - 로그인한 유저의 리뷰들 요청 송신 타입 - by 1-blue
+ */
+export type ApiGetReviewsOfUserBody = {};
+/**
+ * 2022/09/08 - 로그인한 유저의 리뷰들 요청 수신 타입 - by 1-blue
+ */
+export type ApiGetReviewsOfUserResponse = ApiResponse & {
+  reviews: (Review & {
+    photos: {
+      path: string;
+    }[];
+    Product: {
+      idx: number;
+      name: string;
+      photo: string;
+    };
+  })[];
+};

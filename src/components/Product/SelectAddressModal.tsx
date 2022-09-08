@@ -120,7 +120,10 @@ const SelectAddressModal = ({ products, singleData, onCloseModal }: Props) => {
   );
 
   return (
-    <Modal onCloseModal={onCloseModal} className="space-y-2">
+    <Modal
+      onCloseModal={onCloseModal}
+      className="space-y-2 max-w-[500px] min-w-[250px]"
+    >
       <h6 className="text-xl md:text-2xl font-bolder text-center bg-indigo-400 py-2 text-white">
         배송지 선택
       </h6>

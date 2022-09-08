@@ -275,6 +275,7 @@ const InformationUpdate = () => {
           <Modal
             title="프로필 이미지 설정"
             onCloseModal={() => setShowModal(false)}
+            className="max-w-[500px] min-w-[250px]"
           >
             <Support.Background className="flex flex-col divide-y">
               <button

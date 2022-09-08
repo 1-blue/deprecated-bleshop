@@ -31,7 +31,7 @@ const StarRating = ({ score, setScore }: Props) => {
   return (
     <section className="flex space-x-1" onClick={onClickStar}>
       {arr.map((v) => (
-        <button key={v} type="button">
+        <button key={v} type="button" tabIndex={-1}>
           <Icon
             shape="star"
             className="w-6 h-6 xs:w-8 xs:h-8 text-yellow-400"

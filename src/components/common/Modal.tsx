@@ -29,12 +29,12 @@ const Modal = ({ children, onCloseModal, title, className }: Props) => {
 
   return (
     <aside
-      className="fixed -top-4 left-0 bg-black/60 w-full h-full animate-fade-in z-[9]"
+      className="fixed top-0 left-0 bg-black/60 w-full h-full animate-fade-in z-[9]"
       ref={modalRef}
     >
       <aside
         className={combineClassNames(
-          "absolute top-1/2 left-1/2 max-w-[500px] min-w-[250px] w-2/3 rounded-md bg-white -translate-x-1/2 -translate-y-1/2 overflow-y-auto",
+          "absolute top-1/2 left-1/2 w-2/3 rounded-md bg-white -translate-x-1/2 -translate-y-1/2 overflow-y-auto",
           className ? className : ""
         )}
       >

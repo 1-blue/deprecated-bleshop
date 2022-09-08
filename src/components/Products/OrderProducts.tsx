@@ -164,7 +164,7 @@ const OrderProducts = () => {
                               ) : (
                                 <button
                                   type="button"
-                                  className="px-2 text-[8px] sm:text-xs border border-blue-400 rounded-md text-blue-400 bg-white hover:bg-blue-400 hover:text-white focus:outline-none focus:bg-blue-400 focus:text-white transition-colors"
+                                  className="py-1 px-1.5 text-[8px] sm:text-xs border border-blue-400 rounded-md text-blue-400 bg-white hover:bg-blue-400 hover:text-white focus:outline-none focus:bg-blue-400 focus:text-white transition-colors"
                                   onClick={onClickWriteReview({
                                     name: product.product.name,
                                     photo: product.product.photo,
@@ -283,6 +283,7 @@ const OrderProducts = () => {
             <Modal
               title="상품 주문 내역 관리"
               onCloseModal={() => setIsShowModal(false)}
+              className="max-w-[500px] min-w-[250px]"
             >
               <Support.Background className="flex flex-col divide-y">
                 <button
