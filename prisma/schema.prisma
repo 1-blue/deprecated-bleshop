@@ -14,17 +14,13 @@ datasource db {
 model Photo {
   path String @id
 
-  // 유저와 이미지 => 1:1
-  user    User? @relation(fields: [userIdx], references: [idx])
-  userIdx Int?  @unique
-
   // 상품과 이미지 => 1:N ( 대표 이미지, 추가 이미지 )
   Product     Product? @relation(fields: [productsIdx], references: [idx])
   productsIdx Int?
 
-  // 댓글과 이미지 => 1:N
-  Comment    Comment? @relation(fields: [commentIdx], references: [idx])
-  commentIdx Int?
+  // 리뷰와 이미지 => 1:N
+  Review    Review? @relation(fields: [reviewIdx], references: [idx])
+  reviewIdx Int?
 }
 
 // 유저
@@ -36,24 +32,25 @@ model User {
   email    String  @unique
   phone    String  @unique
   isAdmin  Boolean @default(false)
+  photo    String?
+
+  // 유저와 주소 => 1:N
+  addresses Address[]
 
   // 유저와 상품 => 1:N
   products Product[]
 
-  // 유저와 이미지 => 1:1
-  photo Photo?
+  // 유저와 상품 ( 장바구니 ) => N:M
+  baskets Basket[]
+
+  // 상품과 유저 ( 찜하기 ) => N:M
+  wishes Wish[]
 
   // 유저와 주문 => 1:N
   orders Order[]
 
-  // 유저와 상품 ( 장바구니 ) => N:M
-  baskets Basket[]
-
-  // 유저와 주소 => 1 : N
-  addresses Address[]
-
-  // 상품과 유저 ( 찜하기 ) => N:M
-  wishes Wish[]
+  // 유저와 리뷰 => 1:N
+  reviews Review[]
 }
 
 // 주소
@@ -90,14 +87,7 @@ model Product {
   userIdx Int?
 
   // 상품과 이미지 => 1:N ( 추가 이미지 )
-  photos Photo[]
-
-  // 유저와 상품 ( 장바구니 ) => N:M
-  baskets Basket[]
-
-  // 상품과 댓글 => 1:N
-  comments Comment[]
-
+  photos     Photo[]
   // 상품과 카테고리 => N:M
   categories ProductsOnCategories[]
 
@@ -107,11 +97,17 @@ model Product {
   // 상품과 필터 => N:M
   filters ProductsOnFilters[]
 
+  // 유저와 상품 ( 장바구니 ) => N:M
+  baskets Basket[]
+
   // 상품과 유저 ( 찜하기 ) => N:M
   wishes Wish[]
 
   // 상품과 주문 => N:M
   orders ProductsOnOrders[]
+
+  // 상품과 리뷰 => 1:N
+  reviews Review[]
 }
 
 // 카테고리
@@ -197,20 +193,6 @@ model Basket {
   @@id([userIdx, productIdx])
 }
 
-// 댓글
-model Comment {
-  idx      Int    @id @default(autoincrement())
-  score    Int
-  contents String
-
-  // 상품과 댓글 => 1:N
-  Product    Product? @relation(fields: [productIdx], references: [idx])
-  productIdx Int?
-
-  // 댓글과 이미지 => 1:N
-  photos Photo[]
-}
-
 // 주문
 model Order {
   idx       Int      @id @default(autoincrement())
@@ -237,6 +219,8 @@ model ProductsOnOrders {
   quantity Int
   size     String
   color    String
+  // 리뷰 작성 유무 ( 한번의 주문에 하나의 리뷰만 가능함 )
+  isReview Boolean @default(false)
 
   product    Product @relation(fields: [productIdx], references: [idx])
   productIdx Int
@@ -244,4 +228,23 @@ model ProductsOnOrders {
   orderIdx   Int
 
   @@id([productIdx, orderIdx])
+}
+
+// 리뷰
+model Review {
+  idx       Int      @id @default(autoincrement())
+  score     Int
+  contents  String   @db.VarChar(500)
+  updatedAt DateTime @updatedAt
+
+  // 상품과 리뷰 => 1:N
+  Product    Product @relation(fields: [productIdx], references: [idx])
+  productIdx Int
+
+  // 유저와 리뷰 => 1:N
+  User    User @relation(fields: [userIdx], references: [idx])
+  userIdx Int
+
+  // 리뷰과 이미지 => 1:N
+  photos Photo[]
 }

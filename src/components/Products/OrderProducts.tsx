@@ -1,7 +1,8 @@
 import { useCallback, useState } from "react";
 import Link from "next/link";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 // api
 import apiService from "@src/api";
@@ -19,9 +20,11 @@ import Icon from "@src/components/common/Icon";
 import Modal from "@src/components/common/Modal";
 
 // type
+import type { InformationAboutReview } from "@src/types";
 import { AxiosError } from "axios";
 
 const OrderProducts = () => {
+  const router = useRouter();
   const orderList = useRecoilValue(stateService.orderService.orderListState);
 
   // 2022/09/05 - 결제 내역 삭제 모달 - by 1-blue
@@ -80,6 +83,23 @@ const OrderProducts = () => {
     }
   }, [targetOrderIdx, setIsShowModal]);
 
+  // 2022/09/07 - 리뷰를 작성할 상품의 정보 입력 함수 - by 1-blue
+  const setTargetProduct = useSetRecoilState(
+    stateService.reviewService.informationAboutReviewState
+  );
+
+  // 2022/09/07 - 리뷰 작성 클릭 - by 1-blue
+  const onClickWriteReview = useCallback(
+    (body: InformationAboutReview) => () => {
+      // 리뷰를 작성할 상품의 정보 저장
+      setTargetProduct(body);
+
+      // 리뷰 페이지로 이동
+      router.push("/review");
+    },
+    [setTargetProduct, router]
+  );
+
   return (
     <>
       {orderList.length === 0 ? (
@@ -110,16 +130,52 @@ const OrderProducts = () => {
                   {order.products.map((product) => (
                     <li key={"" + product.productIdx + product.orderIdx}>
                       <Link href={`/product/${product.productIdx}`}>
-                        <a className="p-2 space-x-4 flex h-full rounded-md bg-white border-4 border-transparent z-[2] group-hover:border-gray-400 focus:outline-blue-500">
+                        <a
+                          className="p-2 space-x-4 flex h-full rounded-md bg-white border-4 border-transparent z-[2] group-hover:border-gray-400 focus:outline-blue-500"
+                          onClick={(e) => {
+                            const target = e.target as HTMLElement;
+
+                            if (target.nodeName === "BUTTON") {
+                              e.preventDefault();
+                            }
+                          }}
+                        >
                           <Photo
                             path={product.product.photo}
                             cover
                             className="flex-shrink-0 w-[120px] h-[120px] sm:w-[160px] sm:h-[160px]"
                           />
                           <div className="flex-1 flex flex-col">
-                            <span className="font-bolder sm:text-lg">
-                              {product.product.name}
-                            </span>
+                            <div className="flex justify-between">
+                              <span className="font-bolder sm:text-lg">
+                                {product.product.name}
+                              </span>
+
+                              {product.isReview ? (
+                                <button
+                                  type="button"
+                                  className="text-[8px] sm:text-xs hover:underline hover:underline-offset-2"
+                                  onClick={() =>
+                                    router.push("/information/review")
+                                  }
+                                >
+                                  리뷰 관리로 이동
+                                </button>
+                              ) : (
+                                <button
+                                  type="button"
+                                  className="py-1 px-1.5 text-[8px] sm:text-xs border border-blue-400 rounded-md text-blue-400 bg-white hover:bg-blue-400 hover:text-white focus:outline-none focus:bg-blue-400 focus:text-white transition-colors"
+                                  onClick={onClickWriteReview({
+                                    name: product.product.name,
+                                    photo: product.product.photo,
+                                    productIdx: product.productIdx,
+                                    orderIdx: product.orderIdx,
+                                  })}
+                                >
+                                  리뷰 작성
+                                </button>
+                              )}
+                            </div>
 
                             <div className="flex-1" />
 
@@ -227,6 +283,7 @@ const OrderProducts = () => {
             <Modal
               title="상품 주문 내역 관리"
               onCloseModal={() => setIsShowModal(false)}
+              className="max-w-[500px] min-w-[250px]"
             >
               <Support.Background className="flex flex-col divide-y">
                 <button

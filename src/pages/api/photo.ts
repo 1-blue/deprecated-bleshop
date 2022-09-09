@@ -38,7 +38,9 @@ export default async function handler(
     if (typeof query.names === "object") {
       const { names } = query;
 
-      names.forEach((name) => movePhoto(name, "remove"));
+      const photosPromise = names.map((name) => movePhoto(name, "remove"));
+
+      await Promise.allSettled(photosPromise);
 
       return res
         .status(200)
@@ -48,7 +50,7 @@ export default async function handler(
     else if (typeof query.name === "string") {
       const { name } = query;
 
-      movePhoto(name, "remove");
+      await movePhoto(name, "remove");
 
       return res
         .status(200)

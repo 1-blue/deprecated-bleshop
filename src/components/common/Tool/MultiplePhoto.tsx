@@ -18,6 +18,7 @@ import { combineClassNames } from "@src/libs";
 import type { Dispatch, SetStateAction } from "react";
 import type { ChangeEvent } from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
+import type { PhotoKinds } from "@src/types";
 import { AxiosError } from "axios";
 
 type Props = {
@@ -25,6 +26,7 @@ type Props = {
   setPhotoURLs: Dispatch<SetStateAction<string[]>>;
   name: string;
   register: UseFormRegisterReturn;
+  kinds: PhotoKinds;
   placeholder?: string;
   errorMessage?: string;
   disabled?: boolean;
@@ -35,6 +37,8 @@ const MultiplePhoto = ({
   setPhotoURLs,
   name,
   register,
+  kinds,
+  placeholder,
   errorMessage,
   disabled,
 }: Props) => {
@@ -58,7 +62,7 @@ const MultiplePhoto = ({
       try {
         const response = await apiService.photoService.apiCreatePhotos({
           files,
-          kinds: "product",
+          kinds,
         });
 
         if (response.length === 0)
@@ -97,6 +101,7 @@ const MultiplePhoto = ({
         });
       } catch (error) {
         console.error(error);
+
         if (error instanceof AxiosError) {
           toast.update(toastId, {
             render: error.response?.data.message,
@@ -114,7 +119,7 @@ const MultiplePhoto = ({
         }
       }
     },
-    [setPhotoURLs, photoURLs]
+    [setPhotoURLs, photoURLs, kinds]
   );
 
   // 2022/08/19 - 추가 이미지중에 현재 선택한 이미지 번호 - by 1-blue
@@ -185,7 +190,7 @@ const MultiplePhoto = ({
                 <Photo
                   path={photoURL}
                   className="w-full h-[200px] xs:h-[300px] md:h-[400px]"
-                  alt="상품 이미지"
+                  alt={placeholder || "이미지"}
                   contain
                 />
               </div>

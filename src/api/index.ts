@@ -27,6 +27,7 @@ import filterService from "./filter";
 import wishService from "./wish";
 import basketService from "./basket";
 import orderService from "./order";
+import reviewService from "./review";
 
 /**
  * 2022/08/17 - api요청 관련 메서드들을 가진 객체 - by 1-blue
@@ -43,6 +44,7 @@ const apiService = {
   wishService,
   basketService,
   orderService,
+  reviewService,
 };
 
 export default apiService;

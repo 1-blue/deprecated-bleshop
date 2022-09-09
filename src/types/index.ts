@@ -69,9 +69,22 @@ export type {
   ApiGetOrderListResponse,
   ApiDeleteOrderBody,
   ApiDeleteOrderResponse,
+  ApiGetReviewsOfProductBody,
+  ApiGetReviewsOfProductResponse,
+  ApiCreateReviewBody,
+  ApiCreateReviewResponse,
+  ApiDeleteReviewBody,
+  ApiDeleteReviewResponse,
+  ApiGetReviewsOfUserBody,
+  ApiGetReviewsOfUserResponse,
 } from "./api";
 
-export type { UserWithPhoto, ProductOptionForm, DetailProduct } from "./data";
+export type {
+  SimpleUser,
+  ProductOptionForm,
+  DetailProduct,
+  InformationAboutReview,
+} from "./data";
 
 export type { RequestPayParams, Iamport } from "./iamport";
 
@@ -79,4 +92,4 @@ export type { RequestPayParams, Iamport } from "./iamport";
 export type LIMIT = 15;
 
 // 2022/08/28 - 이미지 종류 - by 1-blue
-export type PhotoKinds = "user" | "product" | "benner" | "remove";
+export type PhotoKinds = "user" | "product" | "benner" | "review" | "remove";

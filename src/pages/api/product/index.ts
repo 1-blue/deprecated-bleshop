@@ -2,13 +2,15 @@ import { getSession } from "next-auth/react";
 
 import prisma from "@src/prisma";
 
+// util
+import { movePhoto } from "@src/libs";
+
 // type
 import type { NextApiRequest, NextApiResponse } from "next";
 import type {
   ApiCreateProductResponse,
   ApiGetProductResponse,
 } from "@src/types";
-import { movePhoto } from "@src/libs";
 
 export default async function handler(
   req: NextApiRequest,

@@ -42,7 +42,7 @@ const Information: NextPage = () => {
         <Support.Background className="space-y-2 sm:space-y-4" hasPadding>
           <div className="flex justify-center">
             <Photo
-              path={data?.user?.photo?.path}
+              path={data?.user?.photo}
               cover
               avatar
               isFocus
@@ -108,7 +108,7 @@ const Information: NextPage = () => {
               </Link>
             </li>
             <li>
-              <Link href="/">
+              <Link href="/information/review">
                 <a className="flex p-4 items-center transition-colors hover:bg-blue-400 hover:text-white focus:outline-none focus:bg-blue-400 focus:text-white">
                   <Icon shape="star" className="w-6 h-6 sm:w-8 sm:h-8" />
                   <span className="font-bolder sm:text-lg pl-3 flex-1">

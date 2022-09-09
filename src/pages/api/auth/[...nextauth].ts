@@ -29,10 +29,7 @@ export default NextAuth({
 
         const { id, password } = credentials;
 
-        const exUser = await prisma.user.findUnique({
-          where: { id },
-          include: { photo: true },
-        });
+        const exUser = await prisma.user.findUnique({ where: { id } });
         if (!exUser) throw new Error("존재하지 않는 아이디입니다.");
 
         const result = await bcrypt.compare(password, exUser.password);
@@ -57,15 +54,11 @@ export default NextAuth({
           email: true,
           phone: true,
           isAdmin: true,
-          photo: {
-            select: {
-              path: true,
-            },
-          },
+          photo: true,
         },
       });
 
-      session.user = exUser;
+      session.user = exUser!;
 
       return session;
     },

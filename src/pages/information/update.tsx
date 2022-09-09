@@ -31,6 +31,7 @@ type UserEditForm = ApiUpdateUserBody & { photo?: FileList | null };
 
 const InformationUpdate = () => {
   const { data } = useSession();
+
   const {
     handleSubmit,
     register,
@@ -249,7 +250,7 @@ const InformationUpdate = () => {
           hasPadding
         >
           <Photo
-            path={data?.user?.photo?.path}
+            path={data?.user?.photo}
             alt="유저 이미지"
             avatar
             cover
@@ -274,6 +275,7 @@ const InformationUpdate = () => {
           <Modal
             title="프로필 이미지 설정"
             onCloseModal={() => setShowModal(false)}
+            className="max-w-[500px] min-w-[250px]"
           >
             <Support.Background className="flex flex-col divide-y">
               <button

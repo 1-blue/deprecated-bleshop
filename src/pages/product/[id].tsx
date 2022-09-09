@@ -25,6 +25,7 @@ import RelatedProducts from "@src/components/Products/RelatedProducts";
 import Support from "@src/components/common/Support";
 import MyLoading from "@src/components/common/MyLoading";
 import SelectAddressModal from "@src/components/Product/SelectAddressModal";
+import Reviews from "@src/components/Product/Reviews";
 
 // type
 import type {
@@ -33,7 +34,12 @@ import type {
   GetStaticPropsContext,
   NextPage,
 } from "next";
-import type { LIMIT, DetailProduct, ProductOptionForm } from "@src/types";
+import type {
+  LIMIT,
+  DetailProduct,
+  ProductOptionForm,
+  ApiGetReviewsOfProductResponse,
+} from "@src/types";
 import type { Product } from "@prisma/client";
 import { AxiosError } from "axios";
 
@@ -42,9 +48,10 @@ const limit: LIMIT = 15;
 type Props = {
   product: DetailProduct | null;
   relatedProducts: Product[];
+  reviews: ApiGetReviewsOfProductResponse["reviews"];
 };
 
-const Product: NextPage<Props> = ({ product, relatedProducts }) => {
+const Product: NextPage<Props> = ({ product, relatedProducts, reviews }) => {
   const { data } = useSession();
   const router = useRouter();
 
@@ -202,6 +209,12 @@ const Product: NextPage<Props> = ({ product, relatedProducts }) => {
     setRelatedProducts(relatedProducts);
   }, [setRelatedProducts, relatedProducts]);
 
+  // 2022/09/07 - 리뷰들 수정 함수 - by 1-blue
+  const setReviews = useSetRecoilState(stateService.reviewService.reviewsState);
+
+  // 2022/09/07 - 리뷰들 초기화 - by 1-blue
+  useEffect(() => setReviews(reviews), [setReviews, reviews]);
+
   if (router.isFallback) return <MyLoading />;
   if (product === null) return <MyError message="상품이 존재하지 않습니다." />;
 
@@ -345,6 +358,7 @@ const Product: NextPage<Props> = ({ product, relatedProducts }) => {
           </button>
         </form>
 
+        {/* 상품 구매 시 주소 선택 모달 */}
         {showAddressModal && (
           <SelectAddressModal
             products={[product]}
@@ -354,12 +368,17 @@ const Product: NextPage<Props> = ({ product, relatedProducts }) => {
                 color: getValues("color"),
                 size: getValues("size"),
                 quantity: quantity,
+                productIdx: product.idx,
               },
             ]}
           />
         )}
 
-        {/* >>> 상품평 */}
+        {/* 상품평 */}
+        <Support.Background className="flex flex-col space-y-2 p-4">
+          <Support.Title text="리뷰들" />
+          <Reviews productIdx={product.idx} />
+        </Support.Background>
 
         {/* 유사 상품 */}
         <Support.Background className="flex flex-col space-y-2" hasPadding>
@@ -388,20 +407,38 @@ export const getStaticProps: GetStaticProps<Props> = async (
     } = await apiService.productService.apiGetProduct({ productIdx });
 
     // 2022/09/03 - 현재 상품과 연관된 상품들 ( 같은 키워드를 가진 상품들 ) - by 1-blue
-    const {
-      data: { products: relatedProducts },
-    } = await apiService.productService.apiGetRelatedProducts({
+    const relatedProductsPromise =
+      await apiService.productService.apiGetRelatedProducts({
+        limit,
+        lastIdx: -1,
+        productIdx,
+        keywords: product.keywords.map(({ keywordIdx }) =>
+          encodeURI(keywordIdx)
+        ),
+      });
+
+    // 2022/09/07 - 현재 상품의 리뷰들 - by 1-blue
+    const reviewsPromise = await apiService.productService.apiGetReviews({
       limit,
       lastIdx: -1,
       productIdx,
-      keywords: product.keywords.map(({ keywordIdx }) => encodeURI(keywordIdx)),
     });
 
-    return { props: { product, relatedProducts } };
+    // 병렬 처리
+    const [
+      {
+        data: { products: relatedProducts },
+      },
+      {
+        data: { reviews },
+      },
+    ] = await Promise.all([relatedProductsPromise, reviewsPromise]);
+
+    return { props: { product, relatedProducts, reviews } };
   } catch (error) {
     console.error("getStaticProps product/[id] >> ", error);
 
-    return { props: { product: null, relatedProducts: [] } };
+    return { props: { product: null, relatedProducts: [], reviews: [] } };
   }
 };
 
