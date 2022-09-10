@@ -43,7 +43,7 @@ const ASide = () => {
   return (
     <aside
       className={combineClassNames(
-        "fixed bottom-2 right-2 flex transition-all duration-500 space-x-2 z-10",
+        "fixed bottom-2 right-2 flex transition-all duration-500 space-x-2 z-[9]",
         locationCondition
       )}
     >

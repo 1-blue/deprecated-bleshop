@@ -13,7 +13,7 @@ const NavBar = () => {
   return (
     <ul
       className={combineClassNames(
-        "fixed bottom-0 flex justify-between border-t border-gray-400 max-w-[1024px] w-full bg-gray-50 transition-transform duration-300 z-10",
+        "fixed bottom-0 flex justify-between border-t border-gray-400 max-w-[1024px] w-full bg-gray-50 transition-transform duration-300 z-[9]",
         hide ? "translate-y-[57px]" : "translate-y-0",
         isBottom ? "translate-y-0" : ""
       )}

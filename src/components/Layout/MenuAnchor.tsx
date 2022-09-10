@@ -30,8 +30,12 @@ const MenuAnchor = ({ shape, name, url }: Props) => {
             isMatch ? " text-blue-500" : "text-gray-500"
           )}
         >
-          <Icon shape={shape} className="w-6 h-6" fill={isMatch} />
-          <span className="text-xs">
+          <Icon
+            shape={shape}
+            className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6"
+            fill={isMatch}
+          />
+          <span className="text-[8px] xs:text-xs">
             <strong>{name}</strong>
           </span>
         </a>

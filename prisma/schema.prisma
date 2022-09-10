@@ -15,11 +15,11 @@ model Photo {
   path String @id
 
   // 상품과 이미지 => 1:N ( 대표 이미지, 추가 이미지 )
-  Product     Product? @relation(fields: [productsIdx], references: [idx])
+  Product     Product? @relation(fields: [productsIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   productsIdx Int?
 
   // 리뷰와 이미지 => 1:N
-  Review    Review? @relation(fields: [reviewIdx], references: [idx])
+  Review    Review? @relation(fields: [reviewIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   reviewIdx Int?
 }
 
@@ -64,7 +64,7 @@ model Address {
   isDefault Boolean
 
   // 유저와 주소 => 1 : N
-  User    User? @relation(fields: [userIdx], references: [idx])
+  User    User? @relation(fields: [userIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   userIdx Int?
 }
 
@@ -83,7 +83,7 @@ model Product {
   updatedAt   DateTime @updatedAt
 
   // 유저와 상품 => 1:N
-  User    User? @relation(fields: [userIdx], references: [idx])
+  User    User? @relation(fields: [userIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   userIdx Int?
 
   // 상품과 이미지 => 1:N ( 추가 이미지 )
@@ -120,9 +120,9 @@ model Category {
 
 // 상품과 카테고리 중간 테이블 ( N:M )
 model ProductsOnCategories {
-  product     Product  @relation(fields: [productIdx], references: [idx])
+  product     Product  @relation(fields: [productIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   productIdx  Int
-  category    Category @relation(fields: [categoryIdx], references: [category])
+  category    Category @relation(fields: [categoryIdx], references: [category], onDelete: Cascade, onUpdate: Cascade)
   categoryIdx String
 
   @@id([productIdx, categoryIdx])
@@ -138,9 +138,9 @@ model Keyword {
 
 // 상품과 키워드 중간 테이블 ( N:M )
 model ProductsOnKeywords {
-  product    Product @relation(fields: [productIdx], references: [idx])
+  product    Product @relation(fields: [productIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   productIdx Int
-  keyword    Keyword @relation(fields: [keywordIdx], references: [keyword])
+  keyword    Keyword @relation(fields: [keywordIdx], references: [keyword], onDelete: Cascade, onUpdate: Cascade)
   keywordIdx String
 
   @@id([productIdx, keywordIdx])
@@ -156,9 +156,9 @@ model Filter {
 
 // 상품과 필터 중간 테이블 ( N:M )
 model ProductsOnFilters {
-  product    Product @relation(fields: [productIdx], references: [idx])
+  product    Product @relation(fields: [productIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   productIdx Int
-  filter     Filter  @relation(fields: [filterIdx], references: [filter])
+  filter     Filter  @relation(fields: [filterIdx], references: [filter], onDelete: Cascade, onUpdate: Cascade)
   filterIdx  String
 
   @@id([productIdx, filterIdx])
@@ -170,9 +170,9 @@ model Wish {
   color    String
   quantity Int
 
-  user       User    @relation(fields: [userIdx], references: [idx])
+  user       User    @relation(fields: [userIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   userIdx    Int
-  product    Product @relation(fields: [productIdx], references: [idx])
+  product    Product @relation(fields: [productIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   productIdx Int
 
   @@id([userIdx, productIdx])
@@ -185,9 +185,9 @@ model Basket {
   quantity Int
   skip     Boolean @default(false)
 
-  user       User    @relation(fields: [userIdx], references: [idx])
+  user       User    @relation(fields: [userIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   userIdx    Int
-  product    Product @relation(fields: [productIdx], references: [idx])
+  product    Product @relation(fields: [productIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   productIdx Int
 
   @@id([userIdx, productIdx])
@@ -207,7 +207,7 @@ model Order {
   provider  String
 
   // 유저와 주문 => 1:N
-  User    User @relation(fields: [userIdx], references: [idx])
+  User    User @relation(fields: [userIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   userIdx Int
 
   // 상품과 주문 => N:M
@@ -222,9 +222,9 @@ model ProductsOnOrders {
   // 리뷰 작성 유무 ( 한번의 주문에 하나의 리뷰만 가능함 )
   isReview Boolean @default(false)
 
-  product    Product @relation(fields: [productIdx], references: [idx])
+  product    Product @relation(fields: [productIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   productIdx Int
-  order      Order   @relation(fields: [orderIdx], references: [idx])
+  order      Order   @relation(fields: [orderIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   orderIdx   Int
 
   @@id([productIdx, orderIdx])
@@ -238,11 +238,11 @@ model Review {
   updatedAt DateTime @updatedAt
 
   // 상품과 리뷰 => 1:N
-  Product    Product @relation(fields: [productIdx], references: [idx])
+  Product    Product @relation(fields: [productIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   productIdx Int
 
   // 유저와 리뷰 => 1:N
-  User    User @relation(fields: [userIdx], references: [idx])
+  User    User @relation(fields: [userIdx], references: [idx], onDelete: Cascade, onUpdate: Cascade)
   userIdx Int
 
   // 리뷰과 이미지 => 1:N

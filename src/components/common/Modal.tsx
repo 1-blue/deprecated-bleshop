@@ -27,10 +27,21 @@ const Modal = ({ children, onCloseModal, title, className }: Props) => {
     return () => window.removeEventListener("click", closeModal);
   }, [closeModal]);
 
+  // 2022/09/10 - 모달 열려있으면 외부 스크롤 금지 - by 1-blue
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+      return;
+    };
+  }, []);
+
   return (
     <aside
-      className="fixed top-0 left-0 bg-black/60 w-full h-full animate-fade-in z-[9]"
+      className="fixed top-0 left-0 bg-black/60 w-full h-full animate-fade-in z-[10]"
       ref={modalRef}
+      style={{ margin: 0 }}
     >
       <aside
         className={combineClassNames(
@@ -39,7 +50,7 @@ const Modal = ({ children, onCloseModal, title, className }: Props) => {
         )}
       >
         {title && (
-          <h3 className="xs:text-lg md:text-xl text-center text-white font-bolder py-2 xs:py-3 bg-blue-400">
+          <h3 className="text-base sm:text-xl md:text-2xl text-center text-white font-bolder py-2 xs:py-3 bg-blue-400">
             {title}
           </h3>
         )}
