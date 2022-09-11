@@ -18,6 +18,8 @@ type Props = {
   setCurrentDot: Dispatch<SetStateAction<number>>;
   autoPlay?: boolean;
   className?: string;
+  slidesToShow?: number;
+  dotPos?: number;
 };
 
 const Carousel = ({
@@ -26,18 +28,20 @@ const Carousel = ({
   setCurrentDot,
   autoPlay,
   className,
+  slidesToShow = 1,
+  dotPos = 40,
 }: Props) => {
   const [settings, setSettings] = useState<Settings>({
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 1,
+    slidesToShow,
     slidesToScroll: 1,
     adaptiveHeight: true,
     arrows: false,
     autoplay: autoPlay,
     beforeChange: (prev, next) => setCurrentDot(next),
-    appendDots: (dots) => <ul style={{ bottom: "-40px" }}>{dots}</ul>,
+    appendDots: (dots) => <ul style={{ bottom: `-${dotPos}px` }}>{dots}</ul>,
   });
 
   return (

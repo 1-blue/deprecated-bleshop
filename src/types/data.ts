@@ -32,3 +32,12 @@ export type InformationAboutReview = {
   photo: string;
   name: string;
 };
+
+/**
+ * 2022/09/11 - 최근 본 상품 - by 1-blue
+ */
+export type RecentProduct = {
+  idx: number;
+  photo: string;
+  name: string;
+};

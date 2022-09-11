@@ -84,6 +84,7 @@ export type {
   ProductOptionForm,
   DetailProduct,
   InformationAboutReview,
+  RecentProduct,
 } from "./data";
 
 export type { RequestPayParams, Iamport } from "./iamport";

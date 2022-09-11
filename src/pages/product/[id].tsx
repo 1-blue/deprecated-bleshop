@@ -39,6 +39,7 @@ import type {
   DetailProduct,
   ProductOptionForm,
   ApiGetReviewsOfProductResponse,
+  RecentProduct,
 } from "@src/types";
 import type { Product } from "@prisma/client";
 import { AxiosError } from "axios";
@@ -214,6 +215,37 @@ const Product: NextPage<Props> = ({ product, relatedProducts, reviews }) => {
 
   // 2022/09/07 - 리뷰들 초기화 - by 1-blue
   useEffect(() => setReviews(reviews), [setReviews, reviews]);
+
+  // 2022/09/11 - 최근 본 상품으로 등록 ( localStorage ) - by 1-blue
+  useEffect(() => {
+    if (!product) return;
+
+    const previousWatched: RecentProduct[] = JSON.parse(
+      localStorage.getItem("watched") || "[]"
+    );
+    if (!Array.isArray(previousWatched)) return;
+
+    let currentWatched: RecentProduct[] = [];
+    const targetIndex = previousWatched.findIndex(
+      (watched) => watched.idx === product.idx
+    );
+
+    // 처음 보는 상품이라면
+    if (targetIndex === -1) {
+      const { idx, photo, name, ...rest } = product;
+      currentWatched = [{ idx, photo, name }, ...previousWatched];
+    }
+    // 최근에 본적이 있는 상품이라면
+    else {
+      const target = previousWatched.splice(targetIndex, 1);
+      currentWatched = [...target, ...previousWatched];
+    }
+
+    // 목록이 10개가 넘으면 자르기
+    if (currentWatched.length > 10) currentWatched.pop();
+
+    localStorage.setItem("watched", JSON.stringify(currentWatched));
+  }, [product]);
 
   if (router.isFallback) return <MyLoading />;
   if (product === null) return <MyError message="상품이 존재하지 않습니다." />;
