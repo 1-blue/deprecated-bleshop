@@ -10,6 +10,7 @@ import Tool from "@src/components/common/Tool";
 import Icon from "@src/components/common/Icon";
 import Photo from "@src/components/common/Photo";
 import Support from "@src/components/common/Support";
+import RecentProducts from "@src/components/Products/RecentProducts";
 
 // type
 import type { NextPage } from "next";
@@ -86,12 +87,11 @@ const Information: NextPage = () => {
         </Support.Background>
 
         <Support.Background hasPadding>
-          <h2>최근본상품</h2>
-          <ul>
-            <li>리스트1</li>
-            <li>리스트2</li>
-            <li>리스트3</li>
-          </ul>
+          <Support.Title text="최근 본 상품" />
+
+          <RecentProducts />
+
+          <div className="pb-6"></div>
         </Support.Background>
 
         <Support.Background className="overflow-hidden">
