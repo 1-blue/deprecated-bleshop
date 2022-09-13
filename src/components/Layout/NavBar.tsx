@@ -18,7 +18,6 @@ const NavBar = () => {
         isBottom ? "translate-y-0" : ""
       )}
     >
-      <MenuAnchor shape="list" name="카테고리" url="category" />
       <MenuAnchor shape="search" name="검색" url="search" />
       <MenuAnchor shape="home" name="홈" url="" />
       <MenuAnchor shape="user" name="내 정보" url="information" />

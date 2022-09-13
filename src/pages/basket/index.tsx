@@ -122,6 +122,7 @@ const Basket: NextPage<Props> = ({ baskets }) => {
                       color: basket.color,
                       quantity: basket.quantity,
                       size: basket.size,
+                      productIdx: basket.productIdx,
                     }))}
                 />
               )}
