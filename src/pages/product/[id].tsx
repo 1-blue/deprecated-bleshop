@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import dynamic from "next/dynamic";
 
 // util
 import { dateOrTimeFormat, numberWithComma } from "@src/libs";
@@ -16,16 +17,46 @@ import stateService from "@src/states";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Carousel from "@src/components/common/Carousel";
-import Nav from "@src/components/common/Nav";
-import Photo from "@src/components/common/Photo";
-import Tool from "@src/components/common/Tool";
-import MyError from "@src/components/common/MyError";
-import RelatedProducts from "@src/components/Products/RelatedProducts";
-import Support from "@src/components/common/Support";
-import MyLoading from "@src/components/common/MyLoading";
-import SelectAddressModal from "@src/components/Product/SelectAddressModal";
-import Reviews from "@src/components/Product/Reviews";
+const Background = dynamic(
+  () => import("@src/components/common/Support/Background"),
+  { suspense: true }
+);
+const Title = dynamic(() => import("@src/components/common/Support/Title"), {
+  suspense: true,
+});
+const TitleNav = dynamic(() => import("@src/components/common/Nav/TitleNav"), {
+  suspense: true,
+});
+const Select = dynamic(() => import("@src/components/common/Tool/Select"), {
+  suspense: true,
+});
+const Carousel = dynamic(() => import("@src/components/common/Carousel"), {
+  suspense: true,
+});
+const Photo = dynamic(() => import("@src/components/common/Photo"), {
+  suspense: true,
+});
+const MyError = dynamic(() => import("@src/components/common/MyError"), {
+  suspense: true,
+});
+const MyLoading = dynamic(() => import("@src/components/common/MyLoading"), {
+  suspense: true,
+});
+const RelatedProducts = dynamic(
+  () => import("@src/components/Products/RelatedProducts"),
+  {
+    suspense: true,
+  }
+);
+const SelectAddressModal = dynamic(
+  () => import("@src/components/Product/SelectAddressModal"),
+  {
+    suspense: true,
+  }
+);
+const Reviews = dynamic(() => import("@src/components/Product/Reviews"), {
+  suspense: true,
+});
 
 // type
 import type {
@@ -259,11 +290,11 @@ const Product: NextPage<Props> = ({ product, relatedProducts, reviews }) => {
       />
 
       <article className="pt-4 space-y-4">
-        <Nav.TitleNav title="돌아가기" />
+        <TitleNav title="돌아가기" />
 
         {/* 상품 이미지들 */}
-        <Support.Background className="space-y-2" hasPadding>
-          <Support.Title text="상품 이미지들" />
+        <Background className="space-y-2" hasPadding>
+          <Title text="상품 이미지들" />
           <Carousel currentDot={currentDot} setCurrentDot={setCurrentDot}>
             <Photo
               key={product.photo}
@@ -284,11 +315,11 @@ const Product: NextPage<Props> = ({ product, relatedProducts, reviews }) => {
           </Carousel>
 
           <div className="pb-10" />
-        </Support.Background>
+        </Background>
 
         {/* 상품 정보 */}
-        <Support.Background className="flex flex-col space-y-2" hasPadding>
-          <Support.Title text={product.name} />
+        <Background className="flex flex-col space-y-2" hasPadding>
+          <Title text={product.name} />
           <div className="flex flex-col divide-y-2 space-y-2 text-sm sm:text-base">
             <span className="px-2 font-bold">
               {numberWithComma(product.price)}원
@@ -300,35 +331,35 @@ const Product: NextPage<Props> = ({ product, relatedProducts, reviews }) => {
           <time className="self-end text-[8px] sm:text-xs text-gray-400">
             {dateOrTimeFormat(product.updatedAt, "YYYY-MM-DD-hh-mm-ss")}
           </time>
-        </Support.Background>
+        </Background>
 
         {/* 상품 설명 */}
-        <Support.Background className="flex flex-col space-y-2" hasPadding>
-          <Support.Title text="상품 설명" />
+        <Background className="flex flex-col space-y-2" hasPadding>
+          <Title text="상품 설명" />
           <p className="text-sm sm:text-base whitespace-pre-line">
             {product.description}
           </p>
-        </Support.Background>
+        </Background>
 
         {/* 상품 옵션 선택 */}
-        <Support.Background className="flex flex-col space-y-2" hasPadding>
-          <Support.Title text="옵션 선택" />
+        <Background className="flex flex-col space-y-2" hasPadding>
+          <Title text="옵션 선택" />
 
           <form className="flex flex-col">
             {product.size && (
-              <Tool.Select name="사이즈" register={register("size")}>
+              <Select name="사이즈" register={register("size")}>
                 {product.size.split(",").map((v) => (
                   <option key={v}>{v}</option>
                 ))}
-              </Tool.Select>
+              </Select>
             )}
 
             {product.color && (
-              <Tool.Select name="색상" register={register("color")}>
+              <Select name="색상" register={register("color")}>
                 {product.color?.split(",").map((v) => (
                   <option key={v}>{v}</option>
                 ))}
-              </Tool.Select>
+              </Select>
             )}
 
             <div className="flex justify-between items-center">
@@ -361,7 +392,7 @@ const Product: NextPage<Props> = ({ product, relatedProducts, reviews }) => {
               </span>
             </div>
           </form>
-        </Support.Background>
+        </Background>
 
         {/* 상품 찜하기/구매하기/장바구니 버튼 */}
         <form
@@ -407,19 +438,19 @@ const Product: NextPage<Props> = ({ product, relatedProducts, reviews }) => {
         )}
 
         {/* 상품평 */}
-        <Support.Background className="flex flex-col space-y-2 p-4">
-          <Support.Title text="리뷰들" />
+        <Background className="flex flex-col space-y-2 p-4">
+          <Title text="리뷰들" />
           <Reviews productIdx={product.idx} />
-        </Support.Background>
+        </Background>
 
         {/* 유사 상품 */}
-        <Support.Background className="flex flex-col space-y-2" hasPadding>
-          <Support.Title text="연관 상품들" />
+        <Background className="flex flex-col space-y-2" hasPadding>
+          <Title text="연관 상품들" />
           <RelatedProducts
             productIdx={product.idx}
             keywords={product.keywords.map(({ keywordIdx }) => keywordIdx)}
           />
-        </Support.Background>
+        </Background>
       </article>
     </>
   );

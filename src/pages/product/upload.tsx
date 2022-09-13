@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
 
 // util
 import {
@@ -20,9 +21,36 @@ import stateService from "@src/states";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Tool from "@src/components/common/Tool";
-import NotAuthPage from "@src/components/common/403";
-import NotLogInPage from "@src/components/common/401";
+const NotAuthPage = dynamic(() => import("@src/components/common/403"), {
+  suspense: true,
+});
+const NotLogInPage = dynamic(() => import("@src/components/common/401"), {
+  suspense: true,
+});
+const Form = dynamic(() => import("@src/components/common/Tool/Form"), {
+  suspense: true,
+});
+const Input = dynamic(() => import("@src/components/common/Tool/Input"), {
+  suspense: true,
+});
+const Select = dynamic(() => import("@src/components/common/Tool/Select"), {
+  suspense: true,
+});
+const SinglePhoto = dynamic(
+  () => import("@src/components/common/Tool/SinglePhoto"),
+  { suspense: true }
+);
+const MultiplePhoto = dynamic(
+  () => import("@src/components/common/Tool/MultiplePhoto"),
+  { suspense: true }
+);
+const Textarea = dynamic(() => import("@src/components/common/Tool/Textarea"), {
+  suspense: true,
+});
+const Button = dynamic(() => import("@src/components/common/Tool/Button"), {
+  suspense: true,
+});
+import DatePicker from "@src/components/common/Tool/DatePicker";
 
 // type
 import type { GetServerSideProps, NextPage } from "next";
@@ -162,9 +190,9 @@ const Upload: NextPage = () => {
         description="BleShop의 상품 생성 페이지"
       />
 
-      <Tool.Form onSubmit={handleSubmit(onCreateProduct)} className="pt-4">
+      <Form onSubmit={handleSubmit(onCreateProduct)} className="pt-4">
         {/* 상품명 입력 */}
-        <Tool.Input
+        <Input
           name="상품명"
           type="text"
           placeholder="상품명을 입력해주세요."
@@ -177,7 +205,7 @@ const Upload: NextPage = () => {
         />
 
         {/* 가격 입력 */}
-        <Tool.Input
+        <Input
           name="가격"
           type="text"
           placeholder="가격을 입력해주세요."
@@ -191,7 +219,7 @@ const Upload: NextPage = () => {
         />
 
         {/* 카테고리 설정 */}
-        <Tool.Select
+        <Select
           name="카테고리"
           register={register("category", {
             required: { message: "카테고리를 선택해주세요.", value: true },
@@ -203,10 +231,10 @@ const Upload: NextPage = () => {
               {category}
             </option>
           ))}
-        </Tool.Select>
+        </Select>
 
         {/* 옵션 설정 */}
-        <Tool.Input
+        <Input
           name="사이즈"
           type="text"
           placeholder="사이즈 입력해주세요. ( 쉼표(,)로 구분해서 입력해주세요. )"
@@ -214,7 +242,7 @@ const Upload: NextPage = () => {
           errorMessage={errors.option?.size?.message}
           className="min-w-[200px] max-w-[600px] w-full"
         />
-        <Tool.Input
+        <Input
           name="색상"
           type="text"
           placeholder="색상 입력해주세요. ( 쉼표(,)로 구분해서 입력해주세요. )"
@@ -224,7 +252,7 @@ const Upload: NextPage = () => {
         />
 
         {/* 상품 대표 이미지 등록 */}
-        <Tool.SinglePhoto
+        <SinglePhoto
           photoURL={photoURL}
           setPhotoURL={setPhotoURL}
           name="대표 이미지"
@@ -236,7 +264,7 @@ const Upload: NextPage = () => {
         />
 
         {/* 상품 이미지들 등록 */}
-        <Tool.MultiplePhoto
+        <MultiplePhoto
           photoURLs={photoURLs}
           setPhotoURLs={setPhotoURLs}
           name="추가 이미지"
@@ -246,7 +274,7 @@ const Upload: NextPage = () => {
         />
 
         {/* 상세 설명 */}
-        <Tool.Textarea
+        <Textarea
           name="상품 설명"
           register={register("description", {
             required: { message: "상품 설명을 입력해주세요!", value: true },
@@ -263,7 +291,7 @@ const Upload: NextPage = () => {
         />
 
         {/* 상품 주요 정보 ( 브랜드, 제조사, 판매기간 ) */}
-        <Tool.Input
+        <Input
           name="브랜드"
           type="text"
           placeholder="브랜드를 입력해주세요."
@@ -271,7 +299,7 @@ const Upload: NextPage = () => {
           errorMessage={errors.option?.color?.message}
           className="min-w-[200px] max-w-[600px] w-full"
         />
-        <Tool.Input
+        <Input
           name="제조사"
           type="text"
           placeholder="제조사를 입력해주세요."
@@ -279,7 +307,7 @@ const Upload: NextPage = () => {
           errorMessage={errors.option?.color?.message}
           className="min-w-[200px] max-w-[600px] w-full"
         />
-        <Tool.DatePicker<ProductForm>
+        <DatePicker<ProductForm>
           name="판매 종료일"
           control={control}
           errorMessage={
@@ -288,7 +316,7 @@ const Upload: NextPage = () => {
         />
 
         {/* 검색어 입력 ( 최대 20개 콤마로 구분 ) */}
-        <Tool.Input
+        <Input
           name="검색어"
           type="text"
           placeholder="검색어 입력해주세요. ( 쉼표(,)로 구분해서 입력해주세요. ) ex) 남자,상의"
@@ -298,7 +326,7 @@ const Upload: NextPage = () => {
         />
 
         {/* 검색어 필터 ( 색상, 사이즈, 제조연도 등 ) */}
-        <Tool.Input
+        <Input
           name="검색어 필터"
           type="text"
           placeholder="검색어 필터 입력해주세요. ( 쉼표(,)로 구분해서 입력해주세요. ) ex) 파랑,M"
@@ -308,7 +336,7 @@ const Upload: NextPage = () => {
         />
 
         {/* 판매 요청 버튼 */}
-        <Tool.Button
+        <Button
           text="상품 등록"
           type="submit"
           primary
@@ -316,7 +344,7 @@ const Upload: NextPage = () => {
         />
 
         {/* 필요 시 추가할 것들 배송 관련 사항 입력 ( 출고지, 배송 방법, 택배사, 배송종류, 출고 소요기간 ) */}
-      </Tool.Form>
+      </Form>
     </>
   );
 };

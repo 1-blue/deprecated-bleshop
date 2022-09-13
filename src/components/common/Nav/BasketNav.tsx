@@ -1,30 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-// component
-import Icon from "@src/components/common/Icon";
+// util
 import { combineClassNames } from "@src/libs";
-
-type TitleNavProps = {
-  title: string;
-};
-
-const TitleNav = ({ title }: TitleNavProps) => {
-  const router = useRouter();
-
-  return (
-    <nav className="bg-white rounded-md shadow-2xl overflow-hidden w-full min-w-[250px]">
-      <button
-        type="button"
-        onClick={() => router.back()}
-        className="flex p-2 xs:p-3 sm:p-4 transition-colors hover:bg-blue-400 hover:text-white focus:outline-none focus:bg-blue-400 focus:text-white"
-      >
-        <Icon shape="arrowLeft" className="w-5 h-5 xs:w-6 xs:h-6" />
-        <span className="font-bold text-sm xs:text-base">{title}</span>
-      </button>
-    </nav>
-  );
-};
 
 const BasketNav = () => {
   const { asPath } = useRouter();
@@ -59,11 +37,4 @@ const BasketNav = () => {
   );
 };
 
-type NavType = {
-  TitleNav: typeof TitleNav;
-  BasketNav: typeof BasketNav;
-};
-
-const Nav: NavType = { TitleNav, BasketNav };
-
-export default Nav;
+export default BasketNav;

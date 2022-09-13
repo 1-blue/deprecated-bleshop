@@ -1,15 +1,30 @@
 import { useRecoilValue } from "recoil";
+import dynamic from "next/dynamic";
 
 // state
 import stateService from "@src/states";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import MyLoading from "@src/components/common/MyLoading";
-import Nav from "@src/components/common/Nav";
-import Support from "@src/components/common/Support";
-import Photo from "@src/components/common/Photo";
-import ReviewForm from "@src/components/Review/ReviewForm";
+const MyLoading = dynamic(() => import("@src/components/common/MyLoading"), {
+  suspense: true,
+});
+const TitleNav = dynamic(() => import("@src/components/common/Nav/TitleNav"), {
+  suspense: true,
+});
+const Background = dynamic(
+  () => import("@src/components/common/Support/Background"),
+  { suspense: true }
+);
+const Title = dynamic(() => import("@src/components/common/Support/Title"), {
+  suspense: true,
+});
+const Photo = dynamic(() => import("@src/components/common/Photo"), {
+  suspense: true,
+});
+const ReviewForm = dynamic(() => import("@src/components/Review/ReviewForm"), {
+  suspense: true,
+});
 
 const Review = () => {
   const product = useRecoilValue(
@@ -26,17 +41,17 @@ const Review = () => {
       />
 
       <article className="pt-4 space-y-4 flex flex-col">
-        <Nav.TitleNav title="돌아가기" />
+        <TitleNav title="돌아가기" />
 
-        <Support.Background hasPadding className="space-y-2">
-          <Support.Title text={`"${product.name}"의 대표 이미지`} />
+        <Background hasPadding className="space-y-2">
+          <Title text={`"${product.name}"의 대표 이미지`} />
           <Photo
             path={product.photo}
             className="w-full h-[200px] xs:h-[350px] md:h-[500px]"
             alt="상품 대표 이미지"
             cover
           />
-        </Support.Background>
+        </Background>
 
         <ReviewForm
           productIdx={product.productIdx}

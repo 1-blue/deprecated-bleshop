@@ -2,6 +2,7 @@ import { useCallback, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
 import { toast } from "react-toastify";
+import dynamic from "next/dynamic";
 
 // api
 import apiService from "@src/api";
@@ -11,9 +12,23 @@ import stateService from "@src/states";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Nav from "@src/components/common/Nav";
-import Support from "@src/components/common/Support";
-import Tool from "@src/components/common/Tool";
+const Background = dynamic(
+  () => import("@src/components/common/Support/Background"),
+  { suspense: true }
+);
+const Title = dynamic(() => import("@src/components/common/Support/Title"), {
+  suspense: true,
+});
+const SubTitle = dynamic(
+  () => import("@src/components/common/Support/SubTitle"),
+  { suspense: true }
+);
+const TitleNav = dynamic(() => import("@src/components/common/Nav/TitleNav"), {
+  suspense: true,
+});
+const Button = dynamic(() => import("@src/components/common/Tool/Button"), {
+  suspense: true,
+});
 
 // type
 import type { Iamport } from "@src/types";
@@ -131,15 +146,15 @@ const Payment = () => {
       />
 
       <article className="pt-4 space-y-4">
-        <Nav.TitleNav title="돌아가기" />
+        <TitleNav title="돌아가기" />
 
-        <Support.Background className="space-y-2 sm:space-y-4" hasPadding>
-          <Support.Title text="결제" />
+        <Background className="space-y-2 sm:space-y-4" hasPadding>
+          <Title text="결제" />
 
           <ul className="space-y-2 sm:space-y-4">
             <li className="flex flex-col">
-              <Support.SubTitle text="토스로 결제" />
-              <Tool.Button
+              <SubTitle text="토스로 결제" />
+              <Button
                 type="button"
                 onClick={onPayment("tosspay")}
                 className="bg-blue-400 p-2 rounded-md text-white sm:text-lg font-bold hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors"
@@ -147,8 +162,8 @@ const Payment = () => {
               />
             </li>
             <li className="flex flex-col">
-              <Support.SubTitle text="카카오페이로 결제" />
-              <Tool.Button
+              <SubTitle text="카카오페이로 결제" />
+              <Button
                 type="button"
                 onClick={onPayment("kakaopay")}
                 className="bg-yellow-300 p-2 rounded-md text-black sm:text-lg font-bold hover:bg-yellow-400 focus:outline-none focus:bg-yellow-400 transition-colors"
@@ -156,7 +171,7 @@ const Payment = () => {
               />
             </li>
           </ul>
-        </Support.Background>
+        </Background>
       </article>
     </>
   );

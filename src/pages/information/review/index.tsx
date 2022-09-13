@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import dynamic from "next/dynamic";
 
 // api
 import apiService from "@src/api";
@@ -10,12 +11,32 @@ import { combineClassNames, dateOrTimeFormat } from "@src/libs";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Support from "@src/components/common/Support";
-import Nav from "@src/components/common/Nav";
-import Photo from "@src/components/common/Photo";
-import Icon from "@src/components/common/Icon";
-import Modal from "@src/components/common/Modal";
-import Carousel from "@src/components/common/Carousel";
+const Background = dynamic(
+  () => import("@src/components/common/Support/Background"),
+  { suspense: true }
+);
+const Error = dynamic(() => import("@src/components/common/Support/Error"), {
+  suspense: true,
+});
+const TitleNav = dynamic(() => import("@src/components/common/Nav/TitleNav"), {
+  suspense: true,
+});
+const SubTitle = dynamic(
+  () => import("@src/components/common/Support/SubTitle"),
+  { suspense: true }
+);
+const Photo = dynamic(() => import("@src/components/common/Photo"), {
+  suspense: true,
+});
+const Icon = dynamic(() => import("@src/components/common/Icon"), {
+  suspense: true,
+});
+const Modal = dynamic(() => import("@src/components/common/Modal"), {
+  suspense: true,
+});
+const Carousel = dynamic(() => import("@src/components/common/Carousel"), {
+  suspense: true,
+});
 
 // type
 import { ApiGetReviewsOfUserResponse } from "@src/types";
@@ -81,13 +102,13 @@ const Review = () => {
       />
 
       <article className="pt-4 space-y-4">
-        <Nav.TitleNav title="돌아가기" />
+        <TitleNav title="돌아가기" />
 
-        <Support.Background hasPadding className="space-y-2">
-          <Support.SubTitle text={`작성한 리뷰들 ( ${reviews.length}개 )`} />
+        <Background hasPadding className="space-y-2">
+          <SubTitle text={`작성한 리뷰들 ( ${reviews.length}개 )`} />
 
           {reviews.length === 0 && (
-            <Support.Error text="** 작성한 리뷰가 없습니다. **" />
+            <Error text="** 작성한 리뷰가 없습니다. **" />
           )}
 
           <ul className="space-y-4">
@@ -195,7 +216,7 @@ const Review = () => {
               </Carousel>
             </Modal>
           )}
-        </Support.Background>
+        </Background>
       </article>
     </>
   );

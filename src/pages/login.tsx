@@ -3,10 +3,19 @@ import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Tool from "@src/components/common/Tool";
+const Form = dynamic(() => import("@src/components/common/Tool/Form"), {
+  suspense: true,
+});
+const Input = dynamic(() => import("@src/components/common/Tool/Input"), {
+  suspense: true,
+});
+const Button = dynamic(() => import("@src/components/common/Tool/Button"), {
+  suspense: true,
+});
 
 // type
 import type { NextPage } from "next";
@@ -81,8 +90,8 @@ const LogIn: NextPage = () => {
         bleshop
       </h1>
 
-      <Tool.Form onSubmit={handleSubmit(onSubmit)}>
-        <Tool.Input
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Input
           name="아이디"
           type="text"
           register={register("id", { required: "아이디를 입력해주세요!" })}
@@ -90,7 +99,7 @@ const LogIn: NextPage = () => {
           errorMessage={errors.id?.message}
           className="min-w-[200px] max-w-[600px] w-full"
         />
-        <Tool.Input
+        <Input
           name="비밀번호"
           type="password"
           register={register("password", {
@@ -101,21 +110,21 @@ const LogIn: NextPage = () => {
           className="min-w-[200px] max-w-[600px] w-full"
         />
 
-        <Tool.Button
+        <Button
           type="submit"
           text="로그인"
           className="min-w-[300px] max-w-[600px] w-full mb-4"
           primary
         />
 
-        <Tool.Button
+        <Button
           type="button"
           text="회원가입하러 가기"
           className="min-w-[300px] max-w-[600px] w-full mb-4 bg-gray-400 hover:bg-gray-500 focus:ring-gray-400"
           onClick={() => router.push("/signup")}
           primary
         />
-      </Tool.Form>
+      </Form>
     </>
   );
 };

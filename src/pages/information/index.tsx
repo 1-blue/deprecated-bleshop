@@ -3,14 +3,32 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Tool from "@src/components/common/Tool";
-import Icon from "@src/components/common/Icon";
-import Photo from "@src/components/common/Photo";
-import Support from "@src/components/common/Support";
-import RecentProducts from "@src/components/Products/RecentProducts";
+const Background = dynamic(
+  () => import("@src/components/common/Support/Background"),
+  { suspense: true }
+);
+const Title = dynamic(() => import("@src/components/common/Support/Title"), {
+  suspense: true,
+});
+const Button = dynamic(() => import("@src/components/common/Tool/Button"), {
+  suspense: true,
+});
+const Icon = dynamic(() => import("@src/components/common/Icon"), {
+  suspense: true,
+});
+const Photo = dynamic(() => import("@src/components/common/Photo"), {
+  suspense: true,
+});
+const RecentProducts = dynamic(
+  () => import("@src/components/Products/RecentProducts"),
+  {
+    suspense: true,
+  }
+);
 
 // type
 import type { NextPage } from "next";
@@ -40,7 +58,7 @@ const Information: NextPage = () => {
       />
 
       <article className="pt-4 space-y-4">
-        <Support.Background className="space-y-2 sm:space-y-4" hasPadding>
+        <Background className="space-y-2 sm:space-y-4" hasPadding>
           <div className="flex justify-center">
             <Photo
               path={data?.user?.photo}
@@ -61,7 +79,7 @@ const Information: NextPage = () => {
                   </a>
                 </Link>
 
-                <Tool.Button
+                <Button
                   type="button"
                   text="로그아웃"
                   onClick={onClickLogOut}
@@ -84,17 +102,17 @@ const Information: NextPage = () => {
               </>
             )}
           </section>
-        </Support.Background>
+        </Background>
 
-        <Support.Background hasPadding>
-          <Support.Title text="최근 본 상품" />
+        <Background hasPadding>
+          <Title text="최근 본 상품" />
 
           <RecentProducts />
 
           <div className="pb-6"></div>
-        </Support.Background>
+        </Background>
 
-        <Support.Background className="overflow-hidden">
+        <Background className="overflow-hidden">
           <ul className="divide-y-2">
             <li>
               <Link href="/information/order">
@@ -119,7 +137,7 @@ const Information: NextPage = () => {
               </Link>
             </li>
           </ul>
-        </Support.Background>
+        </Background>
       </article>
     </>
   );

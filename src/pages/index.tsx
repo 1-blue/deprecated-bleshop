@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
+import dynamic from "next/dynamic";
 
 // api
 import apiService from "@src/api";
@@ -9,12 +10,34 @@ import stateService from "@src/states";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Benner from "@src/components/Main/Benner";
-import Products from "@src/components/Main/Products";
-import SearchBar from "@src/components/Main/SearchBar";
-import CategorySelector from "@src/components/Main/CategorySelector";
-import FilterSelector from "@src/components/Main/FilterSelector";
-import Support from "@src/components/common/Support";
+const Background = dynamic(
+  () => import("@src/components/common/Support/Background"),
+  { suspense: true }
+);
+const Title = dynamic(() => import("@src/components/common/Support/Title"), {
+  suspense: true,
+});
+const SubTitle = dynamic(
+  () => import("@src/components/common/Support/SubTitle"),
+  { suspense: true }
+);
+const Benner = dynamic(() => import("@src/components/Main/Benner"), {
+  suspense: true,
+});
+const Products = dynamic(() => import("@src/components/Main/Products"), {
+  suspense: true,
+});
+const SearchBar = dynamic(() => import("@src/components/Main/SearchBar"), {
+  suspense: true,
+});
+const CategorySelector = dynamic(
+  () => import("@src/components/Main/CategorySelector"),
+  { suspense: true }
+);
+const FilterSelector = dynamic(
+  () => import("@src/components/Main/FilterSelector"),
+  { suspense: true }
+);
 
 // type
 import type { GetServerSideProps, NextPage } from "next";
@@ -58,36 +81,36 @@ const Home: NextPage<Props> = ({ photo, categories, filters, products }) => {
 
       <article className="pt-4 space-y-4">
         {/* 검색창과 카테고리 */}
-        <Support.Background className="space-y-2" hasPadding>
+        <Background className="space-y-2" hasPadding>
           <div>
-            <Support.Title text="상품 검색" />
+            <Title text="상품 검색" />
             <SearchBar />
           </div>
 
           <div>
-            <Support.SubTitle text="카테고리" />
+            <SubTitle text="카테고리" />
             <CategorySelector />
           </div>
 
           <div>
-            <Support.SubTitle text="필터" />
+            <SubTitle text="필터" />
             <FilterSelector />
           </div>
-        </Support.Background>
+        </Background>
 
         {/* 광고 케루셀 */}
-        <Support.Background className="space-y-2" hasPadding>
-          <Support.Title text="광고" />
+        <Background className="space-y-2" hasPadding>
+          <Title text="광고" />
           <Benner />
 
           <div className="pb-10" />
-        </Support.Background>
+        </Background>
 
         {/* 상품 리스트 */}
-        <Support.Background className="space-y-2" hasPadding>
-          <Support.Title text="상품들" />
+        <Background className="space-y-2" hasPadding>
+          <Title text="상품들" />
           <Products />
-        </Support.Background>
+        </Background>
       </article>
     </>
   );

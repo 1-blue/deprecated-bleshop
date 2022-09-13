@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import dynamic from "next/dynamic";
 
 // api
 import apiService from "@src/api";
@@ -11,8 +12,12 @@ import { addSeparatorToPhone } from "@src/libs";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Tool from "@src/components/common/Tool";
-import Nav from "@src/components/common/Nav";
+const TitleNav = dynamic(() => import("@src/components/common/Nav/TitleNav"), {
+  suspense: true,
+});
+const Button = dynamic(() => import("@src/components/common/Tool/Button"), {
+  suspense: true,
+});
 
 // type
 import type { Address } from "@prisma/client";
@@ -135,7 +140,7 @@ const Address = () => {
       />
 
       <article className="pt-4 space-y-4 flex flex-col items-center">
-        <Nav.TitleNav title="내 정보 관리" />
+        <TitleNav title="내 정보 관리" />
 
         <section className="bg-white rounded-md shadow-2xl overflow-hidden min-w-[250px] max-w-[1024px] p-6 w-full">
           {addresses.length > 0 ? (
@@ -155,14 +160,14 @@ const Address = () => {
                       </span>
                     )}
                     <div className="flex-1" />
-                    <Tool.Button
+                    <Button
                       type="button"
                       text="수정"
                       className="self-start px-1 pt-1 pb-1 xs:px-2 xs:pt-2 xs:pb-2 text-[8px] xs:text-xs md:text-xs rounded-sm xs:rounded-md"
                       primary
                       onClick={onUpdateAddress(address.idx)}
                     />
-                    <Tool.Button
+                    <Button
                       type="button"
                       text="삭제"
                       className="self-start px-1 pt-1 pb-1 xs:px-2 xs:pt-2 xs:pb-2 text-[8px] xs:text-xs md:text-xs rounded-sm xs:rounded-md"

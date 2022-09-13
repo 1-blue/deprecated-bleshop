@@ -3,6 +3,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
 // api
 import apiService from "@src/api";
@@ -16,11 +17,22 @@ import {
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Icon from "@src/components/common/Icon";
-import Photo from "@src/components/common/Photo";
-import Modal from "@src/components/common/Modal";
-import Nav from "@src/components/common/Nav";
-import Support from "@src/components/common/Support";
+const Background = dynamic(
+  () => import("@src/components/common/Support/Background"),
+  { suspense: true }
+);
+const TitleNav = dynamic(() => import("@src/components/common/Nav/TitleNav"), {
+  suspense: true,
+});
+const Icon = dynamic(() => import("@src/components/common/Icon"), {
+  suspense: true,
+});
+const Photo = dynamic(() => import("@src/components/common/Photo"), {
+  suspense: true,
+});
+const Modal = dynamic(() => import("@src/components/common/Modal"), {
+  suspense: true,
+});
 
 // type
 import type { ApiUpdateUserBody } from "@src/types";
@@ -243,9 +255,9 @@ const InformationUpdate = () => {
       />
 
       <article className="pt-4 space-y-4">
-        <Nav.TitleNav title="내 정보" />
+        <TitleNav title="내 정보" />
 
-        <Support.Background
+        <Background
           className="flex items-center space-x-2 xs:space-x-4"
           hasPadding
         >
@@ -269,7 +281,7 @@ const InformationUpdate = () => {
           >
             로그아웃
           </button>
-        </Support.Background>
+        </Background>
 
         {showModal && (
           <Modal
@@ -277,7 +289,7 @@ const InformationUpdate = () => {
             onCloseModal={() => setShowModal(false)}
             className="max-w-[500px] min-w-[250px]"
           >
-            <Support.Background className="flex flex-col divide-y">
+            <Background className="flex flex-col divide-y">
               <button
                 type="button"
                 className="text-xs xs:text-sm md:text-base py-2 transition-colors hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
@@ -313,11 +325,11 @@ const InformationUpdate = () => {
               >
                 취소
               </button>
-            </Support.Background>
+            </Background>
           </Modal>
         )}
 
-        <Support.Background className="overflow-hidden">
+        <Background className="overflow-hidden">
           <form onSubmit={handleSubmit(onSubmitUser)}>
             <ul className="divide-y-2">
               <li className="flex">
@@ -434,9 +446,9 @@ const InformationUpdate = () => {
               </li>
             </ul>
           </form>
-        </Support.Background>
+        </Background>
 
-        <Support.Background className="space-y-4 overflow-hidden">
+        <Background className="space-y-4 overflow-hidden">
           {defaultAddress ? (
             <ul className="divide-y-2">
               <li className="flex items-center">
@@ -509,7 +521,7 @@ const InformationUpdate = () => {
               </li>
             </ul>
           )}
-        </Support.Background>
+        </Background>
       </article>
     </>
   );

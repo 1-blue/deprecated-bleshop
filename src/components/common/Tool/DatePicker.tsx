@@ -15,7 +15,7 @@ import type { Control, FieldValues, Path } from "react-hook-form";
 
 registerLocale("ko", ko);
 
-type Props<T> = {
+type Props<T extends FieldValues> = {
   name: string;
   control: Control<T, any>;
   errorMessage?: string;

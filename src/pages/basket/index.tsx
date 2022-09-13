@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
+import dynamic from "next/dynamic";
 
 // api
 import apiService, { axiosInstance } from "@src/api";
@@ -12,11 +13,31 @@ import { numberWithComma } from "@src/libs";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Nav from "@src/components/common/Nav";
-import Tool from "@src/components/common/Tool";
-import Support from "@src/components/common/Support";
-import BasketProducts from "@src/components/Products/BasketProducts";
-import SelectAddressModal from "@src/components/Product/SelectAddressModal";
+const Background = dynamic(
+  () => import("@src/components/common/Support/Background"),
+  { suspense: true }
+);
+const Title = dynamic(() => import("@src/components/common/Support/Title"), {
+  suspense: true,
+});
+const TitleNav = dynamic(() => import("@src/components/common/Nav/TitleNav"), {
+  suspense: true,
+});
+const BasketNav = dynamic(
+  () => import("@src/components/common/Nav/BasketNav"),
+  { suspense: true }
+);
+const Button = dynamic(() => import("@src/components/common/Tool/Button"), {
+  suspense: true,
+});
+const BasketProducts = dynamic(
+  () => import("@src/components/Products/BasketProducts"),
+  { suspense: true }
+);
+const SelectAddressModal = dynamic(
+  () => import("@src/components/Product/SelectAddressModal"),
+  { suspense: true }
+);
 
 // type
 import type {
@@ -51,17 +72,17 @@ const Basket: NextPage<Props> = ({ baskets }) => {
       />
 
       <article className="pt-4 space-y-4">
-        <Nav.TitleNav title="장바구니" />
+        <TitleNav title="장바구니" />
 
-        <Nav.BasketNav />
+        <BasketNav />
 
-        <Support.Background hasPadding>
+        <Background hasPadding>
           <BasketProducts />
-        </Support.Background>
+        </Background>
 
         {basketProducts.length !== 0 && (
-          <Support.Background className="space-y-2" hasPadding>
-            <Support.Title text="결제 금액" />
+          <Background className="space-y-2" hasPadding>
+            <Title text="결제 금액" />
 
             <ul>
               {basketProducts
@@ -101,7 +122,7 @@ const Basket: NextPage<Props> = ({ baskets }) => {
               </li>
 
               <li className="mt-4 text-end">
-                <Tool.Button
+                <Button
                   type="button"
                   text="구매하기"
                   primary
@@ -127,7 +148,7 @@ const Basket: NextPage<Props> = ({ baskets }) => {
                 />
               )}
             </ul>
-          </Support.Background>
+          </Background>
         )}
       </article>
     </>

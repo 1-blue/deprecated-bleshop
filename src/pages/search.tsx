@@ -1,6 +1,7 @@
 import { useSetRecoilState } from "recoil";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
 // api
 import apiService from "@src/api";
@@ -10,11 +11,39 @@ import stateService from "@src/states";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Products from "@src/components/Main/Products";
-import SearchBar from "@src/components/Main/SearchBar";
-import CategorySelector from "@src/components/Main/CategorySelector";
-import FilterSelector from "@src/components/Main/FilterSelector";
-import Support from "@src/components/common/Support";
+const Products = dynamic(() => import("@src/components/Main/Products"), {
+  suspense: true,
+});
+const SearchBar = dynamic(() => import("@src/components/Main/SearchBar"), {
+  suspense: true,
+});
+const CategorySelector = dynamic(
+  () => import("@src/components/Main/CategorySelector"),
+  {
+    suspense: true,
+  }
+);
+const FilterSelector = dynamic(
+  () => import("@src/components/Main/FilterSelector"),
+  {
+    suspense: true,
+  }
+);
+const Background = dynamic(
+  () => import("@src/components/common/Support/Background"),
+  {
+    suspense: true,
+  }
+);
+const Title = dynamic(() => import("@src/components/common/Support/Title"), {
+  suspense: true,
+});
+const SubTitle = dynamic(
+  () => import("@src/components/common/Support/SubTitle"),
+  {
+    suspense: true,
+  }
+);
 
 // type
 import type {
@@ -64,26 +93,26 @@ const Search: NextPage<Props> = ({ photo, categories, filters, products }) => {
 
       <article className="pt-4 space-y-4">
         {/* 검색창과 카테고리 */}
-        <Support.Background className="space-y-2" hasPadding>
+        <Background className="space-y-2" hasPadding>
           <div>
-            <Support.Title text="상품 검색" />
+            <Title text="상품 검색" />
             <SearchBar />
           </div>
 
           <div>
-            <Support.SubTitle text="카테고리" />
+            <SubTitle text="카테고리" />
             <CategorySelector />
           </div>
 
           <div>
-            <Support.SubTitle text="필터" />
+            <SubTitle text="필터" />
             <FilterSelector />
           </div>
-        </Support.Background>
+        </Background>
 
         {/* 상품 리스트 */}
-        <Support.Background className="space-y-2" hasPadding>
-          <Support.Title
+        <Background className="space-y-2" hasPadding>
+          <Title
             text={`${
               router.query.searchWord
                 ? '"' + router.query.searchWord + '"'
@@ -92,7 +121,7 @@ const Search: NextPage<Props> = ({ photo, categories, filters, products }) => {
           />
 
           <Products searchWord={router.query.searchWord as string} />
-        </Support.Background>
+        </Background>
       </article>
     </>
   );

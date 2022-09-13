@@ -4,13 +4,31 @@ import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Tool from "@src/components/common/Tool";
-import Nav from "@src/components/common/Nav";
-import Modal from "@src/components/common/Modal";
-import Icon from "@src/components/common/Icon";
+const TitleNav = dynamic(() => import("@src/components/common/Nav/TitleNav"), {
+  suspense: true,
+});
+const Modal = dynamic(() => import("@src/components/common/Modal"), {
+  suspense: true,
+});
+const Icon = dynamic(() => import("@src/components/common/Icon"), {
+  suspense: true,
+});
+const Form = dynamic(() => import("@src/components/common/Tool/Form"), {
+  suspense: true,
+});
+const Input = dynamic(() => import("@src/components/common/Tool/Input"), {
+  suspense: true,
+});
+const Checkbox = dynamic(() => import("@src/components/common/Tool/Checkbox"), {
+  suspense: true,
+});
+const Button = dynamic(() => import("@src/components/common/Tool/Button"), {
+  suspense: true,
+});
 
 // util
 import { getRegExp } from "@src/libs";
@@ -147,13 +165,13 @@ const AddressUpdate = () => {
       />
 
       <section className="flex flex-col items-center pt-4 space-y-4">
-        <Nav.TitleNav title="주소록 관리" />
+        <TitleNav title="주소록 관리" />
 
-        <Tool.Form
+        <Form
           onSubmit={handleSubmit(submitAddress)}
           className="bg-white rounded-md shadow-2xl overflow-hidden min-w-[300px] max-w-[600px] p-8 w-full"
         >
-          <Tool.Input
+          <Input
             type="text"
             name="받는 사람"
             placeholder="받는 사람 이름을 입력해주세요."
@@ -168,7 +186,7 @@ const AddressUpdate = () => {
             className="min-w-[200px] max-w-[600px] w-full"
           />
           <div className="relative flex flex-col items-center min-w-[200px] max-w-[600px] w-full">
-            <Tool.Input
+            <Input
               type="text"
               name="주소"
               placeholder="주소를 검색해주세요."
@@ -191,7 +209,7 @@ const AddressUpdate = () => {
               />
             </button>
           </div>
-          <Tool.Input
+          <Input
             type="text"
             name="상세 주소"
             placeholder="상세 주소를 입력해주세요."
@@ -201,7 +219,7 @@ const AddressUpdate = () => {
             errorMessage={errors.residence?.message}
             className="min-w-[200px] max-w-[600px] w-full"
           />
-          <Tool.Input
+          <Input
             type="text"
             name="phone"
             placeholder="휴대폰 번호를 숫자만 입력해주세요.  ex) 01021038259"
@@ -223,7 +241,7 @@ const AddressUpdate = () => {
             errorMessage={errors.phone?.message}
             className="min-w-[200px] max-w-[600px] w-full"
           />
-          <Tool.Input
+          <Input
             type="text"
             name="요청 사항"
             placeholder="요청 사항을 입력해주세요!"
@@ -231,17 +249,17 @@ const AddressUpdate = () => {
             errorMessage={errors.message?.message}
             className="min-w-[200px] max-w-[600px] w-full"
           />
-          <Tool.Checkbox
+          <Checkbox
             name="기본 배송지로 선택"
             register={register("isDefault")}
           />
-          <Tool.Button
+          <Button
             type="submit"
             text="등록/수정"
             className="min-w-[200px] max-w-[600px] w-full"
             primary
           />
-        </Tool.Form>
+        </Form>
 
         {showAddressInput && (
           <Modal

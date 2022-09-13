@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
 // util
 import { getRegExp } from "@src/libs";
@@ -11,7 +12,22 @@ import apiService from "@src/api";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Tool from "@src/components/common/Tool";
+const Form = dynamic(() => import("@src/components/common/Tool/Form"), {
+  suspense: true,
+});
+const Input = dynamic(() => import("@src/components/common/Tool/Input"), {
+  suspense: true,
+});
+const Checkbox = dynamic(() => import("@src/components/common/Tool/Checkbox"), {
+  suspense: true,
+});
+const SinglePhoto = dynamic(
+  () => import("@src/components/common/Tool/SinglePhoto"),
+  { suspense: true }
+);
+const Button = dynamic(() => import("@src/components/common/Tool/Button"), {
+  suspense: true,
+});
 
 // type
 import type { NextPage } from "next";
@@ -104,10 +120,10 @@ const SignUp: NextPage = () => {
         bleshop
       </h1>
 
-      <Tool.Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         {isShow && (
           <div className="fixed top-2 left-2">
-            <Tool.Checkbox name="관리자" register={register("isAdmin")} />
+            <Checkbox name="관리자" register={register("isAdmin")} />
           </div>
         )}
 
@@ -117,7 +133,7 @@ const SignUp: NextPage = () => {
           onClick={() => setIsShow((prev) => !prev)}
         />
 
-        <Tool.Input
+        <Input
           type="text"
           name="아이디"
           placeholder="아이디를 입력해주세요."
@@ -132,7 +148,7 @@ const SignUp: NextPage = () => {
           errorMessage={errors.id?.message}
           className="min-w-[200px] max-w-[600px] w-full"
         />
-        <Tool.Input
+        <Input
           type="password"
           name="비밀번호"
           placeholder="비밀번호를 입력해주세요."
@@ -147,7 +163,7 @@ const SignUp: NextPage = () => {
           errorMessage={errors.password?.message}
           className="min-w-[200px] max-w-[600px] w-full"
         />
-        <Tool.Input
+        <Input
           type="password"
           name="비밀번호 확인"
           placeholder="비밀번호를 다시 입력해주세요."
@@ -159,7 +175,7 @@ const SignUp: NextPage = () => {
           errorMessage={errors.passwordConfirm?.message}
           className="min-w-[200px] max-w-[600px] w-full"
         />
-        <Tool.Input
+        <Input
           type="text"
           name="이름"
           placeholder="이름를 입력해주세요."
@@ -173,7 +189,7 @@ const SignUp: NextPage = () => {
           errorMessage={errors.name?.message}
           className="min-w-[200px] max-w-[600px] w-full"
         />
-        <Tool.Input
+        <Input
           type="text"
           name="이메일"
           placeholder="이메일을 입력해주세요.  ex)email@naver.com"
@@ -187,7 +203,7 @@ const SignUp: NextPage = () => {
           errorMessage={errors.email?.message}
           className="min-w-[200px] max-w-[600px] w-full"
         />
-        <Tool.Input
+        <Input
           type="text"
           name="휴대폰 번호"
           placeholder="휴대폰 번호를 숫자만 입력해주세요.  ex) 01021038259"
@@ -210,7 +226,7 @@ const SignUp: NextPage = () => {
           className="min-w-[200px] max-w-[600px] w-full"
         />
         {/* 프로필 이미지 */}
-        <Tool.SinglePhoto
+        <SinglePhoto
           photoURL={photoURL}
           setPhotoURL={setPhotoURL}
           name="프로필 이미지"
@@ -218,21 +234,21 @@ const SignUp: NextPage = () => {
           kinds="user"
         />
 
-        <Tool.Button
+        <Button
           type="submit"
           text="회원가입"
           className="min-w-[200px] max-w-[600px] w-full mb-4"
           primary
         />
 
-        <Tool.Button
+        <Button
           type="button"
           text="로그인하러 가기"
           className="min-w-[200px] max-w-[600px] w-full mb-4 bg-gray-400 hover:bg-gray-500 focus:ring-gray-400"
           onClick={() => router.push("/login")}
           primary
         />
-      </Tool.Form>
+      </Form>
     </>
   );
 };

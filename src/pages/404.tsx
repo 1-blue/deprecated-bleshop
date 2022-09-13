@@ -1,8 +1,11 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Icon from "@src/components/common/Icon";
+const Icon = dynamic(() => import("@src/components/common/Icon"), {
+  suspense: true,
+});
 
 const NotFoundPage = () => {
   return (

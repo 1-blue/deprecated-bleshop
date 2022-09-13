@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
+import dynamic from "next/dynamic";
 
 // api
 import apiService, { axiosInstance } from "@src/api";
@@ -9,9 +10,21 @@ import stateService from "@src/states";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Nav from "@src/components/common/Nav";
-import Support from "@src/components/common/Support";
-import WishProducts from "@src/components/Products/WishProducts";
+const Background = dynamic(
+  () => import("@src/components/common/Support/Background"),
+  { suspense: true }
+);
+const TitleNav = dynamic(() => import("@src/components/common/Nav/TitleNav"), {
+  suspense: true,
+});
+const BasketNav = dynamic(
+  () => import("@src/components/common/Nav/BasketNav"),
+  { suspense: true }
+);
+const WishProducts = dynamic(
+  () => import("@src/components/Products/WishProducts"),
+  { suspense: true }
+);
 
 // type
 import type {
@@ -43,13 +56,13 @@ const Wish: NextPage<Props> = ({ wishes }) => {
       />
 
       <article className="pt-4 space-y-4">
-        <Nav.TitleNav title="장바구니" />
+        <TitleNav title="장바구니" />
 
-        <Nav.BasketNav />
+        <BasketNav />
 
-        <Support.Background hasPadding>
+        <Background hasPadding>
           <WishProducts />
-        </Support.Background>
+        </Background>
       </article>
     </>
   );

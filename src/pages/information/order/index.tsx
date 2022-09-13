@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
+import dynamic from "next/dynamic";
 
 // api
 import apiService, { axiosInstance } from "@src/api";
@@ -9,8 +10,13 @@ import stateService from "@src/states";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-import Nav from "@src/components/common/Nav";
-import OrderProducts from "@src/components/Products/OrderProducts";
+const TitleNav = dynamic(() => import("@src/components/common/Nav/TitleNav"), {
+  suspense: true,
+});
+const OrderProducts = dynamic(
+  () => import("@src/components/Products/OrderProducts"),
+  { suspense: true }
+);
 
 // type
 import type {
@@ -42,7 +48,7 @@ const Order: NextPage<Props> = ({ orderList }) => {
       />
 
       <article className="pt-4 space-y-4">
-        <Nav.TitleNav title="내 정보" />
+        <TitleNav title="내 정보" />
 
         <OrderProducts />
       </article>
