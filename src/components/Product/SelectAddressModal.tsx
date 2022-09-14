@@ -84,7 +84,8 @@ const SelectAddressModal = ({ products, singleData, onCloseModal }: Props) => {
           buyer_email: data.user.email,
           buyer_addr: selectedAddress.address,
           buyer_postcode: postcode,
-          m_redirect_url: process.env.NEXT_PUBLIC_FRONT_URL + "/basket/order",
+          m_redirect_url:
+            process.env.NEXT_PUBLIC_FRONT_URL + "/api/payment/complete/mobile",
         });
       }
       // 다중 상품 주문
@@ -110,7 +111,8 @@ const SelectAddressModal = ({ products, singleData, onCloseModal }: Props) => {
           buyer_email: data.user.email,
           buyer_addr: selectedAddress.address,
           buyer_postcode: postcode,
-          m_redirect_url: process.env.NEXT_PUBLIC_FRONT_URL + "/basket/order",
+          m_redirect_url:
+            process.env.NEXT_PUBLIC_FRONT_URL + "/api/payment/complete/mobile",
         });
       }
 

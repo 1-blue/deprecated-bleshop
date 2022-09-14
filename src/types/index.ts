@@ -87,7 +87,15 @@ export type {
   RecentProduct,
 } from "./data";
 
-export type { RequestPayParams, Iamport } from "./iamport";
+export type {
+  RequestPayParams,
+  Iamport,
+  CustomData,
+  IamportGetPaymentDataBody,
+  IamportGetPaymentDataResponse,
+  IamportGetTokenBody,
+  IamportGetTokenResponse,
+} from "./iamport";
 
 // 2022/08/21 - 최대 요청 개수 - by 1-blue
 export type LIMIT = 15;
