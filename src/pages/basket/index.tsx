@@ -38,6 +38,9 @@ const SelectAddressModal = dynamic(
   () => import("@src/components/Product/SelectAddressModal"),
   { suspense: true }
 );
+const NotLoggedIn = dynamic(() => import("@src/components/common/401"), {
+  suspense: true,
+});
 
 // type
 import type {
@@ -47,12 +50,14 @@ import type {
 } from "next";
 import type { Basket } from "@prisma/client";
 import type { ApiGetBasketProductsResponse } from "@src/types";
+import { AxiosError } from "axios";
 
 type Props = {
   baskets: ApiGetBasketProductsResponse["baskets"];
+  isLoggedIn?: boolean;
 };
 
-const Basket: NextPage<Props> = ({ baskets }) => {
+const Basket: NextPage<Props> = ({ baskets, isLoggedIn = true }) => {
   // 2022/09/03 - 내 장바구니 상품들 수정 함수 - by 1-blue
   const [basketProducts, setBasketProducts] = useRecoilState(
     stateService.basketService.basketProductsState
@@ -76,79 +81,91 @@ const Basket: NextPage<Props> = ({ baskets }) => {
 
         <BasketNav />
 
-        <Background hasPadding>
-          <BasketProducts />
-        </Background>
+        {isLoggedIn ? (
+          <>
+            <Background hasPadding>
+              <BasketProducts />
+            </Background>
 
-        {basketProducts.length !== 0 && (
-          <Background className="space-y-2" hasPadding>
-            <Title text="결제 금액" />
+            {basketProducts.length !== 0 && (
+              <Background className="space-y-2" hasPadding>
+                <Title text="결제 금액" />
 
-            <ul>
-              {basketProducts
-                .filter((basket) => !basket.skip)
-                .map((basket) => (
-                  <li key={basket.productIdx} className="flex items-center">
-                    <span className="text-xs xs:text-sm sm:text-base font-bold text-gray-500">
-                      {basket.product.name}
+                <ul>
+                  {basketProducts
+                    .filter((basket) => !basket.skip)
+                    .map((basket) => (
+                      <li key={basket.productIdx} className="flex items-center">
+                        <span className="text-xs xs:text-sm sm:text-base font-bold text-gray-500">
+                          {basket.product.name}
+                        </span>
+                        <div className="flex-1" />
+                        <span className="font-bold text-xs xs:text-sm sm:text-base">
+                          {numberWithComma(
+                            basket.quantity * basket.product.price
+                          )}
+                        </span>
+                        <span className="text-[8px] xs:text-xs sm:text-sm">
+                          원
+                        </span>
+                      </li>
+                    ))}
+
+                  <hr className="h-0.5 bg-gray-300 my-2" />
+
+                  <li className="flex items-center">
+                    <span className="text-sm xs:text-base sm:text-lg font-bold text-gray-600">
+                      총 결제 금액
                     </span>
                     <div className="flex-1" />
-                    <span className="font-bold text-xs xs:text-sm sm:text-base">
-                      {numberWithComma(basket.quantity * basket.product.price)}
+                    <span className="font-bold text-sm xs:text-base sm:text-lg">
+                      {numberWithComma(
+                        basketProducts
+                          .map((basket) =>
+                            basket.skip
+                              ? 0
+                              : basket.quantity * basket.product.price
+                          )
+                          .reduce((prev, curr) => prev + curr)
+                      )}
                     </span>
-                    <span className="text-[8px] xs:text-xs sm:text-sm">원</span>
+                    <span className="font-bold text-xs xs:text-sm sm:text-base">
+                      원
+                    </span>
                   </li>
-                ))}
 
-              <hr className="h-0.5 bg-gray-300 my-2" />
+                  <li className="mt-4 text-end">
+                    <Button
+                      type="button"
+                      text="구매하기"
+                      primary
+                      className="px-4"
+                      onClick={() => setShowAddressModal(true)}
+                    />
+                  </li>
 
-              <li className="flex items-center">
-                <span className="text-sm xs:text-base sm:text-lg font-bold text-gray-600">
-                  총 결제 금액
-                </span>
-                <div className="flex-1" />
-                <span className="font-bold text-sm xs:text-base sm:text-lg">
-                  {numberWithComma(
-                    basketProducts
-                      .map((basket) =>
-                        basket.skip ? 0 : basket.quantity * basket.product.price
-                      )
-                      .reduce((prev, curr) => prev + curr)
+                  {showAddressModal && (
+                    <SelectAddressModal
+                      products={basketProducts
+                        .filter((basket) => !basket.skip)
+                        .map((basket) => basket.product)}
+                      onCloseModal={() => setShowAddressModal(false)}
+                      singleData={basketProducts
+                        .filter((basket) => !basket.skip)
+                        .map((basket) => ({
+                          color: basket.color,
+                          quantity: basket.quantity,
+                          size: basket.size,
+                          productIdx: basket.productIdx,
+                        }))}
+                    />
                   )}
-                </span>
-                <span className="font-bold text-xs xs:text-sm sm:text-base">
-                  원
-                </span>
-              </li>
-
-              <li className="mt-4 text-end">
-                <Button
-                  type="button"
-                  text="구매하기"
-                  primary
-                  className="px-4"
-                  onClick={() => setShowAddressModal(true)}
-                />
-              </li>
-
-              {showAddressModal && (
-                <SelectAddressModal
-                  products={basketProducts
-                    .filter((basket) => !basket.skip)
-                    .map((basket) => basket.product)}
-                  onCloseModal={() => setShowAddressModal(false)}
-                  singleData={basketProducts
-                    .filter((basket) => !basket.skip)
-                    .map((basket) => ({
-                      color: basket.color,
-                      quantity: basket.quantity,
-                      size: basket.size,
-                      productIdx: basket.productIdx,
-                    }))}
-                />
-              )}
-            </ul>
-          </Background>
+                </ul>
+              </Background>
+            )}
+          </>
+        ) : (
+          <NotLoggedIn />
         )}
       </article>
     </>
@@ -178,6 +195,15 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     const { data } = await apiService.productService.apiGetBasketProducts();
     baskets = data.baskets;
   } catch (error) {
+    // 로그인 하지 않은 유저인 경우 실행
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 403) {
+        return {
+          props: { baskets, isLoggedIn: false },
+        };
+      }
+    }
+
     console.error("getServerSideProps basket/wish >> ", error);
   } finally {
     /**

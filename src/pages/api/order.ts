@@ -64,13 +64,15 @@ export default async function handler(
       });
 
       // 주문한 상품은 장바구니에서 제거
-      prisma.basket.deleteMany({
-        where: {
-          productIdx: {
-            in: singleData.map((v) => v.productIdx),
+      prisma.basket
+        .deleteMany({
+          where: {
+            productIdx: {
+              in: singleData.map((v) => v.productIdx),
+            },
           },
-        },
-      });
+        })
+        .then();
 
       return res.status(201).json({ message: "결제를 완료했습니다." });
     }

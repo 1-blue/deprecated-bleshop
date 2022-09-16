@@ -61,7 +61,7 @@ export const deletePhoto = (photo: string) =>
  * @returns
  */
 export const copyPhoto = (originalSource: string, location: PhotoKinds) => {
-  let Key = null;
+  let Key: unknown = null;
   const firstSlashIndex = originalSource.indexOf("/");
   const secondSlashIndex = originalSource.indexOf("/", firstSlashIndex + 1);
 
@@ -81,6 +81,9 @@ export const copyPhoto = (originalSource: string, location: PhotoKinds) => {
       break;
   }
 
+  if (typeof Key !== "string")
+    return console.error("이미지 저장 위치가 올바르지 않습니다.");
+
   return S3.copyObject(
     {
       Bucket: "bleshop",
@@ -88,6 +91,11 @@ export const copyPhoto = (originalSource: string, location: PhotoKinds) => {
       Key,
     },
     (error, data) => {
+      /**
+       * >>> 여기가 가끔씩 두 번 실행됨, 요청은 한 번으로 확인했고, callback이 두 번 실행되면서 에러가 발생함
+       * 하지만 첫 번째 실행에 정상작동해서 이미지 복사는 정상적으로 실행되므로 상관은 없지만 에러 로그가 남는 문제가 발생
+       */
+
       if (error) console.error("S3 이미지 이동 error >> ", error);
     }
   ).promise();

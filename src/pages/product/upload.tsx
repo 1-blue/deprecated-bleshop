@@ -21,10 +21,10 @@ import stateService from "@src/states";
 
 // component
 import HeadInfo from "@src/components/common/HeadInfo";
-const NotAuthPage = dynamic(() => import("@src/components/common/403"), {
+const NotAuth = dynamic(() => import("@src/components/common/403"), {
   suspense: true,
 });
-const NotLogInPage = dynamic(() => import("@src/components/common/401"), {
+const NotLoggedIn = dynamic(() => import("@src/components/common/401"), {
   suspense: true,
 });
 const Form = dynamic(() => import("@src/components/common/Tool/Form"), {
@@ -178,10 +178,10 @@ const Upload: NextPage = () => {
   }, [getValues, setValue]);
 
   // 로그인 유무 확인
-  if (!data) return <NotLogInPage />;
-  if (!data.user) return <NotLogInPage />;
+  if (!data) return <NotLoggedIn />;
+  if (!data.user) return <NotLoggedIn />;
   // 상품 등록 권한이 있는지 확인
-  if (!data.user.isAdmin) return <NotAuthPage />;
+  if (!data.user.isAdmin) return <NotAuth />;
 
   return (
     <>

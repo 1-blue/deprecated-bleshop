@@ -95,12 +95,10 @@ const apiCreatePhotos = async ({
       .map((url) => ({ ...url.value.data }));
 
     // 각 이미지 업로드 promise 얻음
-    const photoPromiseList = preSignedUrlResultList.map(
-      ({ preSignedURL }, i) => {
-        axios.put(preSignedURL!, files[i], {
-          headers: { "Content-Type": files[i].type },
-        });
-      }
+    const photoPromiseList = preSignedUrlResultList.map(({ preSignedURL }, i) =>
+      axios.put(preSignedURL!, files[i], {
+        headers: { "Content-Type": files[i].type },
+      })
     );
 
     // 병렬 처리

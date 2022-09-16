@@ -37,11 +37,11 @@ const categories = [
   "여행",
 ];
 const photos = [
-  "photos/development/benner/barcelona.jpg",
-  "photos/development/benner/big-ben.jpg",
-  "photos/development/benner/germany.jpg",
-  "photos/development/benner/Iceland-waterfall.jpg",
-  "photos/development/benner/venice.jpg",
+  `photos/${process.env.NODE_ENV}/benner/barcelona.jpg`,
+  `photos/${process.env.NODE_ENV}/benner/big-ben.jpg`,
+  `photos/${process.env.NODE_ENV}/benner/germany.jpg`,
+  `photos/${process.env.NODE_ENV}/benner/Iceland-waterfall.jpg`,
+  `photos/${process.env.NODE_ENV}/benner/venice.jpg`,
 ];
 
 /**

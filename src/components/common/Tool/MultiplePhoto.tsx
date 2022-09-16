@@ -79,18 +79,6 @@ const MultiplePhoto = ({
             (photoURL): photoURL is string => typeof photoURL === "string"
           );
 
-        /**
-         * >>> 이미지들을 업로드할 때까지 기다렸다가 실행하는데도 403 에러 발생
-         * 브라우저에서 바로 url 입력해서 접근하거나
-         * 코드 변경으로 인한 새로고침시에는 정상적으로 이미지를 렌더링함
-         *
-         * 접근은 되는데 403 에러인데 타이머를 길게 걸어주면 정상적으로 작동함
-         * 정확히 어떤 부분이 문제인지 파악하지 못해서 임시로 타이머를 이용해서 동작하게 만듦
-         */
-        await new Promise((resolve) => {
-          setTimeout(() => resolve(0), 500 * filteredPhotoURLs.length);
-        });
-
         setPhotoURLs((prev) => [...prev, ...filteredPhotoURLs]);
 
         toast.update(toastId, {

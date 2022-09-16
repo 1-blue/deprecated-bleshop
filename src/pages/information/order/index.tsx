@@ -17,6 +17,9 @@ const OrderProducts = dynamic(
   () => import("@src/components/Products/OrderProducts"),
   { suspense: true }
 );
+const NotLoggedIn = dynamic(() => import("@src/components/common/401"), {
+  suspense: true,
+});
 
 // type
 import type {
@@ -26,12 +29,14 @@ import type {
 } from "next";
 import type { Order } from "@prisma/client";
 import type { ApiGetOrderListResponse } from "@src/types";
+import { AxiosError } from "axios";
 
 type Props = {
   orderList: ApiGetOrderListResponse["orderList"];
+  isLoggedIn?: boolean;
 };
 
-const Order: NextPage<Props> = ({ orderList }) => {
+const Order: NextPage<Props> = ({ orderList, isLoggedIn = true }) => {
   // 2022/09/04 - 로그인한 유저의 주문 목록 수정 함수 - by 1-blue
   const setOrderList = useSetRecoilState(
     stateService.orderService.orderListState
@@ -50,7 +55,7 @@ const Order: NextPage<Props> = ({ orderList }) => {
       <article className="pt-4 space-y-4">
         <TitleNav title="내 정보" />
 
-        <OrderProducts />
+        {isLoggedIn ? <OrderProducts /> : <NotLoggedIn />}
       </article>
     </>
   );
@@ -71,6 +76,15 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     const { data } = await apiService.orderService.apiGetOrderList();
     orderList = data.orderList;
   } catch (error) {
+    // 로그인 하지 않은 유저인 경우 실행
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 403) {
+        return {
+          props: { orderList, isLoggedIn: false },
+        };
+      }
+    }
+
     console.error("getServerSideProps information/order >> ", error);
   } finally {
     axiosInstance.defaults.headers.Cookie = "";

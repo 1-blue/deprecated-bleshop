@@ -4,7 +4,7 @@ import Link from "next/link";
 import HeadInfo from "@src/components/common/HeadInfo";
 import Icon from "@src/components/common/Icon";
 
-const NotAuthPage = () => {
+const NotAuth = () => {
   return (
     <>
       <HeadInfo title="BleShop - 접근 권한 없음" />
@@ -21,8 +21,6 @@ const NotAuthPage = () => {
             viewBox="0 0 40 40"
             xmlSpace="preserve"
             fill="#FF0000"
-            // width="140px"
-            // height="140px"
             className="w-[90px] h-[90px] xs:w-[140px] xs:h-[140px]"
           >
             <g>
@@ -55,4 +53,4 @@ const NotAuthPage = () => {
   );
 };
 
-export default NotAuthPage;
+export default NotAuth;

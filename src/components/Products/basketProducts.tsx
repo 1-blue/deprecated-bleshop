@@ -120,7 +120,7 @@ const BasketProducts = () => {
   return (
     <>
       {basketProducts.length === 0 ? (
-        <Support.Error text="** 조건에 맞는 상품이 없습니다. **" />
+        <Support.Error text="** 장바구니에 담긴 상품이 없습니다. **" />
       ) : (
         <ul className="space-y-2 sm:space-y-4">
           {basketProducts.map((basketProduct) => (
