@@ -126,10 +126,16 @@ const LogIn: NextPage = () => {
 
         <Button
           type="button"
+          text="Google"
+          className="min-w-[200px] max-w-[600px] w-full mb-4 bg-teal-400 py-2 xs:py-3 text-xs xs:text-sm md:text-base text-white font-semibold rounded-sm xs:rounded-md hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-colors"
+          onClick={() => signIn("google")}
+        />
+
+        <Button
+          type="button"
           text="회원가입하러 가기"
-          className="min-w-[200px] max-w-[600px] w-full mb-4 bg-gray-400 hover:bg-gray-500 focus:ring-gray-400"
+          className="min-w-[200px] max-w-[600px] w-full mb-4 bg-indigo-400 py-2 xs:py-3 text-xs xs:text-sm md:text-base text-white font-semibold rounded-sm xs:rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors"
           onClick={() => router.push("/signup")}
-          primary
         />
       </Form>
     </>

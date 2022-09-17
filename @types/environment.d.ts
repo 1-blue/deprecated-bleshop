@@ -20,5 +20,8 @@ namespace NodeJS {
 
     KAKAO_ID: string;
     KAKAO_SECRET: string;
+
+    GOOGLE_ID: string;
+    GOOGLE_SECRET: string;
   }
 }

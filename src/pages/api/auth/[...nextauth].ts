@@ -2,6 +2,7 @@ import prisma from "@src/prisma";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import KakaoProvider from "next-auth/providers/kakao";
+import googleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 
 export default NextAuth({
@@ -46,6 +47,12 @@ export default NextAuth({
       clientId: process.env.KAKAO_ID,
       clientSecret: process.env.KAKAO_SECRET,
     }),
+
+    // 구글 로그인
+    googleProvider({
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+    }),
   ],
   callbacks: {
     async jwt({ token, account }) {
@@ -55,7 +62,7 @@ export default NextAuth({
           where: { provider: "KAKAO", name: token.name!, email: token.email! },
         });
 
-        // 등록된 유저가 아니라면 등록
+        // 등록된 유저가 아니라면 회원가입
         if (!exUser) {
           await prisma.user.create({
             data: {
@@ -63,6 +70,24 @@ export default NextAuth({
               email: token.email!,
               photo: token.picture,
               provider: "KAKAO",
+            },
+          });
+        }
+      }
+      // 구글 로그인일 경우
+      if (account?.provider === "google") {
+        const exUser = await prisma.user.findFirst({
+          where: { provider: "GOOGLE", name: token.name!, email: token.email! },
+        });
+
+        // 등록된 유저가 아니라면 회원가입
+        if (!exUser) {
+          await prisma.user.create({
+            data: {
+              name: token.name!,
+              email: token.email!,
+              photo: token.picture,
+              provider: "GOOGLE",
             },
           });
         }
