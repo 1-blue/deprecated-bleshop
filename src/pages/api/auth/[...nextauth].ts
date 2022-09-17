@@ -1,6 +1,7 @@
 import prisma from "@src/prisma";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import KakaoProvider from "next-auth/providers/kakao";
 import bcrypt from "bcrypt";
 
 export default NextAuth({
@@ -31,6 +32,7 @@ export default NextAuth({
 
         const exUser = await prisma.user.findUnique({ where: { id } });
         if (!exUser) throw new Error("존재하지 않는 아이디입니다.");
+        if (!exUser.password) throw new Error("잘못된 로그인 방식입니다.");
 
         const result = await bcrypt.compare(password, exUser.password);
         if (!result) throw new Error("비밀번호가 불일치합니다.");
@@ -38,23 +40,49 @@ export default NextAuth({
         return exUser;
       },
     }),
+
+    // 카카오 로그인
+    KakaoProvider({
+      clientId: process.env.KAKAO_ID,
+      clientSecret: process.env.KAKAO_SECRET,
+    }),
   ],
   callbacks: {
-    async jwt({ token }) {
+    async jwt({ token, account }) {
+      // 카카오 로그인일 경우
+      if (account?.provider === "kakao") {
+        const exUser = await prisma.user.findFirst({
+          where: { provider: "KAKAO", name: token.name!, email: token.email! },
+        });
+
+        // 등록된 유저가 아니라면 등록
+        if (!exUser) {
+          await prisma.user.create({
+            data: {
+              name: token.name!,
+              email: token.email!,
+              photo: token.picture,
+              provider: "KAKAO",
+            },
+          });
+        }
+      }
+
       return token;
     },
     // 세션에 로그인한 유저 데이터 입력
     async session({ session }) {
-      const exUser = await prisma.user.findUnique({
-        where: { name: session.user?.name },
+      const exUser = await prisma.user.findFirst({
+        where: { email: session.user.email },
         select: {
           idx: true,
           id: true,
           name: true,
           email: true,
           phone: true,
-          isAdmin: true,
+          role: true,
           photo: true,
+          provider: true,
         },
       });
 

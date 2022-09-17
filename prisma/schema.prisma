@@ -10,6 +10,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  ADMIN
+  SELLER
+  USER
+}
+
+enum Provider {
+  Credentials
+  KAKAO
+}
+
 // 이미지
 model Photo {
   path String @id
@@ -25,14 +36,15 @@ model Photo {
 
 // 유저
 model User {
-  idx      Int     @id @default(autoincrement())
-  id       String  @unique
-  password String
-  name     String  @unique
-  email    String  @unique
-  phone    String  @unique
-  isAdmin  Boolean @default(false)
+  idx      Int       @id @default(autoincrement())
+  name     String
+  email    String    @unique
+  id       String?   @unique
+  password String?
+  phone    String?   @unique
   photo    String?
+  role     Role?     @default(USER)
+  provider Provider? @default(Credentials)
 
   // 유저와 주소 => 1:N
   addresses Address[]

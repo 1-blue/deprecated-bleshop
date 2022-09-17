@@ -52,7 +52,7 @@ const AddressUpdate = () => {
   } = useForm<ApiUpdateAddressBody>({
     defaultValues: {
       name: data?.user?.name,
-      phone: data?.user?.phone,
+      phone: data?.user?.phone || "",
     },
   });
 

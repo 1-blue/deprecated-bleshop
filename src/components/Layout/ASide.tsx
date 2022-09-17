@@ -48,7 +48,7 @@ const ASide = () => {
       )}
     >
       <ToTopButton showCondition={showCondition} />
-      {data?.user?.isAdmin && <ToCreateProductButton />}
+      {data?.user?.role === "SELLER" && <ToCreateProductButton />}
     </aside>
   );
 };

@@ -48,15 +48,7 @@ export type ApiCreatePhotosResponse = ApiCreatePhotoResponse[];
 /**
  * 2022/08/11 - 회원가입 송신 타입 - by 1-blue
  */
-export type ApiSignUpBody = {
-  id: string;
-  password: string;
-  name: string;
-  email: string;
-  phone: string;
-  photo?: string;
-  isAdmin: boolean;
-};
+export type ApiSignUpBody = Omit<User, "idx" | "provider">;
 /**
  * 2022/08/11 - 회원가입 수신 타입 - by 1-blue
  */

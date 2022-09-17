@@ -113,14 +113,21 @@ const LogIn: NextPage = () => {
         <Button
           type="submit"
           text="로그인"
-          className="min-w-[300px] max-w-[600px] w-full mb-4"
+          className="min-w-[200px] max-w-[600px] w-full mb-4"
           primary
         />
 
         <Button
           type="button"
+          text="Kakao"
+          className="min-w-[200px] max-w-[600px] w-full mb-4 bg-yellow-400 py-2 xs:py-3 text-xs xs:text-sm md:text-base text-white font-semibold rounded-sm xs:rounded-md hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 transition-colors"
+          onClick={() => signIn("kakao")}
+        />
+
+        <Button
+          type="button"
           text="회원가입하러 가기"
-          className="min-w-[300px] max-w-[600px] w-full mb-4 bg-gray-400 hover:bg-gray-500 focus:ring-gray-400"
+          className="min-w-[200px] max-w-[600px] w-full mb-4 bg-gray-400 hover:bg-gray-500 focus:ring-gray-400"
           onClick={() => router.push("/signup")}
           primary
         />

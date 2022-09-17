@@ -40,19 +40,23 @@ export default async function handler(
     else {
       // 이름, 이메일, 휴대폰번호 중복 여부 확인
       const promiseList = [
-        prisma.user.findUnique({ where: { name }, select: { idx: true } }),
-        prisma.user.findUnique({ where: { email }, select: { idx: true } }),
-        prisma.user.findUnique({ where: { phone }, select: { idx: true } }),
+        prisma.user.findUnique({
+          where: { email },
+          select: { idx: true },
+        }),
+        prisma.user.findUnique({
+          where: { phone },
+          select: { idx: true },
+        }),
       ];
       const promiseResultList = await Promise.allSettled(promiseList);
       const resultList = promiseResultList
         .filter(isFulFilled)
         .map((data) => ({ ...data.value }));
-      if (resultList[0].idx && resultList[0].idx !== userIdx)
-        return res.status(409).json({ message: "이미 사용중인 이름입니다." });
-      if (resultList[1].idx && resultList[1].idx !== userIdx)
+
+      if (resultList[0]?.idx && resultList[0].idx !== userIdx)
         return res.status(409).json({ message: "이미 사용중인 이메일입니다." });
-      if (resultList[2].idx && resultList[2].idx !== userIdx)
+      if (resultList[1]?.idx && resultList[1].idx !== userIdx)
         return res.status(409).json({ message: "이미 사용중인 폰번호입니다." });
 
       const user = await prisma.user.update({

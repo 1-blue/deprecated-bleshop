@@ -107,6 +107,13 @@ export const copyPhoto = (originalSource: string, location: PhotoKinds) => {
  * @returns
  */
 export const movePhoto = async (photo: string, location: PhotoKinds) => {
-  await copyPhoto(photo, location);
-  await deletePhoto(photo);
+  // OAuth의 이미지를 사용하는 경우
+  if (photo.includes("http")) return;
+
+  try {
+    await copyPhoto(photo, location);
+    await deletePhoto(photo);
+  } catch (error) {
+    console.error("movePhoto >> ", error);
+  }
 };
