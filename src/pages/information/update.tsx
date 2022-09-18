@@ -83,7 +83,7 @@ const InformationUpdate = () => {
 
     setValue("name", data.user.name);
     setValue("email", data.user.email);
-    setValue("phone", addSeparatorToPhone(data.user.phone));
+    setValue("phone", addSeparatorToPhone(data.user.phone || ""));
   }, [data, setValue]);
 
   // 2022/08/14 - 유저 초기 정보 입력 - by 1-blue
@@ -98,7 +98,7 @@ const InformationUpdate = () => {
         data: { message },
       } = await apiService.userService.apiEditUser({
         ...body,
-        phone: removeSeparatorToPhone(body.phone),
+        phone: removeSeparatorToPhone(body.phone || ""),
       });
 
       toast.update(toastId, {
@@ -136,7 +136,7 @@ const InformationUpdate = () => {
     setTimeout(() => nameInputRef.current?.select(), 0);
 
     if (!data?.user) return;
-    setValue("phone", removeSeparatorToPhone(data.user.phone));
+    setValue("phone", removeSeparatorToPhone(data.user.phone || ""));
   }, [setValue, data, nameInputRef]);
 
   // 2022/08/14 - 유저 정보 수정 취소 버튼 클릭 - by 1-blue
@@ -145,7 +145,7 @@ const InformationUpdate = () => {
     setChangeInformation(true);
 
     if (!data?.user) return;
-    setValue("phone", addSeparatorToPhone(data.user.phone));
+    setValue("phone", addSeparatorToPhone(data.user.phone || ""));
   }, [initialize, setChangeInformation, data, setValue]);
 
   // 2022/08/14 - 유저 이미지 수정 모달 - by 1-blue

@@ -181,7 +181,7 @@ const Upload: NextPage = () => {
   if (!data) return <NotLoggedIn />;
   if (!data.user) return <NotLoggedIn />;
   // 상품 등록 권한이 있는지 확인
-  if (!data.user.isAdmin) return <NotAuth />;
+  if (data.user.role === "USER") return <NotAuth />;
 
   return (
     <>

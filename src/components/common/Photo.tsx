@@ -4,6 +4,9 @@ import Image from "next/image";
 // util
 import { combineClassNames, combinePhotoUrl } from "@src/libs";
 
+// type
+import type { Provider } from "@prisma/client";
+
 type Props = {
   path?: string | null;
   className?: string;
@@ -53,7 +56,7 @@ const Photo = ({
           }
         >
           <Image
-            src={combinePhotoUrl(path)}
+            src={path.includes("http") ? path : combinePhotoUrl(path)}
             layout="fill"
             className={combineClassNames(
               avatar ? "rounded-full" : "",

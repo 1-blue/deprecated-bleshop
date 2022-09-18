@@ -34,9 +34,10 @@ import type { NextPage } from "next";
 import type { ApiSignUpBody } from "@src/types";
 import { AxiosError } from "axios";
 
-type SignUpForm = Omit<ApiSignUpBody, "photo"> & {
+type SignUpForm = Omit<ApiSignUpBody, "photo" | "role"> & {
   passwordConfirm: string;
   photo?: FileList | null;
+  role: boolean;
 };
 
 const SignUp: NextPage = () => {
@@ -57,7 +58,7 @@ const SignUp: NextPage = () => {
       const toastId = toast.loading("회원가입중입니다.");
 
       try {
-        const { id, email, name, password, phone, isAdmin } = body;
+        const { id, email, name, password, phone, role } = body;
 
         const {
           data: { message },
@@ -68,7 +69,7 @@ const SignUp: NextPage = () => {
           password,
           phone,
           photo: photoURL,
-          isAdmin,
+          role: role ? "SELLER" : "USER",
         });
 
         toast.update(toastId, {
@@ -123,7 +124,7 @@ const SignUp: NextPage = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         {isShow && (
           <div className="fixed top-2 left-2">
-            <Checkbox name="관리자" register={register("isAdmin")} />
+            <Checkbox name="판매자" register={register("role")} />
           </div>
         )}
 

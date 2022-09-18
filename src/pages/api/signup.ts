@@ -28,11 +28,7 @@ export default async function handler(
       data = {
         ...body,
         password: hashPassword,
-        photo: {
-          create: {
-            path: photo.replace("/temporary", ""),
-          },
-        },
+        photo: photo.replace("/temporary", ""),
       };
     } else {
       data = {
@@ -60,11 +56,6 @@ export default async function handler(
           return res.status(409).json({
             user: null,
             message: "이미 사용중인 아이디입니다.",
-          });
-        case "User_name_key":
-          return res.status(409).json({
-            user: null,
-            message: "이미 사용중인 이름입니다.",
           });
         case "User_email_key":
           return res.status(409).json({

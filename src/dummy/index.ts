@@ -55,8 +55,9 @@ export const getAdminUser = (): User => ({
   password: "$2b$06$2dZH5QkrdzeLKo4eWkFC/.wd/iuO87L5CsF6FXvs1C0UzvcZpRYjq",
   email: "a@naver.com",
   phone: "01012123434",
-  isAdmin: true,
   photo: null,
+  role: "ADMIN",
+  provider: "Credentials",
 });
 
 /**
