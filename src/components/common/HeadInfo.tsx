@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 
 // utill
-import { combinePhotoUrl, getLogoUrl } from "@src/libs/utils";
+import { combinePhotoUrl, getFrontUrl, getLogoUrl } from "@src/libs";
 
 type Props = {
   title?: string;
@@ -23,10 +23,7 @@ const HeadInfo = ({ title, description, photo }: Props) => {
       <meta name="description" content={description} />
 
       {/* 카카오톡, 네이버 블로그 미리보기에 제공될 정보 */}
-      <meta
-        property="og:url"
-        content={`https://${process.env.NEXT_PUBLIC_FRONT_URL}${asPath}`}
-      />
+      <meta property="og:url" content={getFrontUrl() + "/" + asPath} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta
@@ -37,8 +34,8 @@ const HeadInfo = ({ title, description, photo }: Props) => {
       {/* 트위터 */}
       <meta
         name="twitter:card"
-        content={`제목: ${title}
-        내용: ${description}`}
+        content={`${title}
+        ${description}`}
       />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />

@@ -1,0 +1,8 @@
+@media screen and (max-width: 486px) {
+  .Toastify__toast-container--top-center {
+    top: 1em;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+  }
+}
