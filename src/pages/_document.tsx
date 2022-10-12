@@ -8,6 +8,12 @@ class MyDocument extends Document {
           {/* favicon */}
           <link href="/favicon.ico" rel="shortcut icon" />
 
+          {/* SEO 키워드 */}
+          <meta
+            name="keyword"
+            content="ble, bleshop, shop, shopping, project, frontend, 쇼핑몰, 프로젝트, 프론트엔드"
+          />
+
           {/* 메인 폰트: Nanum Gothic ( https://fonts.google.com/specimen/Nanum+Gothic?subset=korean ) */}
           <link
             href="https://fonts.googleapis.com/css?family=Nanum+Gothic+Coding:400&display=swap"
