@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[740],{740:function(a,b,c){c.r(b);var d=c(5893),e=function(a){var b=a.text;return(0,d.jsx)("h4",{className:"text-gray-800 font-bolder text-lg xs:text-xl md:text-2xl",children:b})};b.default=e}}])

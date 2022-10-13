@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[565],{565:function(a,b,c){c.r(b);var d=c(5893),e=c(9923),f=function(a){var b=a.children,c=a.className,f=a.hasPadding;return(0,d.jsx)("section",{className:(0,e.Nn)("min-w-[250px] bg-white rounded-md shadow-2xl",f?"p-2 xsm:p-3 md:p-4":"",c||""),children:b})};b.default=f}}])

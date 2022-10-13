@@ -1,0 +1,669 @@
+{
+  "..\\components\\common\\Nav\\TitleNav.tsx -> @src/components/common/Icon": {
+    "id": 6193,
+    "files": []
+  },
+  "404.tsx -> @src/components/common/Icon": {
+    "id": 6193,
+    "files": []
+  },
+  "basket\\index.tsx -> @src/components/Product/SelectAddressModal": {
+    "id": 5328,
+    "files": [
+      "static/chunks/6819-38d31b24d0bb799c.js",
+      "static/chunks/2483-2728ba5ac082c5ec.js",
+      "static/chunks/1546.fb4712c9e238fc5d.js"
+    ]
+  },
+  "basket\\index.tsx -> @src/components/Products/BasketProducts": {
+    "id": 6670,
+    "files": [
+      "static/chunks/6819-38d31b24d0bb799c.js",
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/7842.f6e694fc01ba988f.js",
+      "static/chunks/7536-e8558f430891afac.js",
+      "static/css/f8aee2f66a30e49b.css",
+      "static/chunks/8956-c524fc2f737673cc.js",
+      "static/chunks/2483-2728ba5ac082c5ec.js",
+      "static/chunks/3300.26c9de20572ac212.js",
+      "static/css/4df78f2cd73d6b26.css",
+      "static/chunks/1232.784b42d757645a76.js"
+    ]
+  },
+  "basket\\index.tsx -> @src/components/common/401": {
+    "id": 1867,
+    "files": [
+      "static/chunks/1566.4c53f2b472aefe64.js"
+    ]
+  },
+  "basket\\index.tsx -> @src/components/common/Nav/BasketNav": {
+    "id": 7426,
+    "files": [
+      "static/chunks/7426.fe3f74d57b53d5c4.js"
+    ]
+  },
+  "basket\\index.tsx -> @src/components/common/Nav/TitleNav": {
+    "id": 7340,
+    "files": [
+      "static/chunks/7340.0f1ed57a278ecb70.js"
+    ]
+  },
+  "basket\\index.tsx -> @src/components/common/Support/Background": {
+    "id": 565,
+    "files": [
+      "static/chunks/565.4e7173fee008c187.js"
+    ]
+  },
+  "basket\\index.tsx -> @src/components/common/Support/Title": {
+    "id": 740,
+    "files": [
+      "static/chunks/740.e4c52d1732fcbbf7.js"
+    ]
+  },
+  "basket\\index.tsx -> @src/components/common/Tool/Button": {
+    "id": 6987,
+    "files": [
+      "static/chunks/6987.eee10e964e996711.js"
+    ]
+  },
+  "basket\\wish.tsx -> @src/components/Products/WishProducts": {
+    "id": 9497,
+    "files": [
+      "static/chunks/6819-38d31b24d0bb799c.js",
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/7842.f6e694fc01ba988f.js",
+      "static/chunks/7536-e8558f430891afac.js",
+      "static/css/f8aee2f66a30e49b.css",
+      "static/chunks/8956-c524fc2f737673cc.js",
+      "static/chunks/2483-2728ba5ac082c5ec.js",
+      "static/chunks/3300.26c9de20572ac212.js",
+      "static/css/4df78f2cd73d6b26.css",
+      "static/chunks/7505.5481cceb3f6c1bc9.js"
+    ]
+  },
+  "basket\\wish.tsx -> @src/components/common/Nav/BasketNav": {
+    "id": 7426,
+    "files": [
+      "static/chunks/7426.fe3f74d57b53d5c4.js"
+    ]
+  },
+  "basket\\wish.tsx -> @src/components/common/Nav/TitleNav": {
+    "id": 7340,
+    "files": [
+      "static/chunks/7340.0f1ed57a278ecb70.js"
+    ]
+  },
+  "basket\\wish.tsx -> @src/components/common/Support/Background": {
+    "id": 565,
+    "files": [
+      "static/chunks/565.4e7173fee008c187.js"
+    ]
+  },
+  "index.tsx -> @src/components/Main/Benner": {
+    "id": 868,
+    "files": [
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/7842.f6e694fc01ba988f.js",
+      "static/css/4df78f2cd73d6b26.css",
+      "static/chunks/2965.e3e45003cbefc67f.js"
+    ]
+  },
+  "index.tsx -> @src/components/Main/CategorySelector": {
+    "id": 7180,
+    "files": [
+      "static/chunks/7180.10a0730d713a2686.js"
+    ]
+  },
+  "index.tsx -> @src/components/Main/FilterSelector": {
+    "id": 3175,
+    "files": [
+      "static/chunks/3175.8270459ddf0352fa.js"
+    ]
+  },
+  "index.tsx -> @src/components/Main/Products": {
+    "id": 5319,
+    "files": [
+      "static/chunks/6819-38d31b24d0bb799c.js",
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/2483-2728ba5ac082c5ec.js",
+      "static/chunks/5319.cacee9e7ce9276bd.js"
+    ]
+  },
+  "index.tsx -> @src/components/Main/SearchBar": {
+    "id": 9776,
+    "files": [
+      "static/chunks/6819-38d31b24d0bb799c.js",
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/7842.f6e694fc01ba988f.js",
+      "static/chunks/7536-e8558f430891afac.js",
+      "static/css/f8aee2f66a30e49b.css",
+      "static/chunks/8956-c524fc2f737673cc.js",
+      "static/chunks/2483-2728ba5ac082c5ec.js",
+      "static/chunks/3300.26c9de20572ac212.js",
+      "static/css/4df78f2cd73d6b26.css",
+      "static/chunks/5092.d20bc011dc6babef.js"
+    ]
+  },
+  "index.tsx -> @src/components/common/Support/Background": {
+    "id": 565,
+    "files": [
+      "static/chunks/565.4e7173fee008c187.js"
+    ]
+  },
+  "index.tsx -> @src/components/common/Support/SubTitle": {
+    "id": 8300,
+    "files": [
+      "static/chunks/8300.30a74bf849a17b9d.js"
+    ]
+  },
+  "index.tsx -> @src/components/common/Support/Title": {
+    "id": 740,
+    "files": [
+      "static/chunks/740.e4c52d1732fcbbf7.js"
+    ]
+  },
+  "information\\address\\index.tsx -> @src/components/common/Nav/TitleNav": {
+    "id": 7340,
+    "files": [
+      "static/chunks/7340.0f1ed57a278ecb70.js"
+    ]
+  },
+  "information\\address\\index.tsx -> @src/components/common/Tool/Button": {
+    "id": 6987,
+    "files": [
+      "static/chunks/6987.eee10e964e996711.js"
+    ]
+  },
+  "information\\address\\update.tsx -> @src/components/common/Icon": {
+    "id": 6193,
+    "files": []
+  },
+  "information\\address\\update.tsx -> @src/components/common/Modal": {
+    "id": 3989,
+    "files": [
+      "static/chunks/3989.d4ea0981c7014ae9.js"
+    ]
+  },
+  "information\\address\\update.tsx -> @src/components/common/Nav/TitleNav": {
+    "id": 7340,
+    "files": [
+      "static/chunks/7340.0f1ed57a278ecb70.js"
+    ]
+  },
+  "information\\address\\update.tsx -> @src/components/common/Tool/Button": {
+    "id": 6987,
+    "files": [
+      "static/chunks/6987.eee10e964e996711.js"
+    ]
+  },
+  "information\\address\\update.tsx -> @src/components/common/Tool/Checkbox": {
+    "id": 2249,
+    "files": [
+      "static/chunks/2249.e5a40a478c35ed07.js"
+    ]
+  },
+  "information\\address\\update.tsx -> @src/components/common/Tool/Form": {
+    "id": 1887,
+    "files": [
+      "static/chunks/1887.16e72d91bf183634.js"
+    ]
+  },
+  "information\\address\\update.tsx -> @src/components/common/Tool/Input": {
+    "id": 1432,
+    "files": [
+      "static/chunks/104.0a8f996d9d7bd5e2.js"
+    ]
+  },
+  "information\\index.tsx -> @src/components/Products/RecentProducts": {
+    "id": 9489,
+    "files": [
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/7842.f6e694fc01ba988f.js",
+      "static/css/4df78f2cd73d6b26.css",
+      "static/chunks/432.d4931fa7ac8d76af.js"
+    ]
+  },
+  "information\\index.tsx -> @src/components/common/Icon": {
+    "id": 6193,
+    "files": []
+  },
+  "information\\index.tsx -> @src/components/common/Photo": {
+    "id": 1304,
+    "files": [
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/1304.62d7663624737a48.js"
+    ]
+  },
+  "information\\index.tsx -> @src/components/common/Support/Background": {
+    "id": 565,
+    "files": [
+      "static/chunks/565.4e7173fee008c187.js"
+    ]
+  },
+  "information\\index.tsx -> @src/components/common/Support/Title": {
+    "id": 740,
+    "files": [
+      "static/chunks/740.e4c52d1732fcbbf7.js"
+    ]
+  },
+  "information\\index.tsx -> @src/components/common/Tool/Button": {
+    "id": 6987,
+    "files": [
+      "static/chunks/6987.eee10e964e996711.js"
+    ]
+  },
+  "information\\order\\index.tsx -> @src/components/Products/OrderProducts": {
+    "id": 200,
+    "files": [
+      "static/chunks/6819-38d31b24d0bb799c.js",
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/2483-2728ba5ac082c5ec.js",
+      "static/chunks/7880.e5d40180ef9373df.js"
+    ]
+  },
+  "information\\order\\index.tsx -> @src/components/common/401": {
+    "id": 1867,
+    "files": [
+      "static/chunks/1566.4c53f2b472aefe64.js"
+    ]
+  },
+  "information\\order\\index.tsx -> @src/components/common/Nav/TitleNav": {
+    "id": 7340,
+    "files": [
+      "static/chunks/7340.0f1ed57a278ecb70.js"
+    ]
+  },
+  "information\\review\\index.tsx -> @src/components/common/401": {
+    "id": 1867,
+    "files": [
+      "static/chunks/1566.4c53f2b472aefe64.js"
+    ]
+  },
+  "information\\review\\index.tsx -> @src/components/common/Carousel": {
+    "id": 5129,
+    "files": [
+      "static/chunks/7842.f6e694fc01ba988f.js",
+      "static/css/4df78f2cd73d6b26.css",
+      "static/chunks/3231.794e33f5f986bce2.js"
+    ]
+  },
+  "information\\review\\index.tsx -> @src/components/common/Icon": {
+    "id": 6193,
+    "files": []
+  },
+  "information\\review\\index.tsx -> @src/components/common/Modal": {
+    "id": 3989,
+    "files": [
+      "static/chunks/3989.d4ea0981c7014ae9.js"
+    ]
+  },
+  "information\\review\\index.tsx -> @src/components/common/Nav/TitleNav": {
+    "id": 7340,
+    "files": [
+      "static/chunks/7340.0f1ed57a278ecb70.js"
+    ]
+  },
+  "information\\review\\index.tsx -> @src/components/common/Photo": {
+    "id": 1304,
+    "files": [
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/1304.62d7663624737a48.js"
+    ]
+  },
+  "information\\review\\index.tsx -> @src/components/common/Support/Background": {
+    "id": 565,
+    "files": [
+      "static/chunks/565.4e7173fee008c187.js"
+    ]
+  },
+  "information\\review\\index.tsx -> @src/components/common/Support/Error": {
+    "id": 7179,
+    "files": [
+      "static/chunks/7179.b5931ee6a92f27b8.js"
+    ]
+  },
+  "information\\review\\index.tsx -> @src/components/common/Support/SubTitle": {
+    "id": 8300,
+    "files": [
+      "static/chunks/8300.30a74bf849a17b9d.js"
+    ]
+  },
+  "information\\update.tsx -> @src/components/common/Icon": {
+    "id": 6193,
+    "files": []
+  },
+  "information\\update.tsx -> @src/components/common/Modal": {
+    "id": 3989,
+    "files": [
+      "static/chunks/3989.d4ea0981c7014ae9.js"
+    ]
+  },
+  "information\\update.tsx -> @src/components/common/Nav/TitleNav": {
+    "id": 7340,
+    "files": [
+      "static/chunks/7340.0f1ed57a278ecb70.js"
+    ]
+  },
+  "information\\update.tsx -> @src/components/common/Photo": {
+    "id": 1304,
+    "files": [
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/1304.62d7663624737a48.js"
+    ]
+  },
+  "information\\update.tsx -> @src/components/common/Support/Background": {
+    "id": 565,
+    "files": [
+      "static/chunks/565.4e7173fee008c187.js"
+    ]
+  },
+  "login.tsx -> @src/components/common/Tool/Button": {
+    "id": 6987,
+    "files": [
+      "static/chunks/6987.eee10e964e996711.js"
+    ]
+  },
+  "login.tsx -> @src/components/common/Tool/Form": {
+    "id": 1887,
+    "files": [
+      "static/chunks/1887.16e72d91bf183634.js"
+    ]
+  },
+  "login.tsx -> @src/components/common/Tool/Input": {
+    "id": 1432,
+    "files": [
+      "static/chunks/104.0a8f996d9d7bd5e2.js"
+    ]
+  },
+  "payment\\index.tsx -> @src/components/common/Nav/TitleNav": {
+    "id": 7340,
+    "files": [
+      "static/chunks/7340.0f1ed57a278ecb70.js"
+    ]
+  },
+  "payment\\index.tsx -> @src/components/common/Support/Background": {
+    "id": 565,
+    "files": [
+      "static/chunks/565.4e7173fee008c187.js"
+    ]
+  },
+  "payment\\index.tsx -> @src/components/common/Support/SubTitle": {
+    "id": 8300,
+    "files": [
+      "static/chunks/8300.30a74bf849a17b9d.js"
+    ]
+  },
+  "payment\\index.tsx -> @src/components/common/Support/Title": {
+    "id": 740,
+    "files": [
+      "static/chunks/740.e4c52d1732fcbbf7.js"
+    ]
+  },
+  "payment\\index.tsx -> @src/components/common/Tool/Button": {
+    "id": 6987,
+    "files": [
+      "static/chunks/6987.eee10e964e996711.js"
+    ]
+  },
+  "product\\[id].tsx -> @src/components/Product/Reviews": {
+    "id": 7261,
+    "files": [
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/7842.f6e694fc01ba988f.js",
+      "static/css/f8aee2f66a30e49b.css",
+      "static/chunks/8956-c524fc2f737673cc.js",
+      "static/chunks/3300.26c9de20572ac212.js",
+      "static/css/4df78f2cd73d6b26.css",
+      "static/chunks/4393.dc0713f9863afa15.js"
+    ]
+  },
+  "product\\[id].tsx -> @src/components/Product/SelectAddressModal": {
+    "id": 5328,
+    "files": [
+      "static/chunks/5328.4e32f76da332ce22.js"
+    ]
+  },
+  "product\\[id].tsx -> @src/components/Products/RelatedProducts": {
+    "id": 3195,
+    "files": [
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/3195.077fd0ba5bcdf80c.js"
+    ]
+  },
+  "product\\[id].tsx -> @src/components/common/Carousel": {
+    "id": 5129,
+    "files": [
+      "static/chunks/7842.f6e694fc01ba988f.js",
+      "static/css/4df78f2cd73d6b26.css",
+      "static/chunks/8312.9821cddf453fe491.js"
+    ]
+  },
+  "product\\[id].tsx -> @src/components/common/MyError": {
+    "id": 6613,
+    "files": [
+      "static/chunks/6613.d4b356ac27a40ff5.js"
+    ]
+  },
+  "product\\[id].tsx -> @src/components/common/MyLoading": {
+    "id": 3654,
+    "files": []
+  },
+  "product\\[id].tsx -> @src/components/common/Nav/TitleNav": {
+    "id": 7340,
+    "files": [
+      "static/chunks/7340.0f1ed57a278ecb70.js"
+    ]
+  },
+  "product\\[id].tsx -> @src/components/common/Photo": {
+    "id": 1304,
+    "files": [
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/1304.62d7663624737a48.js"
+    ]
+  },
+  "product\\[id].tsx -> @src/components/common/Support/Background": {
+    "id": 565,
+    "files": [
+      "static/chunks/565.4e7173fee008c187.js"
+    ]
+  },
+  "product\\[id].tsx -> @src/components/common/Support/Title": {
+    "id": 740,
+    "files": [
+      "static/chunks/740.e4c52d1732fcbbf7.js"
+    ]
+  },
+  "product\\[id].tsx -> @src/components/common/Tool/Select": {
+    "id": 7025,
+    "files": [
+      "static/chunks/7025.87847653acead451.js"
+    ]
+  },
+  "product\\upload.tsx -> @src/components/common/401": {
+    "id": 1867,
+    "files": [
+      "static/chunks/1566.4c53f2b472aefe64.js"
+    ]
+  },
+  "product\\upload.tsx -> @src/components/common/403": {
+    "id": 3341,
+    "files": [
+      "static/chunks/3341.3289ab48cb2d8884.js"
+    ]
+  },
+  "product\\upload.tsx -> @src/components/common/Tool/Button": {
+    "id": 6987,
+    "files": [
+      "static/chunks/6987.eee10e964e996711.js"
+    ]
+  },
+  "product\\upload.tsx -> @src/components/common/Tool/Form": {
+    "id": 1887,
+    "files": [
+      "static/chunks/1887.16e72d91bf183634.js"
+    ]
+  },
+  "product\\upload.tsx -> @src/components/common/Tool/Input": {
+    "id": 1432,
+    "files": [
+      "static/chunks/1432.2c3361366973c572.js"
+    ]
+  },
+  "product\\upload.tsx -> @src/components/common/Tool/MultiplePhoto": {
+    "id": 1423,
+    "files": [
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/7842.f6e694fc01ba988f.js",
+      "static/css/4df78f2cd73d6b26.css",
+      "static/chunks/8026.1f81d5a7043869ab.js"
+    ]
+  },
+  "product\\upload.tsx -> @src/components/common/Tool/Select": {
+    "id": 7025,
+    "files": [
+      "static/chunks/8526.25daf0dcca3bb9a0.js"
+    ]
+  },
+  "product\\upload.tsx -> @src/components/common/Tool/SinglePhoto": {
+    "id": 862,
+    "files": [
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/841.4d1406903f7c026d.js"
+    ]
+  },
+  "product\\upload.tsx -> @src/components/common/Tool/Textarea": {
+    "id": 5865,
+    "files": [
+      "static/chunks/5865.4ab3b67191af6d57.js"
+    ]
+  },
+  "review.tsx -> @src/components/Review/ReviewForm": {
+    "id": 5885,
+    "files": [
+      "static/chunks/6819-38d31b24d0bb799c.js",
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/7842.f6e694fc01ba988f.js",
+      "static/chunks/7536-e8558f430891afac.js",
+      "static/css/f8aee2f66a30e49b.css",
+      "static/chunks/8956-c524fc2f737673cc.js",
+      "static/chunks/2483-2728ba5ac082c5ec.js",
+      "static/chunks/3300.26c9de20572ac212.js",
+      "static/css/4df78f2cd73d6b26.css",
+      "static/chunks/7070.f60d5c7c78faaa91.js"
+    ]
+  },
+  "review.tsx -> @src/components/common/MyLoading": {
+    "id": 3654,
+    "files": []
+  },
+  "review.tsx -> @src/components/common/Nav/TitleNav": {
+    "id": 7340,
+    "files": [
+      "static/chunks/7340.0f1ed57a278ecb70.js"
+    ]
+  },
+  "review.tsx -> @src/components/common/Photo": {
+    "id": 1304,
+    "files": [
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/1304.62d7663624737a48.js"
+    ]
+  },
+  "review.tsx -> @src/components/common/Support/Background": {
+    "id": 565,
+    "files": [
+      "static/chunks/565.4e7173fee008c187.js"
+    ]
+  },
+  "review.tsx -> @src/components/common/Support/Title": {
+    "id": 740,
+    "files": [
+      "static/chunks/740.e4c52d1732fcbbf7.js"
+    ]
+  },
+  "search.tsx -> @src/components/Main/CategorySelector": {
+    "id": 7180,
+    "files": [
+      "static/chunks/7180.10a0730d713a2686.js"
+    ]
+  },
+  "search.tsx -> @src/components/Main/FilterSelector": {
+    "id": 3175,
+    "files": [
+      "static/chunks/3175.8270459ddf0352fa.js"
+    ]
+  },
+  "search.tsx -> @src/components/Main/Products": {
+    "id": 5319,
+    "files": [
+      "static/chunks/6819-38d31b24d0bb799c.js",
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/2483-2728ba5ac082c5ec.js",
+      "static/chunks/5319.cacee9e7ce9276bd.js"
+    ]
+  },
+  "search.tsx -> @src/components/Main/SearchBar": {
+    "id": 9776,
+    "files": [
+      "static/chunks/6819-38d31b24d0bb799c.js",
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/7842.f6e694fc01ba988f.js",
+      "static/chunks/7536-e8558f430891afac.js",
+      "static/css/f8aee2f66a30e49b.css",
+      "static/chunks/8956-c524fc2f737673cc.js",
+      "static/chunks/2483-2728ba5ac082c5ec.js",
+      "static/chunks/3300.26c9de20572ac212.js",
+      "static/css/4df78f2cd73d6b26.css",
+      "static/chunks/5092.d20bc011dc6babef.js"
+    ]
+  },
+  "search.tsx -> @src/components/common/Support/Background": {
+    "id": 565,
+    "files": [
+      "static/chunks/565.4e7173fee008c187.js"
+    ]
+  },
+  "search.tsx -> @src/components/common/Support/SubTitle": {
+    "id": 8300,
+    "files": [
+      "static/chunks/8300.30a74bf849a17b9d.js"
+    ]
+  },
+  "search.tsx -> @src/components/common/Support/Title": {
+    "id": 740,
+    "files": [
+      "static/chunks/740.e4c52d1732fcbbf7.js"
+    ]
+  },
+  "signup.tsx -> @src/components/common/Tool/Button": {
+    "id": 6987,
+    "files": [
+      "static/chunks/6987.eee10e964e996711.js"
+    ]
+  },
+  "signup.tsx -> @src/components/common/Tool/Checkbox": {
+    "id": 2249,
+    "files": [
+      "static/chunks/2249.e5a40a478c35ed07.js"
+    ]
+  },
+  "signup.tsx -> @src/components/common/Tool/Form": {
+    "id": 1887,
+    "files": [
+      "static/chunks/1887.16e72d91bf183634.js"
+    ]
+  },
+  "signup.tsx -> @src/components/common/Tool/Input": {
+    "id": 1432,
+    "files": [
+      "static/chunks/104.0a8f996d9d7bd5e2.js"
+    ]
+  },
+  "signup.tsx -> @src/components/common/Tool/SinglePhoto": {
+    "id": 862,
+    "files": [
+      "static/chunks/5675.bb6b8b86c7e0f36a.js",
+      "static/chunks/862.f469e8bfebfd3802.js"
+    ]
+  }
+}

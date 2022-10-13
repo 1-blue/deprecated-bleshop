@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[1887],{1887:function(a,b,c){c.r(b);var d=c(5893),e=c(9923),f=function(a){var b=a.onSubmit,c=a.className,f=a.children;return(0,d.jsx)("form",{onSubmit:b,className:(0,e.Nn)("flex flex-col items-center",c||""),children:f})};b.default=f}}])

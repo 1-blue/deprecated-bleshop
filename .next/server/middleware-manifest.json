@@ -1,0 +1,26 @@
+{
+  "sortedMiddleware": [
+    "/"
+  ],
+  "middleware": {
+    "/": {
+      "env": [
+        "SECRET",
+        "NEXTAUTH_URL",
+        "VERCEL",
+        "NEXTAUTH_SECRET"
+      ],
+      "files": [
+        "server/edge-runtime-webpack.js",
+        "server/src/middleware.js"
+      ],
+      "name": "src/middleware",
+      "page": "/",
+      "regexp": "^\\/login[\\/#\\?]?$|^\\/signup[\\/#\\?]?$|^\\/information\\/update[\\/#\\?]?$|^\\/information\\/address[\\/#\\?]?$|^\\/information\\/address\\/update[\\/#\\?]?$|^\\/product\\/upload[\\/#\\?]?$",
+      "wasm": [],
+      "assets": []
+    }
+  },
+  "functions": {},
+  "version": 1
+}
