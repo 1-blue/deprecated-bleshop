@@ -20,6 +20,8 @@ type Props = {
   className?: string;
   slidesToShow?: number;
   dotPos?: number;
+  afterChange?: () => void;
+  beforeChange?: () => void;
 };
 
 const Carousel = ({
@@ -30,6 +32,8 @@ const Carousel = ({
   className,
   slidesToShow = 1,
   dotPos = 40,
+  afterChange,
+  beforeChange,
 }: Props) => {
   const [settings, setSettings] = useState<Settings>({
     dots: true,
@@ -40,8 +44,13 @@ const Carousel = ({
     adaptiveHeight: true,
     arrows: false,
     autoplay: autoPlay,
-    beforeChange: (prev, next) => setCurrentDot(next),
     appendDots: (dots) => <ul style={{ bottom: `-${dotPos}px` }}>{dots}</ul>,
+    beforeChange: (prev, next) => {
+      setCurrentDot(next);
+
+      if (typeof beforeChange === "function") beforeChange();
+    },
+    afterChange,
   });
 
   return (
